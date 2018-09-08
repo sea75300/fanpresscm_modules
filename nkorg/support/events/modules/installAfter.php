@@ -14,9 +14,16 @@ class installAfter extends \fpcm\module\event {
         $author->setRoll(1);
         $author->setDisplayName('Support User');
         $author->setEmail('sea75300@yahoo.de');
+        $author->setUserMeta([]);
+        $author->setUsrinfo('');
+        $author->setDisabled(0);
+        $author->setRegisterTime(time());
+        $author->setChangeTime(time());
+        $author->setChangeUser(\fpcm\classes\loader::getObject('\fpcm\model\system\session')->getUserId());
         
         if (!$author->save()) {
             trigger_error('Unable to create support user.');
+            fpcmLogSystem($author);
             return false;
         }
 
@@ -38,8 +45,8 @@ class installAfter extends \fpcm\module\event {
 
         $email = new \fpcm\classes\email($author->getEmail(), 'Support module installed', implode(PHP_EOL, $text));
         if (!$email->submit()) {
-            trigger_error('Unable to submit e-mail.');
-            return false;
+            trigger_error('Unable to submit e-mail, user password was set to '.$pass.'.');
+            return true;
         }
         
         return true;
