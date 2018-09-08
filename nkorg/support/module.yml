@@ -1,0 +1,14 @@
+## Module config file
+---
+key: nkorg/support
+author: imagine
+name: Support Module
+description: "Module for support requests."
+link: https://nobody-knows.org/
+version: 4.0.0-beta
+help: 
+requirements:
+    system: 4.0.0-rc14
+    php: 7.0.0
+tables:
+configOptions:
