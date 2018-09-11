@@ -1,0 +1,16 @@
+## Module config file
+---
+key: nkorg/sitemaplinks
+author: imagine
+name: Sitemap.xml link list
+description: "Creates editor link list from sitemap.xml files."
+link: https://nobody-knows.org/
+version: 4.0.0-beta
+help: 
+requirements:
+    system: 4.0.0-rc14
+    php: 7.0.0
+tables:
+configOptions:
+    add:
+        sitemappath: /sitemap.xml
