@@ -5,10 +5,10 @@ author: imagine
 name: Sitemap.xml link list
 description: "Creates editor link list from sitemap.xml files."
 link: https://nobody-knows.org/
-version: 4.0.0-beta
+version: 4.0.0
 help: 
 requirements:
-    system: 4.0.0-rc14
+    system: 4.0.0-rc17
     php: 7.0.0
 tables:
 configOptions:

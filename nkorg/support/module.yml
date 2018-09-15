@@ -5,7 +5,7 @@ author: imagine
 name: Support Module
 description: "Module for support requests."
 link: https://nobody-knows.org/
-version: 4.0.0-beta
+version: 4.0.0
 help: 
 requirements:
     system: 4.0.0-rc14

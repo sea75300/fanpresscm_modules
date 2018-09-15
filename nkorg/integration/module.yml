@@ -1,0 +1,14 @@
+## Module config file
+---
+key: nkorg/integration
+author: imagine
+name: Integration Assistant
+description: "Assistant to easy integration of FanPress Cm into you website."
+link: https://nobody-knows.org/
+version: 4.0.0
+help: 
+requirements:
+    system: 4.0.0-rc17
+    php: 7.0.0
+tables:
+configOptions:
