@@ -1,0 +1,5 @@
+## Module controller map
+---
+message/add: add
+message/edit: edit
+message/list: msgList
