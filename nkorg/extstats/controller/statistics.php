@@ -6,14 +6,14 @@ final class statistics extends \fpcm\controller\abstracts\controller {
 
     use \fpcm\controller\traits\modules\tools;
 
-    protected function getViewPath(): string
+    protected function getViewPath() : string
     {
         return 'index';
     }
 
     public function process()
     {
-        $key = \fpcm\module\module::getKeyFromPath(__FILE__);
+        $key = $this->getModuleKey();
 
         $chartTypes = [
             $this->addLangVarPrefix('TYPEBAR') => 'bar',

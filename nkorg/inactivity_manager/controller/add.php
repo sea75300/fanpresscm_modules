@@ -48,7 +48,7 @@ final class add extends \fpcm\controller\abstracts\controller {
     public function process()
     {
         $this->view->addJsFiles([
-            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, \fpcm\module\module::getKeyFromPath(__FILE__) . '/js/module.js')
+            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
         ]);
 
         $this->view->addButton(new \fpcm\view\helper\saveButton('save'));
