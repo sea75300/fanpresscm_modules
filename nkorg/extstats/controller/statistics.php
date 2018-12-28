@@ -2,9 +2,7 @@
 
 namespace fpcm\modules\nkorg\extstats\controller;
 
-final class statistics extends \fpcm\controller\abstracts\controller {
-
-    use \fpcm\controller\traits\modules\tools;
+final class statistics extends \fpcm\controller\abstracts\module\controller {
 
     protected function getViewPath() : string
     {

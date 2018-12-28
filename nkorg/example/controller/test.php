@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\example\controller;
 
-final class test extends \fpcm\controller\abstracts\controller {
+final class test extends \fpcm\controller\abstracts\module\controller {
 
     protected function getViewPath(): string
     {

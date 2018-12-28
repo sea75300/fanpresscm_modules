@@ -2,10 +2,9 @@
 
 namespace fpcm\modules\nkorg\inactivity_manager\controller;
 
-final class msgList extends \fpcm\controller\abstracts\controller {
+final class msgList extends \fpcm\controller\abstracts\module\controller {
 
-    use \fpcm\controller\traits\modules\tools,
-        \fpcm\controller\traits\common\dataView;
+    use \fpcm\controller\traits\common\dataView;
 
     /**
      *

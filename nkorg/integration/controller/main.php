@@ -2,9 +2,7 @@
 
 namespace fpcm\modules\nkorg\integration\controller;
 
-final class main extends \fpcm\controller\abstracts\controller {
-
-    use \fpcm\controller\traits\modules\tools;
+final class main extends \fpcm\controller\abstracts\module\controller {
 
     protected function getViewPath(): string
     {

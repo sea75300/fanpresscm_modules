@@ -2,9 +2,7 @@
 
 namespace fpcm\modules\nkorg\inactivity_manager\controller;
 
-final class edit extends \fpcm\controller\abstracts\controller {
-
-    use \fpcm\controller\traits\modules\tools;
+final class edit extends \fpcm\controller\abstracts\module\controller {
 
     /**
      *
