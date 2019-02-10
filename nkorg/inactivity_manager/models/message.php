@@ -89,4 +89,13 @@ class message extends \fpcm\model\abstracts\dataset {
         $obj->setNocomments(isset($param['comments']) ? true : false);
     }
 
+    /**
+     * unused
+     * @return string
+     * @since FPCM 4.1
+     */
+    protected function getEventModule() : string
+    {
+        return '';
+    }
 }
