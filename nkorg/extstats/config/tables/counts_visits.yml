@@ -12,15 +12,7 @@ cols:
         type: bigint
         length: 20
         params: NOT NULL
-    year:
-        type: bigint
-        length: 20
-        params: NOT NULL
-    month:
-        type: bigint
-        length: 20
-        params: NOT NULL
-    day:
+    countdt:
         type: bigint
         length: 20
         params: NOT NULL
@@ -33,17 +25,14 @@ cols:
         length: 20
         params: NOT NULL
 indices:
-    year_day:
-        col:
-            year
-            month
-            day
+    countdt:
+        col: countdt
         isUnqiue: true
-    year:
-        col: year
-        isUnqiue: false
-    month:
-        col: month
+    countdt_unique_hits:
+        col:
+            countdt
+            countunique
+            counthits
         isUnqiue: false
 defaultvalues:
     rows:

@@ -57,6 +57,7 @@ fpcm.extStats = {
         }
 
         fpcm.vars.jsvars.extStats.chartValues.datasets[0].borderWidth = (type === 'line' ? 5 : 0);
+        fpcm.vars.jsvars.extStats.chartValues.datasets[1].borderWidth = (type === 'line' ? 5 : 0);
 
         var isBarOrLine = (type === 'line' || type === 'bar');
 

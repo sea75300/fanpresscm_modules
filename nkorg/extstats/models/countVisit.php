@@ -4,20 +4,17 @@ namespace fpcm\modules\nkorg\extstats\models;
 
 class countVisit extends dbObj {
 
-    protected $table = 'module_nkorgextstats_counts_visits';
+    const TABLE = 'module_nkorgextstats_counts_visits';
 
-    protected $year;
-    protected $month;
-    protected $day;
+    protected $countdt = 0;
     protected $countunique = 0;
     protected $counthits = 0;
 
     public function __construct()
     {
+        $this->table = self::TABLE;
         parent::__construct();
-        $this->year = (int) date('Y');
-        $this->month = (int) date('n');
-        $this->day = (int) date('j');
+        $this->countdt = (new \DateTime())->setTime(0, 0 ,0)->getTimestamp();
         $this->init();
     }
     
@@ -25,8 +22,8 @@ class countVisit extends dbObj {
     {
         $data = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams($this->table))
-            ->setWhere('year = ? AND month = ? AND day = ?')
-            ->setParams([$this->year, $this->month, $this->day])
+            ->setWhere('countdt = ?')
+            ->setParams([$this->countdt])
         );
 
         if (!$data) {

@@ -11,6 +11,8 @@ class counter extends \fpcm\model\abstracts\tablelist {
     const SRC_COMMENTS = 'comments';
     const SRC_SHARES = 'shares';
     const SRC_FILES = 'files';
+    const SRC_VISITORS = 'visitors';
+    const SRC_LINKS = 'links';
 
     protected $mode;
     protected $months;
@@ -99,6 +101,73 @@ class counter extends \fpcm\model\abstracts\tablelist {
         ];
     }
 
+    public function fetchVisitors($start, $stop, $mode = 1)
+    {
+        $this->table = countVisit::TABLE;
+        $this->createTimeVar = 'countdt';
+        $this->mode = (int) $mode;
+        $this->months = $this->language->translate('SYSTEM_MONTHS');
+        
+        $where = '1=1';
+        $params = [];
+
+        $where .= (trim($start) ? ' AND ' . $this->createTimeVar . ' >= ?'  : '');
+        $where .= (trim($stop) ? ' AND ' . $this->createTimeVar . ' < ?' : '');
+        $where .= 'GROUP BY dtstr '.$this->dbcon->orderBy(['dtstr ASC']);
+        
+        if (trim($start)) {
+            $params[] = strtotime($start);
+        }
+
+        if (trim($stop)) {
+            $params[] = strtotime($stop);
+        }
+        
+        $items = 'SUM(countunique) AS sumunique, SUM(counthits) as sumhits, count(id) AS countedds, '. call_user_func([$this, 'getSelectItem' . ucfirst($this->dbcon->getDbtype())]);
+
+        $values = $this->dbcon->selectFetch(
+            (new \fpcm\model\dbal\selectParams($this->table))
+                ->setItem($items)
+                ->setWhere($where)
+                ->setFetchAll(true)
+                ->setParams($params)
+        );
+
+        if (!$values) {
+            return [];
+        }
+
+        $data1 = [];
+        $data2 = [];
+
+        foreach ($values as $value) {
+
+            $labels[] = $this->getLabel($value->dtstr);
+            $data1[] = (string) ($value->sumunique ?? $value->countunique);
+            $data2[] = (string) ($value->sumhits ?? $value->counthits);
+        }
+
+        return [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Unique visitors',
+                    'fill' => false,
+                    'data' => $data1,
+                    'backgroundColor' => array_fill(0, count($data1), $this->getRandomColor()),
+                    'borderColor' => $this->getRandomColor(),
+                ],
+                [
+                    'label' => 'Page hits',
+                    'fill' => false,
+                    'data' => $data2,
+                    'backgroundColor' => array_fill(0, count($data2), $this->getRandomColor()),
+                    'borderColor' => $this->getRandomColor(),
+                ]
+            ]
+        ];
+    }
+
     final private function fetchData($start, $stop, $mode)
     {
         $this->mode = (int) $mode;
@@ -158,24 +227,19 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
     private function getLabel($data)
     {
+        $data = explode('-', $data);
+        $month = intval($data[1] ?? 0);
+        
         switch ($this->mode) {
             case self::MODE_DAY :
-
-                $dtstr = explode('-', $data);
-                $month = (int) $dtstr[1];
-
-                return $dtstr[2] . '. ' . $this->months[$month] . ' ' . $dtstr[0];
-
+                return $data[2] . '. ' . $this->months[$month] . ' ' . $data[0];
                 break;
             case self::MODE_YEAR :
-                return $data;
+                return $data[0];
                 break;
         }
 
-        $dtstr = explode('-', $data);
-        $month = (int) $dtstr[1];
-
-        return $this->months[$month] . ' ' . $dtstr[0];
+        return $this->months[$month] . ' ' . $data[0];
     }
 
     private function getSelectItemMysql()

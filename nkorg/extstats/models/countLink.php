@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\extstats\models;
 
 class countLink extends dbObj {
 
-    protected $table = 'module_nkorgextstats_counts_links';
+    const TABLE = 'module_nkorgextstats_counts_links';
 
     protected $url = '';
     protected $urlhash = '';
@@ -13,6 +13,7 @@ class countLink extends dbObj {
 
     public function __construct()
     {
+        $this->table = self::TABLE;
         parent::__construct();
         $this->url = $_SERVER['REQUEST_URI'];
         $this->urlhash = \fpcm\classes\tools::getHash($this->url);
