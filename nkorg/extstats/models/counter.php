@@ -143,25 +143,28 @@ class counter extends \fpcm\model\abstracts\tablelist {
         foreach ($values as $value) {
 
             $labels[] = $this->getLabel($value->dtstr);
-            $data1[] = (string) ($value->sumunique ?? $value->countunique);
-            $data2[] = (string) ($value->sumhits ?? $value->counthits);
+            $data1['values'][] = (string) ($value->sumunique ?? $value->countunique);
+            $data1['colors'][] = $this->getRandomColor();
+
+            $data2['values'][] = (string) ($value->sumhits ?? $value->counthits);
+            $data2['colors'][] = $this->getRandomColor();
         }
 
         return [
             'labels' => $labels,
             'datasets' => [
                 [
-                    'label' => 'Unique visitors',
+                    'label' => 'LEGEND_UNIQUE',
                     'fill' => false,
-                    'data' => $data1,
-                    'backgroundColor' => array_fill(0, count($data1), $this->getRandomColor()),
+                    'data' => $data1['values'],
+                    'backgroundColor' => $data1['colors'],
                     'borderColor' => $this->getRandomColor(),
                 ],
                 [
-                    'label' => 'Page hits',
+                    'label' => 'LEGEND_HITS',
                     'fill' => false,
-                    'data' => $data2,
-                    'backgroundColor' => array_fill(0, count($data2), $this->getRandomColor()),
+                    'data' => $data2['values'],
+                    'backgroundColor' => $data2['colors'],
                     'borderColor' => $this->getRandomColor(),
                 ]
             ]

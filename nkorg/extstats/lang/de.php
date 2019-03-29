@@ -20,6 +20,8 @@ $lang = [
     'FROMCOMMENTS' => 'Kommentare',
     'FROMSHARES' => 'Geteilte Inhalte',
     'FROMFILES' => 'Dateien',
-    'FROMVISITS' => 'Seitenaufrufe',
-    'FROMLINKS' => 'Seitenaufrufe pro Seite',
+    'FROMVISITS' => 'Besucherzähler',
+    'FROMLINKS' => 'Aufrufe pro Seite',
+    'LEGEND_UNIQUE' => 'Einzelne Besucher',
+    'LEGEND_HITS' => 'Seitenaufrufe',
 ];
