@@ -137,34 +137,71 @@ class counter extends \fpcm\model\abstracts\tablelist {
             return [];
         }
 
-        $data1 = [];
-        $data2 = [];
-
+        $data = [];
         foreach ($values as $value) {
-
-            $labels[] = $this->getLabel($value->dtstr);
-            $data1['values'][] = (string) ($value->sumunique ?? $value->countunique);
-            $data1['colors'][] = $this->getRandomColor();
-
-            $data2['values'][] = (string) ($value->sumhits ?? $value->counthits);
-            $data2['colors'][] = $this->getRandomColor();
+            $data['labels'][] = $this->getLabel($value->dtstr);
+            $data['unique']['values'][] = (string) ($value->sumunique ?? $value->countunique);
+            $data['unique']['colors'][] = $this->getRandomColor();
+            $data['hits']['values'][] = (string) ($value->sumhits ?? $value->counthits);
+            $data['hits']['colors'][] = $this->getRandomColor();
         }
+        
+        $langPrefix = \fpcm\module\module::getLanguageVarPrefixed(\fpcm\module\module::getKeyFromClass(get_called_class()));
 
         return [
-            'labels' => $labels,
+            'labels' => $data['labels'],
             'datasets' => [
                 [
-                    'label' => 'LEGEND_UNIQUE',
+                    'label' => $this->language->translate($langPrefix.'LEGEND_UNIQUE'),
                     'fill' => false,
-                    'data' => $data1['values'],
-                    'backgroundColor' => $data1['colors'],
+                    'data' => $data['unique']['values'],
+                    'backgroundColor' => $data['unique']['colors'],
                     'borderColor' => $this->getRandomColor(),
                 ],
                 [
-                    'label' => 'LEGEND_HITS',
+                    'label' => $this->language->translate($langPrefix.'LEGEND_HITS'),
                     'fill' => false,
-                    'data' => $data2['values'],
-                    'backgroundColor' => $data2['colors'],
+                    'data' => $data['hits']['values'],
+                    'backgroundColor' => $data['hits']['colors'],
+                    'borderColor' => $this->getRandomColor(),
+                ]
+            ]
+        ];
+    }
+
+    public function fetchLinks($start, $stop, $mode = 1)
+    {
+        $this->table = countLink::TABLE;
+
+        $items = 'url, counthits, lasthit';
+
+        $values = $this->dbcon->selectFetch(
+            (new \fpcm\model\dbal\selectParams($this->table))
+                ->setItem($items)
+                ->setFetchAll(true)
+        );
+
+        if (!$values) {
+            return [];
+        }
+
+        $data = [];
+        foreach ($values as $value) {
+            $data['labels'][] = $value->url. ' ('. date($this->config->system_dtmask, $value->lasthit).')';
+            $data['values'][] = (string) ($value->counthits ?? 0);
+            $data['colors'][] = $this->getRandomColor();
+        }
+        
+        $langPrefix = \fpcm\module\module::getLanguageVarPrefixed(\fpcm\module\module::getKeyFromClass(get_called_class()));
+
+        return [
+            'labels' => $data['labels'],
+            'datasets' => [
+                [
+                    'label' => '',
+                    'fill' => false,
+                    'data' => $data['values'],
+                    'backgroundColor' => $data['colors'],
                     'borderColor' => $this->getRandomColor(),
                 ]
             ]
@@ -176,7 +213,6 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $this->mode = (int) $mode;
 
         $hash = \fpcm\classes\tools::getHash(__METHOD__ . json_encode(func_get_args()));
-        $cache = new \fpcm\classes\cache();
 
         $where = '1=1';
 
@@ -197,31 +233,21 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         $this->months = $this->language->translate('SYSTEM_MONTHS');
 
-        $labels = [];
         $data = [];
-        $colors = [];
-
-        $cached = ($cache->isExpired($hash) ? [] : $cache->read($hash));
-
         foreach ($values as $value) {
-
-            $labels[] = $this->getLabel($value->dtstr);
-            $data[] = (string) $value->counted;
-
-            $cached[$value->dtstr] = (isset($cached[$value->dtstr]) ? $cached[$value->dtstr] : $this->getRandomColor());
-            $colors[] = $cached[$value->dtstr];
+            $data['labels'][] = $this->getLabel($value->dtstr);
+            $data['values'][] = (string) $value->counted;
+            $data['colors'][] = $this->getRandomColor();            
         }
 
-        $cache->write($hash, $cached, 604800);
-
         return [
-            'labels' => $labels,
+            'labels' => $data['labels'],
             'datasets' => [
                 [
                     'label' => '',
                     'fill' => false,
-                    'data' => $data,
-                    'backgroundColor' => $colors,
+                    'data' => $data['values'],
+                    'backgroundColor' => $data['colors'],
                     'borderColor' => $this->getRandomColor(),
                 ]
             ]

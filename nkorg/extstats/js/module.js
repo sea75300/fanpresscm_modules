@@ -12,6 +12,7 @@ fpcm.extStats = {
             changeYear: true,
             minDate: fpcm.vars.jsvars.extStats.minDate
         });
+
         fpcm.ui.datepicker('#dateTo', {
             changeMonth: true,
             changeYear: true
@@ -33,11 +34,20 @@ fpcm.extStats = {
 
         fpcm.ui.selectmenu('#source', {
             change: function (event, ui) {
-                if (ui.item.value === 'shares') {
+                
+                var noModes = ['shares' , 'links'];
+                if (noModes.includes(ui.item.value)) {
                     jQuery('#chartMode-button').hide();
                 }
                 else {
                     jQuery('#chartMode-button').show();
+                }
+
+                if (ui.item.value == 'links') {
+                    jQuery('#fpcm-nkorg-extendedstats-dateform').hide();
+                }
+                else {
+                    jQuery('#fpcm-nkorg-extendedstats-dateform').show();
                 }
                 
                 fpcm.ui.controlgroup(fpcm.ui.mainToolbar, 'refresh');
@@ -56,8 +66,13 @@ fpcm.extStats = {
             return true;
         }
 
-        fpcm.vars.jsvars.extStats.chartValues.datasets[0].borderWidth = (type === 'line' ? 5 : 0);
-        fpcm.vars.jsvars.extStats.chartValues.datasets[1].borderWidth = (type === 'line' ? 5 : 0);
+        if (fpcm.vars.jsvars.extStats.chartValues.datasets[0].borderWidth = (type === 'line' ? 5 : 0)) {
+            fpcm.vars.jsvars.extStats.chartValues.datasets[0].borderWidth = (type === 'line' ? 5 : 0);
+        }
+        
+        if (fpcm.vars.jsvars.extStats.chartValues.datasets[1]) {
+            fpcm.vars.jsvars.extStats.chartValues.datasets[1].borderWidth = (type === 'line' ? 5 : 0);
+        }
 
         var isBarOrLine = (type === 'line' || type === 'bar');
 

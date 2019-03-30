@@ -8,7 +8,7 @@
 
         <div id="maintab">
 
-            <div class="row no-gutters">
+            <div class="row no-gutters" id="fpcm-nkorg-extendedstats-dateform">
                 <div class="col-12 fpcm-ui-padding-lg-bottom">
                     <?php $theView->textInput('dateFrom')->setValue($start)->setClass('fpcm-ui-datepicker')->setWrapperClass('fpcm-ui-datepicker-inputwrapper')->setText('ARTICLE_SEARCH_DATE_FROM')->setPlaceholder(true); ?>
                     <?php $theView->textInput('dateTo')->setValue($stop)->setClass('fpcm-ui-datepicker')->setWrapperClass('fpcm-ui-datepicker-inputwrapper')->setText('ARTICLE_SEARCH_DATE_TO')->setPlaceholder(true); ?>

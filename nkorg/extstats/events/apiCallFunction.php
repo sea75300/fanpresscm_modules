@@ -20,6 +20,12 @@ final class apiCallFunction extends \fpcm\module\event {
     {
         return true;
     }
+    
+    final protected function countAll()
+    {
+        $this->visitorsCount();
+        $this->linksCount();
+    }
 
     final protected function visitorsCount()
     {

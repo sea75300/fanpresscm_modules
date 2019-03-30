@@ -56,7 +56,9 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $start = \fpcm\classes\http::postOnly('dateFrom');
         $stop = \fpcm\classes\http::postOnly('dateTo');
 
-        $this->view->assign('modeStr', $source !== \fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES ? strtoupper($modeStr) : '');
+        $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS]);
+
+        $this->view->assign('modeStr',  $hideMode ? '' : strtoupper($modeStr));
         $this->view->assign('sourceStr', array_search($source, $dataSource));
         $this->view->assign('start', trim($start) ? $start : '');
         $this->view->assign('stop', trim($stop) ? $stop : '');
@@ -96,7 +98,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'chartValues' => call_user_func([$counter, $fn], $start, $stop, $chartMode),
                 'chartType' => trim($chartType) ? $chartType : 'bar',
                 'minDate' => date('Y-m-d', $minMax['minDate']),
-                'showMode' => $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES ? false : true
+                'showMode' => $hideMode ? false : true
             ]
         ]);
 
