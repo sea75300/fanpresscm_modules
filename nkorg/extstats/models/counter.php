@@ -113,7 +113,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         $where .= (trim($start) ? ' AND ' . $this->createTimeVar . ' >= ?'  : '');
         $where .= (trim($stop) ? ' AND ' . $this->createTimeVar . ' < ?' : '');
-        $where .= 'GROUP BY dtstr '.$this->dbcon->orderBy(['dtstr ASC']);
+        $where .= ' GROUP BY dtstr '.$this->dbcon->orderBy(['dtstr ASC']);
         
         if (trim($start)) {
             $params[] = strtotime($start);
