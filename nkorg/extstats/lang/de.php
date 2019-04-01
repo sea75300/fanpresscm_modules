@@ -24,4 +24,6 @@ $lang = [
     'FROMLINKS' => 'Aufrufe pro Seite',
     'LEGEND_UNIQUE' => 'Einzelne Besucher',
     'LEGEND_HITS' => 'Seitenaufrufe',
+    'HITS_LIST' => 'Übersicht aufgerufener Seiten',
+    'HITS_LIST_LATEST' => 'Zuletzt aufgerufen',
 ];

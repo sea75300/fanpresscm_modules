@@ -57,8 +57,10 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $stop = \fpcm\classes\http::postOnly('dateTo');
 
         $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS]);
+        $hideDate = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
 
         $this->view->assign('modeStr',  $hideMode ? '' : strtoupper($modeStr));
+        $this->view->assign('showDate', $hideDate);
         $this->view->assign('sourceStr', array_search($source, $dataSource));
         $this->view->assign('start', trim($start) ? $start : '');
         $this->view->assign('stop', trim($stop) ? $stop : '');
@@ -98,10 +100,12 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'chartValues' => call_user_func([$counter, $fn], $start, $stop, $chartMode),
                 'chartType' => trim($chartType) ? $chartType : 'bar',
                 'minDate' => date('Y-m-d', $minMax['minDate']),
-                'showMode' => $hideMode ? false : true
+                'showMode' => $hideMode ? false : true,
+                'showDate' => $hideDate
             ]
         ]);
-
+        
+        $this->view->addJslangVars([$this->addLangVarPrefix('HITS_LIST_LATEST')]);
         $this->view->addJsFiles([
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/chart.min.js'),
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')

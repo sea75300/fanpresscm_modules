@@ -2,6 +2,8 @@
 
 namespace fpcm\modules\nkorg\extstats\models;
 
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
+
 class counter extends \fpcm\model\abstracts\tablelist {
 
     const MODE_MONTH = 1;
@@ -184,17 +186,26 @@ class counter extends \fpcm\model\abstracts\tablelist {
         if (!$values) {
             return [];
         }
+        
 
         $data = [];
         foreach ($values as $value) {
-            $data['labels'][] = $value->url. ' ('. date($this->config->system_dtmask, $value->lasthit).')';
-            $data['values'][] = (string) ($value->counthits ?? 0);
+            $val = (string) ($value->counthits ?? 0);
+
+            $data['labels'][] = $value->url;
+            $data['values'][] = $val;
             $data['colors'][] = $this->getRandomColor();
+            $data['listValues'][] = [
+                'label' => (string) new \fpcm\view\helper\escape($value->url),
+                'latest' => date($this->config->system_dtmask, $value->lasthit),
+                'value' => $val
+            ];
         }
         
         $langPrefix = \fpcm\module\module::getLanguageVarPrefixed(\fpcm\module\module::getKeyFromClass(get_called_class()));
 
         return [
+            'listValues' => $data['listValues'],
             'labels' => $data['labels'],
             'datasets' => [
                 [

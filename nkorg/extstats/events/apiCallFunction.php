@@ -2,7 +2,21 @@
 
 namespace fpcm\modules\nkorg\extstats\events;
 
+use fpcm\classes\loader;
+use fpcm\model\system\session;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
+
 final class apiCallFunction extends \fpcm\module\event {
+
+    /**
+     * @var session
+     */
+    protected $session;
+
+    /**
+     * @var bool
+     */
+    protected $excludeCount = null;
 
     public function run()
     {
@@ -12,6 +26,8 @@ final class apiCallFunction extends \fpcm\module\event {
             return false;
         }
 
+        $this->session = loader::getObject('\fpcm\model\system\session');
+        $this->excludeCount = $this->excludeCount() || $this->session->exists();
         call_user_func([$this, $fn],$this->data['args']);
         return true;
     }
@@ -29,6 +45,10 @@ final class apiCallFunction extends \fpcm\module\event {
 
     final protected function visitorsCount()
     {
+        if ($this->excludeCount) {
+            return true;
+        }
+
         $countObj = new \fpcm\modules\nkorg\extstats\models\countVisit();
 
         $fn = 'save';
@@ -50,6 +70,10 @@ final class apiCallFunction extends \fpcm\module\event {
 
     final protected function linksCount()
     {
+        if ($this->excludeCount) {
+            return true;
+        }
+
         $countObj = new \fpcm\modules\nkorg\extstats\models\countLink();
 
         $fn = 'save';
@@ -62,6 +86,23 @@ final class apiCallFunction extends \fpcm\module\event {
         $countObj->setLastHit(time());
         call_user_func([$countObj, $fn]);
         return true;
+    }
+
+    private function excludeCount()
+    {
+        if ($this->excludeCount !== null) {
+            return $this->excludeCount;
+        }
+        
+        $base = dirname(__DIR__).DIRECTORY_SEPARATOR.'crawlerDetect'.DIRECTORY_SEPARATOR;
+
+        require_once $base.'Fixtures/AbstractProvider.php';
+        require_once $base.'Fixtures/Crawlers.php';
+        require_once $base.'Fixtures/Exclusions.php';
+        require_once $base.'Fixtures/Headers.php';
+        require_once $base.'CrawlerDetect.php';
+
+        return (new CrawlerDetect())->isCrawler();
     }
 
 }
