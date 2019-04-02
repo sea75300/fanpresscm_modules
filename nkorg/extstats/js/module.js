@@ -121,8 +121,6 @@ fpcm.extStats = {
         }
 
         var elList = jQuery('#fpcm-nkorg-extendedstats-list');
-//        var dataValues = ;
-        
         jQuery.each(fpcm.vars.jsvars.extStats.chartValues.listValues, function (index, object) {
             elList.append('<div class="col-8">' + object.label + '</div><div class="col-1">' + object.value + '</div><div class="col-3">' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + ': ' + object.latest + '</div>');
         });

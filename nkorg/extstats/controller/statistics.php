@@ -57,15 +57,16 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $stop = \fpcm\classes\http::postOnly('dateTo');
 
         $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS]);
-        $hideDate = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
+        $isLinks = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
 
         $this->view->assign('modeStr',  $hideMode ? '' : strtoupper($modeStr));
-        $this->view->assign('showDate', $hideDate);
+        $this->view->assign('showDate', $isLinks);
         $this->view->assign('sourceStr', array_search($source, $dataSource));
         $this->view->assign('start', trim($start) ? $start : '');
         $this->view->assign('stop', trim($stop) ? $stop : '');
 
-        $this->view->addButtons([
+
+        $buttons = [
             (new \fpcm\view\helper\select('source'))
                 ->setClass('fpcm-ui-input-select-articleactions')
                 ->setOptions($dataSource)->setSelected($source)
@@ -83,9 +84,22 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
             (new \fpcm\view\helper\submitButton('setdatespan'))
                 ->setText('GLOBAL_OK')
-        ]);
+        ];
+
+        if ($isLinks) {
+            $buttons[] = (new \fpcm\view\helper\submitButton('removeEntries'))
+                ->setText($this->addLangVarPrefix('HITS_LIST_DELETE'))
+                ->setIcon('file-archive')
+                ->setIconOnly(true);
+        }
+
+        $this->view->addButtons($buttons);
 
         $counter = new \fpcm\modules\nkorg\extstats\models\counter();
+        if ($this->buttonClicked('removeEntries')) {
+            $counter->cleanupLinks();
+        }
+
         $articleList = new \fpcm\model\articles\articlelist();
         $minMax = $articleList->getMinMaxDate();
 
@@ -101,7 +115,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'chartType' => trim($chartType) ? $chartType : 'bar',
                 'minDate' => date('Y-m-d', $minMax['minDate']),
                 'showMode' => $hideMode ? false : true,
-                'showDate' => $hideDate
+                'showDate' => $isLinks
             ]
         ]);
         

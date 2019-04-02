@@ -26,4 +26,5 @@ $lang = [
     'LEGEND_HITS' => 'Seitenaufrufe',
     'HITS_LIST' => 'Übersicht aufgerufener Seiten',
     'HITS_LIST_LATEST' => 'Zuletzt aufgerufen',
+    'HITS_LIST_DELETE' => 'Einträge auf Top 50 komprimieren',
 ];

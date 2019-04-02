@@ -180,6 +180,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $values = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams($this->table))
                 ->setItem($items)
+                ->setWhere('1=1 '.$this->dbcon->orderBy(['counthits DESC']))
                 ->setFetchAll(true)
         );
 
@@ -206,17 +207,25 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         return [
             'listValues' => $data['listValues'],
-            'labels' => $data['labels'],
+            'labels' => array_slice($data['labels'], 0, 10),
             'datasets' => [
                 [
                     'label' => '',
                     'fill' => false,
-                    'data' => $data['values'],
-                    'backgroundColor' => $data['colors'],
+                    'data' => array_slice($data['values'], 0, 10),
+                    'backgroundColor' => array_slice($data['colors'], 0, 10),
                     'borderColor' => $this->getRandomColor(),
                 ]
             ]
         ];
+    }
+
+    public function cleanupLinks()
+    {
+        return $this->dbcon->delete(
+            countLink::TABLE,
+            'id NOT IN (SELECT id FROM '.$this->dbcon->getTablePrefixed(countLink::TABLE).' '. $this->dbcon->orderBy(['counthits DESC']).' '.$this->dbcon->limitQuery(50, 0).')'
+        );
     }
 
     final private function fetchData($start, $stop, $mode)
