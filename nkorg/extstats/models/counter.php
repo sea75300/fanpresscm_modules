@@ -2,8 +2,6 @@
 
 namespace fpcm\modules\nkorg\extstats\models;
 
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
-
 class counter extends \fpcm\model\abstracts\tablelist {
 
     const MODE_MONTH = 1;
@@ -222,9 +220,30 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
     public function cleanupLinks()
     {
+        $result = $this->dbcon->selectFetch(
+            (new \fpcm\model\dbal\selectParams(countLink::TABLE))
+                ->setItem('id')
+                ->setWhere('1=1 '.$this->dbcon->orderBy(['counthits DESC']).' '.$this->dbcon->limitQuery(50, 0) )
+                ->setFetchAll(true)
+        );
+
+        if (!$result || !count($result)) {
+            return true;
+        }
+
+        $ids = [];
+        foreach ($result as $row) {
+            $ids[] = (int) $row->id;
+        }
+
+        if (!count($ids)) {
+            return true;
+        }
+
         return $this->dbcon->delete(
             countLink::TABLE,
-            'id NOT IN (SELECT id FROM '.$this->dbcon->getTablePrefixed(countLink::TABLE).' '. $this->dbcon->orderBy(['counthits DESC']).' '.$this->dbcon->limitQuery(50, 0).')'
+            'id NOT IN ('.implode(',', array_fill(0, count($ids), '?')).')',
+            $ids
         );
     }
 
