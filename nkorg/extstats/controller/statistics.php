@@ -36,25 +36,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $this->addLangVarPrefix('FROMLINKS') => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS
         ];
 
-        $source = \fpcm\classes\http::postOnly('source');
-        if (!trim($source)) {
-            $source = \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
-        }
-
-        $chartType = \fpcm\classes\http::postOnly('chartType');
-        if (!trim($chartType)) {
-            $chartType = 'bar';
-        }
-
-        $chartMode = \fpcm\classes\http::postOnly('chartMode', [\fpcm\classes\http::FILTER_CASTINT]);
-        if (!trim($chartMode)) {
-            $chartMode = \fpcm\modules\nkorg\extstats\models\counter::MODE_MONTH;
-        }
-
-        $modeStr = $chartMode === \fpcm\modules\nkorg\extstats\models\counter::MODE_YEAR ? 'YEAR' : ($chartMode === \fpcm\modules\nkorg\extstats\models\counter::MODE_DAY ? 'DAY' : 'MONTH' );
-
-        $start = \fpcm\classes\http::postOnly('dateFrom');
-        $stop = \fpcm\classes\http::postOnly('dateTo');
+        $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop);
 
         $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS]);
         $isLinks = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
@@ -97,7 +79,12 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $counter = new \fpcm\modules\nkorg\extstats\models\counter();
         if ($this->buttonClicked('removeEntries')) {
-            $counter->cleanupLinks();
+            if (!$counter->cleanupLinks()) {
+                $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_FAILED'));
+            }
+            else {
+                $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_SUCCESS'));
+            }
         }
 
         $articleList = new \fpcm\model\articles\articlelist();
@@ -127,6 +114,36 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $this->view->setFormAction('extstats/statistics');
         $this->view->render();
+        return true;
+    }
+    
+    private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop)
+    {
+        $source = \fpcm\classes\http::postOnly('source');
+        if (!trim($source)) {
+            $source = \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
+        }
+
+        $chartType = \fpcm\classes\http::postOnly('chartType');
+        if (!trim($chartType)) {
+            $chartType = 'bar';
+        }
+
+        $chartMode = \fpcm\classes\http::postOnly('chartMode', [
+            \fpcm\classes\http::FILTER_CASTINT
+        ]);
+
+        if (!trim($chartMode)) {
+            $chartMode = \fpcm\modules\nkorg\extstats\models\counter::MODE_MONTH;
+        }
+
+        $modeStr = $chartMode === \fpcm\modules\nkorg\extstats\models\counter::MODE_YEAR
+                 ? 'YEAR'
+                 : ($chartMode === \fpcm\modules\nkorg\extstats\models\counter::MODE_DAY ? 'DAY' : 'MONTH' );
+
+        $start = \fpcm\classes\http::postOnly('dateFrom');
+        $stop = \fpcm\classes\http::postOnly('dateTo');
+
         return true;
     }
 

@@ -63,8 +63,14 @@ final class apiCallFunction extends \fpcm\module\event {
 
         $countObj->setCountHits($countObj->getCountHits() + 1);
         call_user_func([$countObj, $fn]);
-        
-        setcookie('extstatsts', uniqid().' Unused cookie value', time() + 3600, '/', '', false, true);
+
+        /* @var $config \fpcm\model\system\config */
+        $duration = (int) \fpcm\classes\loader::getObject('\fpcm\model\system\config')->module_nkorgextstats_cookie_duration;
+        if (!$duration || $duration < 600) {
+            $duration = 3600;
+        }
+
+        setcookie('extstatsts', uniqid().' Unused cookie value which just markes you as unique visitor for '.$duration.' seconds', time() + $duration, '/', '', false, true);
         return true;
     }
 

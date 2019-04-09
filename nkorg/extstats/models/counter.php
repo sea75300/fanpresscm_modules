@@ -242,8 +242,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         return $this->dbcon->delete(
             countLink::TABLE,
-            'id NOT IN ('.implode(',', array_fill(0, count($ids), '?')).')',
-            $ids
+            'id NOT IN ('.implode(',', $ids).')'
         );
     }
 

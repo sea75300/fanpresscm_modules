@@ -81,10 +81,10 @@ fpcm.extStats = {
         var chartOptions = {
             legend: {
                 display: (isBarOrLine ? false : true),
-                position: 'bottom',
+                position: 'right',
                 labels: {
                     boxWidth: 25,
-                    fontSize: 10
+                    fontSize: 12
                 }
             },
             responsive: true

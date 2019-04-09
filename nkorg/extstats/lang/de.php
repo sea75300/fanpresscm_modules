@@ -27,4 +27,7 @@ $lang = [
     'HITS_LIST' => 'Übersicht aufgerufener Seiten',
     'HITS_LIST_LATEST' => 'Zuletzt aufgerufen',
     'HITS_LIST_DELETE' => 'Einträge auf Top 50 komprimieren',
+    'COOKIE_DURATION_VALUE' => 'Sekunden bis besucher erneut als Unique gezählt wird (min. 600)',
+    'CLEANUP_SUCCESS' => 'Komprimierung auf Top 50 erfolgreich.',
+    'CLEANUP_FAILED' => 'Komprimierung auf Top 50 fehlgeschlagen, weitere Information enthält das Datenbank-Protokoll.',
 ];
