@@ -47,7 +47,6 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->assign('start', trim($start) ? $start : '');
         $this->view->assign('stop', trim($stop) ? $stop : '');
 
-
         $buttons = [
             (new \fpcm\view\helper\select('source'))
                 ->setClass('fpcm-ui-input-select-articleactions')
@@ -70,7 +69,9 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         if ($isLinks) {
             $buttons[] = (new \fpcm\view\helper\submitButton('removeEntries'))
-                ->setText($this->addLangVarPrefix('HITS_LIST_DELETE'))
+                ->setText($this->addLangVarPrefix('HITS_LIST_DELETE'), [
+                    'limit' => $this->config->module_nkorgextstats_link_compress
+                ])
                 ->setIcon('file-archive')
                 ->setIconOnly(true);
         }
@@ -80,10 +81,14 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $counter = new \fpcm\modules\nkorg\extstats\models\counter();
         if ($this->buttonClicked('removeEntries')) {
             if (!$counter->cleanupLinks()) {
-                $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_FAILED'));
+                $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_FAILED'), [
+                    'limit' => $this->config->module_nkorgextstats_link_compress
+                ]);
             }
             else {
-                $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_SUCCESS'));
+                $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_SUCCESS'), [
+                    'limit' => $this->config->module_nkorgextstats_link_compress
+                ]);
             }
         }
 
@@ -96,13 +101,17 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             return true;
         }
 
+        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode);
+        $this->view->assign('notfound', empty($values['datasets']) ? true : false);
+        
         $this->view->addJsVars([
             'extStats' => [
-                'chartValues' => call_user_func([$counter, $fn], $start, $stop, $chartMode),
+                'chartValues' => $values,
                 'chartType' => trim($chartType) ? $chartType : 'bar',
                 'minDate' => date('Y-m-d', $minMax['minDate']),
                 'showMode' => $hideMode ? false : true,
-                'showDate' => $isLinks
+                'showDate' => $isLinks,
+                'deleteButtonStr' => $isLinks ? (string) (new \fpcm\view\helper\button('entry_{$id}'))->setText('GLOBAL_DELETE')->setIcon('trash')->setIconOnly(true)->setData(['entry' => '{$id}'])->setClass('fpcm-extstats-links-delete') : ''
             ]
         ]);
         
@@ -121,9 +130,11 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
     {
         $source = \fpcm\classes\http::postOnly('source');
         if (!trim($source)) {
-            $source = \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
+            $source = $this->config->module_nkorgextstats_show_visitors
+                    ? \fpcm\modules\nkorg\extstats\models\counter::SRC_VISITORS
+                    : \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
         }
-
+        
         $chartType = \fpcm\classes\http::postOnly('chartType');
         if (!trim($chartType)) {
             $chartType = 'bar';
@@ -134,7 +145,9 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         ]);
 
         if (!trim($chartMode)) {
-            $chartMode = \fpcm\modules\nkorg\extstats\models\counter::MODE_MONTH;
+            $chartMode = $this->config->module_nkorgextstats_show_visitors
+                    ? \fpcm\modules\nkorg\extstats\models\counter::MODE_DAY
+                    : \fpcm\modules\nkorg\extstats\models\counter::MODE_MONTH;
         }
 
         $modeStr = $chartMode === \fpcm\modules\nkorg\extstats\models\counter::MODE_YEAR
@@ -143,6 +156,10 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $start = \fpcm\classes\http::postOnly('dateFrom');
         $stop = \fpcm\classes\http::postOnly('dateTo');
+        
+        if ($start === null) {
+            $start = date('Y-m-d', time() - $this->config->module_nkorgextstats_timespan_default * 86400);
+        }
 
         return true;
     }

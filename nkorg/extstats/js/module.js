@@ -116,13 +116,42 @@ fpcm.extStats = {
 
     drawList: function () {
 
-        if (!fpcm.vars.jsvars.extStats.showDate || !fpcm.vars.jsvars.extStats.chartValues.datasets[0]) {
+        if (!fpcm.vars.jsvars.extStats.showDate || !fpcm.vars.jsvars.extStats.chartValues.datasets || !fpcm.vars.jsvars.extStats.chartValues.datasets[0]) {
             return true;
         }
 
         var elList = jQuery('#fpcm-nkorg-extendedstats-list');
+        var btnEl = '';
+        
         jQuery.each(fpcm.vars.jsvars.extStats.chartValues.listValues, function (index, object) {
-            elList.append('<div class="col-8">' + object.label + '</div><div class="col-1">' + object.value + '</div><div class="col-3">' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + ': ' + object.latest + '</div>');
+            btnEl = fpcm.vars.jsvars.extStats.deleteButtonStr;
+            
+            elList.append(
+                '<div class="row my-1">' +
+                '<div class="col-1 align-self-center">' + btnEl.replace('_{$id}', object.intid).replace('{$id}', object.intid) +
+                '</div><div class="col-7 align-self-center">' + object.label +
+                '</div><div class="col-1 align-self-center">' + object.value +
+                '</div><div class="col-3 align-self-center">' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + ': ' + object.latest +
+                '</div></div>'
+            );
+        });
+
+        jQuery('.fpcm-extstats-links-delete').click(function () {
+            fpcm.ajax.exec('extstats/delete', {
+                data: {
+                    id: jQuery(this).data('entry')
+                },
+                execDone: function (result) {
+                    
+                    if (result == 0) {
+                        return false;
+                    }
+
+                    jQuery('#btnSetdatespan').click();
+                }
+            });
+
+            return false;
         });
 
     }

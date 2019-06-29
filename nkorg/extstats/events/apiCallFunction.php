@@ -69,8 +69,13 @@ final class apiCallFunction extends \fpcm\module\event {
         if (!$duration || $duration < 600) {
             $duration = 3600;
         }
+        
+        $str = uniqid().' Unused cookie value which just markes you as unique visitor for '.$duration.' seconds. Source: '.\fpcm\classes\http::filter($_SERVER['REQUEST_URI'] ?? 'localhost', [
+            \fpcm\classes\http::FILTER_STRIPTAGS,            
+            \fpcm\classes\http::FILTER_TRIM,            
+        ]);
 
-        setcookie('extstatsts', uniqid().' Unused cookie value which just markes you as unique visitor for '.$duration.' seconds', time() + $duration, '/', '', false, true);
+        setcookie('extstatsts', $str, time() + $duration, '/', '', false, true);
         return true;
     }
 

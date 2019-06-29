@@ -17,15 +17,19 @@
 
             <div class="row no-gutters">
                 <div class="col-12">
+                <?php if ($notfound) : ?>
+                    <p class="fpcm-ui-padding-none fpcm-ui-margin-none"><?php $theView->icon('images', 'far')->setStack('ban fpcm-ui-important-text')->setSize('lg')->setStackTop(true); ?> <?php $theView->write('GLOBAL_NOTFOUND2'); ?></p>
+                <?php else : ?>
                     <canvas id="fpcm-nkorg-extendedstats-chart"></canvas>
+                <?php endif; ?>
                 </div>
             </div>
 
+        <?php if (!$notfound) : ?>
             <h3<?php if (!$showDate) : ?> style="display:none;"<?php endif; ?>><?php $theView->write('MODULE_NKORGEXTSTATS_HITS_LIST'); ?></h3>
             
-            <div id="fpcm-nkorg-extendedstats-list" class="row no-gutters fpcm-ui-padding-lg-top">
-                <div class="col-10"></div>
-                <div class="col-2"></div>
+            <div id="fpcm-nkorg-extendedstats-list" class="fpcm-ui-padding-lg-top">
+        <?php endif; ?>
             </div>
 
         </div>

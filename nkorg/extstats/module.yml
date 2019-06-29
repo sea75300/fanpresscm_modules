@@ -5,7 +5,7 @@ author: imagine
 name: Extended statistics
 description: "Extended statistics for articles, shares, coments and more."
 link: https://nobody-knows.org/
-version: 4.1.3
+version: 4.1.4
 help: 
 requirements:
     system: 4.1.0-rc4
@@ -14,3 +14,6 @@ tables:
 configOptions:
     add:
         cookie_duration: 3600
+        timespan_default: 30
+        link_compress: 50
+        show_visitors: 0

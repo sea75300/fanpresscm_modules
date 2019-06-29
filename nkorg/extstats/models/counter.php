@@ -19,6 +19,15 @@ class counter extends \fpcm\model\abstracts\tablelist {
     protected $table;
     protected $createTimeVar = 'createtime';
 
+    public function deleteLinkEntry($id)
+    {
+        $result = $this->dbcon->delete(countLink::TABLE, 'id = ?', [
+            (int) $id
+        ]);
+
+        return $result ? true : false;
+    }
+
     public function fetchArticles($start, $stop, $mode = 1)
     {
         $this->table = \fpcm\classes\database::tableArticles;
@@ -173,7 +182,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
     {
         $this->table = countLink::TABLE;
 
-        $items = 'url, counthits, lasthit';
+        $items = 'url, counthits, lasthit, id';
 
         $values = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams($this->table))
@@ -197,7 +206,8 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['listValues'][] = [
                 'label' => (string) new \fpcm\view\helper\escape($value->url),
                 'latest' => date($this->config->system_dtmask, $value->lasthit),
-                'value' => $val
+                'value' => $val,
+                'intid' => $value->id
             ];
         }
         

@@ -15,7 +15,10 @@ class countLink extends dbObj {
     {
         $this->table = self::TABLE;
         parent::__construct();
-        $this->url = $_SERVER['REQUEST_URI'];
+        $this->url = \fpcm\classes\http::filter($_SERVER['REQUEST_URI'] ?? 'localhost', [
+            \fpcm\classes\http::FILTER_STRIPTAGS,            
+            \fpcm\classes\http::FILTER_TRIM,            
+        ]);
         $this->urlhash = \fpcm\classes\tools::getHash($this->url);
         $this->init();
     }
