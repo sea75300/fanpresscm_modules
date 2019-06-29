@@ -233,7 +233,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $result = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams(countLink::TABLE))
                 ->setItem('id')
-                ->setWhere('1=1 '.$this->dbcon->orderBy(['counthits DESC']).' '.$this->dbcon->limitQuery(50, 0) )
+                ->setWhere('1=1 '.$this->dbcon->orderBy(['counthits DESC']).' '.$this->dbcon->limitQuery((int) $this->config->module_nkorgextstats_link_compress, 0) )
                 ->setFetchAll(true)
         );
 
