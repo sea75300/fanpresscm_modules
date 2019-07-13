@@ -1,0 +1,23 @@
+## Module config file
+---
+key: nkorg/polls
+author: imagine
+name: Polls (unfinished)
+description: "Module to create polls with single/ multiple answers and so on."
+link: https://nobody-knows.org/
+version: 4.2.0-dev
+help: 
+requirements:
+    system: 4.2.0-a1
+    php: 7.0.0
+tables:
+configOptions:
+    add:
+        tpl_voteform_header: "<h3>{{poll_text}}</div><ul>"
+        tpl_voteform_line: "<li>{{poll_reply_option}} {{poll_reply_text}}</li>"
+        tpl_voteform_footer: "</ul>{{poll_button_sumit}} {{poll_button_reset}}{{poll_button_results}}"
+        tpl_result_header: "<h3>{{poll_text}}</div><ul>"
+        tpl_result_line: "<li>{{poll_reply_text}}: {{poll_result_count}} ({{poll_result_percent}}%)</li>"
+        tpl_result_footer: "</ul>{{poll_result_votesum}} {{poll_button_tovote}}"
+        tpl_archive_footer: "Opend: {{poll_start}} to {{poll_stop}}"
+        show_latest_poll: 0
