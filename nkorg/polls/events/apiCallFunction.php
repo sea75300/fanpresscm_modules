@@ -29,4 +29,10 @@ final class apiCallFunction extends \fpcm\module\event {
         return true;
     }
 
+    final protected function displayArchive($pollId = 0)
+    {
+
+        return true;
+    }
+
 }

@@ -1,0 +1,80 @@
+<?php
+
+namespace fpcm\modules\nkorg\polls\controller;
+
+final class polllist extends \fpcm\controller\abstracts\module\controller {
+
+    use \fpcm\controller\traits\common\dataView;
+    
+    protected function getViewPath() : string
+    {
+        return 'index';
+    }
+
+    public function process()
+    {
+        $key = $this->getModuleKey();
+
+        $this->view->addButtons([
+            (new \fpcm\view\helper\linkButton('pollAdd'))->setText('Umfrage erstellen')->setIcon('plus')->setUrl(\fpcm\classes\tools::getControllerLink('polls/add')),
+            (new \fpcm\view\helper\submitButton('pollClose'))->setText('Umfrage schließen')->setIcon('lock'),
+            (new \fpcm\view\helper\deleteButton('pollDelete'))
+        ]);
+        
+        $this->view->addJsVars([
+            'polls' => []
+        ]);
+        
+        $this->view->addJslangVars([$this->addLangVarPrefix('HITS_LIST_LATEST')]);
+        $this->view->addJsFiles([
+            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
+        ]);
+        
+        $this->items = (new \fpcm\modules\nkorg\polls\models\polls())->getAllPolls();
+        $this->initDataView();
+
+        $this->view->setFormAction('polls/list');
+        $this->view->render();
+        return true;
+    }
+    
+    protected function getDataViewCols(): array {
+
+        return [
+            (new \fpcm\components\dataView\column('select', ''))->setSize(1)->setAlign('center'),
+            (new \fpcm\components\dataView\column('button', ''))->setSize(1)->setAlign('center'),
+            (new \fpcm\components\dataView\column('name', 'Umfrage'))->setSize(4),
+            (new \fpcm\components\dataView\column('time', 'Zeitraum'))->setSize(3),
+            (new \fpcm\components\dataView\column('status', 'Status'))->setSize(3),
+        ];
+
+    }
+
+    protected function getDataViewName() {
+        return 'nkorgpolls';
+    }
+    
+    /**
+     * 
+     * @param \fpcm\modules\nkorg\polls\models\poll $poll
+     * @return \fpcm\components\dataView\row
+     */
+    protected function initDataViewRow($poll)
+    {
+        $time = 'Start: '.new \fpcm\view\helper\dateText($poll->getStarttime());
+        
+        if ($poll->getStoptime()) {
+            $time .= ' &bull; Ende: '.new \fpcm\view\helper\dateText($poll->getStoptime());
+        }
+
+        return new \fpcm\components\dataView\row([
+            new \fpcm\components\dataView\rowCol('select', (new \fpcm\view\helper\checkbox('ids[]', 'chbx' . $poll->getId()))->setValue($poll->getId()), '', \fpcm\components\dataView\rowCol::COLTYPE_ELEMENT),
+            new \fpcm\components\dataView\rowCol('button', (new \fpcm\view\helper\editButton('edit'))->setUrlbyObject($poll) ),
+            new \fpcm\components\dataView\rowCol('name', $poll->getText() ),
+            new \fpcm\components\dataView\rowCol('time', $time ),
+            new \fpcm\components\dataView\rowCol('status', $poll->getIsclosed() ? 'geschlossen' : 'offen' ),
+        ]);
+    }
+
+
+}

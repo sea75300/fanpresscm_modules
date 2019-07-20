@@ -32,10 +32,5 @@ indices:
     pollid:
         col: pollid
         isUnqiue: false
-    pollid_reply:
-        col:
-            pollid
-            reply
-        isUnqiue: true
 defaultvalues:
     rows:

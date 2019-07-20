@@ -15,7 +15,7 @@ final class deleteentry extends \fpcm\controller\abstracts\module\ajaxController
             $this->getSimpleResponse();
         }
 
-        $this->returnData = (new \fpcm\modules\nkorg\extstats\models\counter())->deleteLinkEntry($id) ? 1 : 0;
+        $this->returnData = (new \fpcm\modules\nkorg\polls\models\counter())->deleteLinkEntry($id) ? 1 : 0;
         $this->getSimpleResponse();
         return true;
     }

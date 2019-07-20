@@ -24,6 +24,10 @@ cols:
         type: bool
         length: 
         params: 
+    showarchive:
+        type: bool
+        length: 
+        params: 
     starttime:
         type: bigint
         length: 20
@@ -47,11 +51,25 @@ indices:
     isclosed:
         col: isclosed
         isUnqiue: false
+    showarchive:
+        col: showarchive
+        isUnqiue: false
     starttime:
         col: starttime
         isUnqiue: false
     stoptime:
         col: stoptime
+        isUnqiue: false
+    archived_all:
+        col: 
+            stoptime
+            isclosed
+            showarchive
+        isUnqiue: false
+    archived_small:
+        col: 
+            isclosed
+            showarchive
         isUnqiue: false
 defaultvalues:
     rows:

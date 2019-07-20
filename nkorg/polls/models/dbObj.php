@@ -1,9 +1,15 @@
 <?php
 
-namespace fpcm\modules\nkorg\extstats\models;
+namespace fpcm\modules\nkorg\polls\models;
 
 class dbObj extends \fpcm\model\abstracts\dataset {
 
+    protected $id = 0;  
+    
+    public function getId() {
+        return $this->id;
+    }
+    
     protected function getEventModule(): string
     {
         return '';
@@ -30,4 +36,5 @@ class dbObj extends \fpcm\model\abstracts\dataset {
 
         return true;
     }
+
 }
