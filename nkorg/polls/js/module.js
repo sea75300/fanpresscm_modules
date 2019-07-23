@@ -10,20 +10,23 @@ fpcm.polls = {
     init: function () {
         
         jQuery('#btnAddReplyOption').click(function () {
-            var newEl = jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone();
             fpcm.polls.replyOptionsStart++;
+            jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone().attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#tabs-replies');
 
-            jQuery(newEl).attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#tabs-replies');
-            jQuery(newEl).find('label span').text('Antwort ' + fpcm.polls.replyOptionsStart);
-            jQuery(newEl).find('input').val('');
-            jQuery(newEl).find('button.fpcm-ui-nkorgpolls-removereply').data('idx', fpcm.polls.replyOptionsStart);
-
+            var id = '#' + fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart;
+            jQuery(id).find('label span').text('Antwort ' + fpcm.polls.replyOptionsStart);
+            jQuery(id).find('input').val('');
+            jQuery(id).find('input').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
+            jQuery(id).find('input[type=text]').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
+            jQuery(id).find('input[type=hidden]').attr('id', 'polldataids' + fpcm.polls.replyOptionsStart);
+            jQuery(id).find('button.fpcm-ui-nkorgpolls-removereply').attr('data-idx', fpcm.polls.replyOptionsStart);
             jQuery('.fpcm-ui-nkorgpolls-removereply').unbind('click');
             fpcm.polls.initDeleteButtonAction();
             return false;
         });
 
         fpcm.polls.initDeleteButtonAction();
+        jQuery('.fpcm-ui-input-select').selectmenu( "option", "classes.ui-selectmenu-button", "fpcm-ui-border-radius-right" );
     },
     
     initAfter: function() {
@@ -41,7 +44,7 @@ fpcm.polls = {
         jQuery('.fpcm-ui-nkorgpolls-removereply').click(function () {
             
             var btnIdx = jQuery(this).data('idx');
-            if (!btnIdx || btnIdx > fpcm.polls.replyOptionsStart || fpcm.polls.replyOptionsStart == 1) {
+            if (jQuery('.fpcm-ui-nkorgpolls-removereply').length < 2) {
                 return false;
             }
             
@@ -53,10 +56,11 @@ fpcm.polls = {
 
                 idx = (idx + 1);
 
-                jQuery(obj)
-                    .attr('id', fpcm.polls.replyOptionsIdSlug + idx)
-                    .find('label span').text('Antwort ' + idx)
-                    .find('button.fpcm-ui-nkorgpolls-removereply').data('idx', idx);
+                jQuery(obj).attr('id', fpcm.polls.replyOptionsIdSlug + idx);
+                jQuery(obj).find('label span').text('Antwort ' + idx);
+                jQuery(obj).find('input[type=text]').attr('id', 'polldatareplies' + idx);
+                jQuery(obj).find('input[type=hidden]').attr('id', 'polldataids' + idx);
+                jQuery(obj).find('button.fpcm-ui-nkorgpolls-removereply').attr('data-idx', idx);
                 
             });
             

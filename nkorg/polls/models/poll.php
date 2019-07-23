@@ -86,13 +86,24 @@ class poll extends dbObj {
         return $this;
     }
 
+    public function getEditLink() {
+        return \fpcm\classes\tools::getControllerLink('polls/edit', [
+            'id' => $this->getId()
+        ]);
+    }
+
     final public function addReplies(array $replies) {
-        
+
         if (!$replies) {
             return false;
         }
 
         foreach ($replies as $reply) {
+            
+            if (!trim($reply)) {
+                continue;
+            }
+
             $obj = new poll_reply();
             $obj->setPollid($this->getId())->setText($reply)->setCreatetime($this->getCreatetime())->setCreateuser($this->getCreateuser());
             if (!$obj->save()) {
@@ -105,10 +116,82 @@ class poll extends dbObj {
         return true;
     }
 
-    public function getEditLink() {
-        return \fpcm\classes\tools::getControllerLink('polls/edit', [
-            'id' => $this->getId()
-        ]);
+    final public function updateReplies(array $replyIds, array $replies) {
+
+        if (!count($replyIds) || !count($replies)) {
+            return false;
+        }
+        
+        $replyIds = array_map('intval', $replyIds);
+
+        $addedRepliues = [];
+        foreach ($replyIds as $i => $id) {
+            
+            $reply = $replies[$i];
+            if (!trim($reply)) {
+                continue;
+            }
+            
+            if (!$id) {
+                $addedRepliues[] = $reply;
+                continue;
+            }
+
+            $obj = new poll_reply($id);
+            $obj->setText($reply);            
+            if (!$obj->update()) {
+                trigger_error('Unable to update reply "'.$reply.'" for poll "'.$this->getText().'"!');
+                return false;
+            }
+        }
+        
+        $res = $this->dbcon->delete(
+            'module_nkorgpolls_polls_replies', 'pollid = ? AND id NOT IN ('. implode(', ', array_fill(0, count($replyIds), '?')).')',
+            array_merge([$this->getId()], $replyIds)        
+        );
+        
+        if (!$res) {
+            trigger_error('Unable to remove deleted replies from poll "'.$this->getText().'"!');
+            return false;
+        }
+
+        $this->addReplies($addedRepliues);
+        return true;
+    }
+    
+    final public function getReplies($empty = false) {
+
+        if ($empty) {
+
+            $r1 = new poll_reply();
+            $r1->setId(1);
+            $r2 = new poll_reply();
+            $r2->setId(2);
+            $r3 = new poll_reply();
+            $r3->setId(3);
+            
+            return [$r1, $r2, $r3];
+        }
+        
+        $obj = (new \fpcm\model\dbal\selectParams('module_nkorgpolls_polls_replies'))
+                ->setWhere('pollid = ? ' . $this->dbcon->orderBy(['id ASC']))
+                ->setParams([$this->getId()])
+                ->setFetchAll(true);
+        
+        $replies = $this->dbcon->selectFetch($obj);
+
+        if (!$replies) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($replies as $reply) {
+            $obj = new poll_reply();
+            $obj->createFromDbObject($reply);
+            $result[] = $obj;
+        }
+
+        return $result;
     }
 
 }

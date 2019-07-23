@@ -58,25 +58,38 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
                     ->setMaxreplies((int) $data['maxaw'])
                     ->setStarttime((int) $data['starttime'])
                     ->setStoptime((int) $data['stoptime'])
-                    ->setIsclosed(isset($data['closed']))
+                    ->setIsclosed(isset($data['closed']) && $data['closed'])
                     ->setShowarchive(isset($data['inarchive']));
 
         if (!$this->poll->getId()) {
             $this->poll->setCreatetime(time())
                        ->setCreateuser($this->session->getUserId());
         }
+        
+        if (!$this->poll->getId()) {
 
-        $saveFn = $this->poll->getId() ? 'update' : 'save';
-        if (!call_user_func([$this->poll, $saveFn])) {
-            $this->view->addErrorMessage('Fehler beim Speichern der Umfrage!');
-            return false;
+            if (!$this->poll->save()) {
+                $this->view->addErrorMessage('Fehler beim Speichern der Umfrage!');
+                return false;
+            }
+            
+            if (!$this->poll->addReplies($data['replies'])) {
+                $this->view->addErrorMessage('Fehler beim Speichern der Antworten!');
+                return false;
+            }
+
         }
         
-        if ($saveFn === 'save' && !$this->poll->addReplies($data['replies'])) {
-            $this->view->addErrorMessage('Fehler beim Speichern der Umfrage, eine Antwort konnte nicht gespeichert werden!');
+        if (!$this->poll->update()) {
+            $this->view->addErrorMessage('Fehler beim Speichern von Änderungen der Umfrage!');
             return false;
         }
-        
+
+        if (!$this->poll->updateReplies($data['ids'], $data['replies'])) {
+            $this->view->addErrorMessage('Fehler beim Aktualisieren der Antworten!');
+            return false;
+        }
+
         return true;
     }
 

@@ -19,17 +19,18 @@ final class polledit extends pollbase {
             return false;
         }
         
-        if ($this->buttonClicked('save') && !$this->save()) {
+        if ($this->buttonClicked('save') && $this->save()) {
+            $this->view->addNoticeMessage('Änderungen gespeichert!');
             return true;
         }
         
-        $this->view->addNoticeMessage('Änderungen gespeichert!');
         return true;
     }
 
     public function process()
     {
-        $this->view->setFormAction('polls/edit&id='.$this->poll->getId());        
+        $this->view->setFormAction('polls/edit&id='.$this->poll->getId());
+        $this->view->assign('replies', $this->poll->getReplies());
         parent::process();
     }
 

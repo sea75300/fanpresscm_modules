@@ -30,7 +30,7 @@ class dbObj extends \fpcm\model\abstracts\dataset {
         $params = $this->getPreparedSaveParams();        
         $params[] = $this->getId();
 
-        if ($this->dbcon->update($this->table, array_slice(array_keys($params), 0, -1), array_values($params), 'id = ?')) {
+        if (!$this->dbcon->update($this->table, array_slice(array_keys($params), 0, -1), array_values($params), 'id = ?')) {
             return false;
         }
 
