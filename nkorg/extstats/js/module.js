@@ -137,6 +137,8 @@ fpcm.extStats = {
         });
 
         jQuery('.fpcm-extstats-links-delete').click(function () {
+            
+            var btnParent = jQuery(this).parent().parent();
             fpcm.ajax.exec('extstats/delete', {
                 data: {
                     id: jQuery(this).data('entry')
@@ -147,7 +149,7 @@ fpcm.extStats = {
                         return false;
                     }
 
-                    jQuery('#btnSetdatespan').click();
+                    jQuery(btnParent).remove();
                 }
             });
 
