@@ -9,6 +9,7 @@ class poll extends dbObj {
     protected $maxreplies = 1;
     protected $isclosed = 0;
     protected $showarchive = 0;
+    protected $votessum = 0;
     protected $starttime = 0;
     protected $stoptime = 0;
     protected $createtime = 0;
@@ -24,6 +25,10 @@ class poll extends dbObj {
 
     public function getIsclosed() {
         return (bool) $this->isclosed;
+    }
+
+    public function getVotessum() {
+        return (int) $this->votessum;
     }
 
     public function getShowarchive() {
@@ -66,6 +71,11 @@ class poll extends dbObj {
         return $this;
     }
 
+    public function setVotessum($votessum) {
+        $this->votessum = (int) $votessum;
+        return $this;
+    }
+
     public function setStarttime(int $starttime) {
         $this->starttime = $starttime;
         return $this;
@@ -90,6 +100,23 @@ class poll extends dbObj {
         return \fpcm\classes\tools::getControllerLink('polls/edit', [
             'id' => $this->getId()
         ]);
+    }
+    
+    public function delete() {
+        
+        if (!$this->dbcon->delete('module_nkorgpolls_polls_replies', 'pollid = ?', [$this->getId()])) {
+            return false;
+        }
+
+        if (!$this->dbcon->delete('module_nkorgpolls_vote_log', 'pollid = ?', [$this->getId()])) {
+            return false;
+        }
+
+        if (!parent::delete()) {
+            return false;
+        }
+
+        return true;
     }
 
     final public function addReplies(array $replies) {
@@ -116,18 +143,20 @@ class poll extends dbObj {
         return true;
     }
 
-    final public function updateReplies(array $replyIds, array $replies) {
+    final public function updateReplies(array $replyIds, array $replies, array $sums = []) {
 
         if (!count($replyIds) || !count($replies)) {
             return false;
         }
         
         $replyIds = array_map('intval', $replyIds);
+        $sums = array_map('intval', $sums);
 
         $addedRepliues = [];
         foreach ($replyIds as $i => $id) {
             
-            $reply = $replies[$i];
+            $reply = $replies[$i] ?? false;
+            $sum = $sums[$i] ?? 0;
             if (!trim($reply)) {
                 continue;
             }
@@ -138,7 +167,8 @@ class poll extends dbObj {
             }
 
             $obj = new poll_reply($id);
-            $obj->setText($reply);            
+            $obj->setText(trim($reply));            
+            $obj->setVotes($sum);
             if (!$obj->update()) {
                 trigger_error('Unable to update reply "'.$reply.'" for poll "'.$this->getText().'"!');
                 return false;
@@ -160,7 +190,7 @@ class poll extends dbObj {
     }
     
     final public function getReplies($empty = false) {
-
+        
         if ($empty) {
 
             $r1 = new poll_reply();
@@ -171,6 +201,10 @@ class poll extends dbObj {
             $r3->setId(3);
             
             return [$r1, $r2, $r3];
+        }
+        
+        if (isset($this->data[__FUNCTION__])) {
+            return $this->data[__FUNCTION__];
         }
         
         $obj = (new \fpcm\model\dbal\selectParams('module_nkorgpolls_polls_replies'))
@@ -184,14 +218,13 @@ class poll extends dbObj {
             return [];
         }
 
-        $result = [];
         foreach ($replies as $reply) {
             $obj = new poll_reply();
             $obj->createFromDbObject($reply);
-            $result[] = $obj;
+            $this->data[__FUNCTION__][] = $obj;
         }
 
-        return $result;
+        return $this->data[__FUNCTION__];
     }
 
 }

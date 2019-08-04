@@ -4,10 +4,12 @@ if (fpcm === undefined) {
 
 fpcm.polls = {
 
-    replyOptionsStart: 3,
+    replyOptionsStart: 0,
     replyOptionsIdSlug: 'fpcm-nkorgpolls-reply-',
 
     init: function () {
+        
+        fpcm.polls.replyOptionsStart = fpcm.vars.jsvars.replyOptionsStart;
         
         jQuery('#btnAddReplyOption').click(function () {
             fpcm.polls.replyOptionsStart++;

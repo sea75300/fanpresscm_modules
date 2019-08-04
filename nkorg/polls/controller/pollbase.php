@@ -28,7 +28,11 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
         ]);
 
-        $this->view->assign('poll', $this->poll);
+        $this->view->addJsVars([
+            'replyOptionsStart' => count($this->poll->getReplies())
+        ]);
+
+        $this->view->assign('poll', $this->poll);        
         $this->view->render();
         return true;
     }
@@ -53,31 +57,31 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         
         $data['starttime'] = empty($data['starttime']) ? time() : strtotime($data['starttime']);
         $data['stoptime'] = empty($data['stoptime']) ? 0 : strtotime($data['stoptime']);
+        $data['votessum'] = isset($data['votessum']) ? (int) $data['votessum'] : 0;
 
         $this->poll->setText($data['text'])
                     ->setMaxreplies((int) $data['maxaw'])
                     ->setStarttime((int) $data['starttime'])
                     ->setStoptime((int) $data['stoptime'])
+                    ->setVotessum((int) $data['votessum'])
                     ->setIsclosed(isset($data['closed']) && $data['closed'])
                     ->setShowarchive(isset($data['inarchive']));
 
         if (!$this->poll->getId()) {
-            $this->poll->setCreatetime(time())
-                       ->setCreateuser($this->session->getUserId());
-        }
-        
-        if (!$this->poll->getId()) {
+
+            $this->poll->setCreatetime(time())->setCreateuser($this->session->getUserId());
 
             if (!$this->poll->save()) {
                 $this->view->addErrorMessage('Fehler beim Speichern der Umfrage!');
                 return false;
             }
-            
+
             if (!$this->poll->addReplies($data['replies'])) {
                 $this->view->addErrorMessage('Fehler beim Speichern der Antworten!');
                 return false;
             }
-
+            
+            return true;
         }
         
         if (!$this->poll->update()) {
@@ -85,7 +89,7 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
             return false;
         }
 
-        if (!$this->poll->updateReplies($data['ids'], $data['replies'])) {
+        if (!$this->poll->updateReplies($data['ids'], $data['replies'], $data['sums'])) {
             $this->view->addErrorMessage('Fehler beim Aktualisieren der Antworten!');
             return false;
         }

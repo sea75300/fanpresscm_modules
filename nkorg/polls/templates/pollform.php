@@ -49,6 +49,16 @@
             </div>
             <?php if ($poll->getId()) : ?>
             <div class="row my-3 mx-1">
+                <?php $theView
+                        ->dateTimeInput("polldata[votessum]")
+                        ->setText('Stimmenanzahl')
+                        ->setValue($poll->getVotessum())
+                        ->setType('number')
+                        ->setWrapper(false)
+                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+            </div>
+            <div class="row my-3 mx-1">
                 <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
                     <?php $theView->write('Umfrage geschlossen'); ?>
                 </label>
@@ -70,9 +80,18 @@
                         ->setText('Antwort '. ($idx + 1) )
                         ->setValue($reply->getText())
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-7 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setClass('col-12 col-sm-6 col-md-5 fpcm-ui-field-input-nowrapper-general pr-0')
                         ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
                 
+                <?php if ($poll->getId()) : ?>
+                <div class="col-12 col-sm-3 col-md-1">
+                    <?php $theView
+                            ->textInput("polldata[sums][]", "polldatareplies{$idx}")
+                            ->setValue($reply->getVotes())
+                            ->setType('number'); ?>
+                </div>
+                <?php endif; ?>
+
                 <div class="col-12 col-sm-6 col-md-2">
                     <?php $theView->deleteButton('removeReply1')->setClass('fpcm-ui-nkorgpolls-removereply')->setData(['idx' => $idx ]); ?>
                 </div>

@@ -28,6 +28,10 @@ cols:
         type: bool
         length: 
         params: 
+    votessum:
+        type: bigint
+        length: 20
+        params: NOT NULL
     starttime:
         type: bigint
         length: 20

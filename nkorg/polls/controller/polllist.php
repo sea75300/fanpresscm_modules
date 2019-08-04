@@ -13,6 +13,8 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
 
     public function process()
     {
+        $this->deletePoll();
+        
         $key = $this->getModuleKey();
 
         $this->view->addButtons([
@@ -38,6 +40,34 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
         return true;
     }
     
+    private function deletePoll() : bool {
+        
+        if (!$this->buttonClicked('pollDelete')) {
+            return true;
+        }
+
+        $id = $this->getRequestVar('id', [
+            \fpcm\classes\http::FILTER_CASTINT
+        ]);
+        
+        if (!$id) {
+            return false;
+        }
+
+        $poll = new \fpcm\modules\nkorg\polls\models\poll($id);
+        if (!$poll->exists()) {
+            $this->view->addErrorMessage('Die gewählte Umfrage wurde nicht gefunden!');
+            return false;
+        }
+
+        if (!$poll->delete()) {
+            $this->view->addErrorMessage('Die gewählte Umfrage konnte nicht gelöscht werden!');
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getDataViewCols(): array {
 
         return [
@@ -68,7 +98,7 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
         }
 
         return new \fpcm\components\dataView\row([
-            new \fpcm\components\dataView\rowCol('select', (new \fpcm\view\helper\checkbox('ids[]', 'chbx' . $poll->getId()))->setValue($poll->getId()), '', \fpcm\components\dataView\rowCol::COLTYPE_ELEMENT),
+            new \fpcm\components\dataView\rowCol('select', (new \fpcm\view\helper\radiobutton('id', 'chbx' . $poll->getId()))->setValue($poll->getId()), '', \fpcm\components\dataView\rowCol::COLTYPE_ELEMENT),
             new \fpcm\components\dataView\rowCol('button', (new \fpcm\view\helper\editButton('edit'))->setUrlbyObject($poll) ),
             new \fpcm\components\dataView\rowCol('name', $poll->getText() ),
             new \fpcm\components\dataView\rowCol('time', $time ),

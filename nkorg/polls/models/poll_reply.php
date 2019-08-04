@@ -8,6 +8,7 @@ class poll_reply extends dbObj {
 
     protected $pollid = 0;
     protected $text = '';
+    protected $votes = 0;
     protected $createtime = 0;
     protected $createuser = 0;
 
@@ -17,6 +18,10 @@ class poll_reply extends dbObj {
 
     public function getText() {
         return $this->text;
+    }
+
+    public function getVotes() {
+        return (int) $this->votes;
     }
 
     public function getCreatetime() {
@@ -37,6 +42,11 @@ class poll_reply extends dbObj {
         return $this;
     }
 
+    public function setVotes(int $votes) {
+        $this->votes = $votes;
+        return $this;
+    }
+
     public function setCreatetime(int $createtime) {
         $this->createtime = $createtime;
         return $this;
@@ -46,6 +56,5 @@ class poll_reply extends dbObj {
         $this->createuser = $createuser;
         return $this;
     }
-
 
 }

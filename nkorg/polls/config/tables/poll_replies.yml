@@ -20,6 +20,10 @@ cols:
         type: varchar
         length: 255
         params: NOT NULL
+    votes:
+        type: bigint
+        length: 20
+        params: NOT NULL
     createtime:
         type: bigint
         length: 20
@@ -31,6 +35,9 @@ cols:
 indices:
     pollid:
         col: pollid
+        isUnqiue: false
+    votes:
+        col: votes
         isUnqiue: false
 defaultvalues:
     rows:
