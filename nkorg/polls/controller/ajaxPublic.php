@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\polls\controller;
 
-final class deleteentry extends \fpcm\controller\abstracts\module\ajaxController {
+final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController {
 
     /**
      *
@@ -12,13 +12,15 @@ final class deleteentry extends \fpcm\controller\abstracts\module\ajaxController
 
     public function request()
     {
-        $fn = 'process'.$this->getRequestVar('fn');
+        $fn = 'process'.$this->getRequestVar('fn', [
+            \fpcm\classes\http::FILTER_FIRSTUPPER
+        ]);
         if (!method_exists($this, $fn)) {
             trigger_error('Function '.$fn.' does not exists!');
             return false;
         }
         
-        $this->pollId = $this->getRequestVar('pollid', [
+        $this->pollId = $this->getRequestVar('pid', [
             \fpcm\classes\http::FILTER_CASTINT
         ]);
         
@@ -33,9 +35,9 @@ final class deleteentry extends \fpcm\controller\abstracts\module\ajaxController
         return true;
     }
     
-    final protected function vote()
+    final protected function processVote()
     {
-        $replyIds = $this->getRequestVar('replyIds', [
+        $replyIds = $this->getRequestVar('rids', [
             \fpcm\classes\http::FILTER_CASTINT
         ]);
 
@@ -44,10 +46,18 @@ final class deleteentry extends \fpcm\controller\abstracts\module\ajaxController
             return false;
         }
         
-        array_walk($replyIds, function ($replyId) {
-
-
-        });
+        fpcmLogSystem([
+            __METHOD__,
+            $this->pollId,
+            $replyIds
+        ]);
+        
+//        $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
+        
+//        array_walk($replyIds, function ($replyId) {
+//
+//
+//        });
         
     }
 
