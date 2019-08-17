@@ -15,6 +15,11 @@ class poll extends dbObj {
     protected $createtime = 0;
     protected $createuser = 0;
 
+    public function init() {
+        parent::init();
+        $this->pollCookieName = 'nkorgpollsvoted'.$this->id;
+    }
+
     public function getText() {
         return $this->text;
     }
@@ -233,13 +238,16 @@ class poll extends dbObj {
             return false;
         }
 
-        $replyIds = array_slice($replyIds, 0, $this->maxreplies);
+        $replyIds   = $this->maxreplies
+                    ? array_slice($replyIds, 0, $this->maxreplies)
+                    : $replyIds;
 
         array_walk($replyIds, [$this, 'updateReplySum']);
-        if (!empty($this->data['replyUpdateFailed']) || !$this->updateVoteSum(count($replyIds)) ) {
+        if ($this->replyUpdateFailed === true || !$this->updateVoteSum(count($replyIds)) ) {
             return false;
         }
 
+        $this->setCookie('votedreplies_'.implode('_', $replyIds));
         return true;
     }
     
@@ -255,11 +263,8 @@ class poll extends dbObj {
 
     private function updateReplySum(int $replyId)
     {
-        fpcmLogSystem(__METHOD__.' :: '.$replyId);
-        fpcmLogSystem('UPDATE '.$this->dbcon->getTablePrefixed('module_nkorgpolls_polls_replies').' SET votes=votes+1 WHERE pollid = '.$this->id.' AND id = '.$replyId);
-        
         if ( !$this->dbcon->exec('UPDATE '.$this->dbcon->getTablePrefixed('module_nkorgpolls_polls_replies').' SET votes=votes+1 WHERE pollid = ? AND id = ?', [$this->id, $replyId]) ) {
-            $this->data['replyUpdateFailed'] = true;
+            $this->replyUpdateFailed = true;
             trigger_error('Failed to update vote count for reply '.$replyId);
             return false;
         }
@@ -272,6 +277,31 @@ class poll extends dbObj {
 
         if (!$logEntry->save()) {
             trigger_error('Failed to add vote log entry for reply '.$replyId);
+        }
+
+        return true;
+    }
+
+    private function setCookie($value = '')
+    {
+        if ($this->hasVoted()) {
+            return false;
+        }
+
+        setcookie($this->pollCookieName, $value, time() + 2678400, '/', '', false, true);
+        return true;
+    }
+
+    final public function isOpen()
+    {
+        return (!$this->getIsclosed() && $this->getStoptime() > time());
+    }
+
+    final public function hasVoted()
+    {
+
+        if (\fpcm\classes\http::cookieOnly($this->pollCookieName) === null) {
+            return false;
         }
 
         return true;

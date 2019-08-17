@@ -42,12 +42,23 @@ final class apiCallFunction extends \fpcm\module\event {
         
         $poll = new \fpcm\modules\nkorg\polls\models\poll($pollId);
         if (!$poll->exists()) {
+            print "Die ausgewählte Umfrage wurde nicht gefunden.";
             return false;
+        }
+
+        if (!$poll->isOpen()) {
+            $content = "Die ausgewählte Umfrage wurde geschlossen oder beendet.";
+        }
+        elseif ($poll->hasVoted()) {
+            $content = "Du hast bei dieser Umfrage bereits abgestimmt.";
+        }
+        else {
+            $content = ( new \fpcm\modules\nkorg\polls\models\pollform($poll))->getVoteForm();
         }
 
         $view = $this->getViewObj();
         $view->assign('pollId', $poll->getId() );
-        $view->assign('content', ( new \fpcm\modules\nkorg\polls\models\pollform($poll))->getVoteForm() );
+        $view->assign('content', $content);
         $view->assign('pollJsVars', [ ]);
         $view->render();
         return true;

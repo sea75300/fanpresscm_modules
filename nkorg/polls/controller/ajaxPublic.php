@@ -12,7 +12,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
 
     public function request()
     {
-        $this->returnData = ['code' => 0, 'msg' => 'nofound'];
+        $this->returnData = ['code' => 0, 'msg' => 'Beim Sender der Anfrage ist ein fehler aufgetreten.'];
 
         $fn = 'process'.$this->getRequestVar('fn', [
             \fpcm\classes\http::FILTER_FIRSTUPPER
@@ -47,10 +47,10 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
         }
         
         $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
-        if (!$poll->exists()) {
+        if (!$poll->exists() || !$poll->isOpen() || $poll->hasVoted()) {
             $this->getSimpleResponse();
         }
-
+        
         if (!$poll->pushnewVote($replyIds)) {
             $this->returnData = ['code' => -100, 'msg' => 'Die Antwort konnte nicht gespeichert werden, bitte versuche es später noch einmal.'];
             $this->getSimpleResponse();
