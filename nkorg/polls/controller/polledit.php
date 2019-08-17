@@ -30,7 +30,13 @@ final class polledit extends pollbase {
     public function process()
     {
         $this->view->setFormAction('polls/edit&id='.$this->poll->getId());
-        $this->view->assign('replies', $this->poll->getReplies());
+        
+        $replies = $this->poll->getReplies();
+        $this->view->assign('replies', $replies);
+        $this->view->addJsVars([
+            'replyOptionsStart' => count($replies)
+        ]);
+
         parent::process();
     }
 

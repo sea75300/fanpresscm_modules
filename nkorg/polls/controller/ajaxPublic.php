@@ -12,6 +12,8 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
 
     public function request()
     {
+        $this->returnData = ['code' => 0, 'msg' => 'nofound'];
+
         $fn = 'process'.$this->getRequestVar('fn', [
             \fpcm\classes\http::FILTER_FIRSTUPPER
         ]);
@@ -25,7 +27,6 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
         ]);
         
         if (!$this->pollId) {
-            $this->returnData = ['code' => 0, 'msg' => 'nofound'];
             $this->getSimpleResponse();
         }
         
@@ -42,23 +43,21 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
         ]);
 
         if (!count($replyIds)) {
-            $this->returnData = ['code' => 0, 'msg' => 'noreplies'];
             return false;
         }
         
-        fpcmLogSystem([
-            __METHOD__,
-            $this->pollId,
-            $replyIds
-        ]);
-        
-//        $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
-        
-//        array_walk($replyIds, function ($replyId) {
-//
-//
-//        });
-        
+        $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
+        if (!$poll->exists()) {
+            $this->getSimpleResponse();
+        }
+
+        if (!$poll->pushnewVote($replyIds)) {
+            $this->returnData = ['code' => -100, 'msg' => 'Die Antwort konnte nicht gespeichert werden, bitte versuche es später noch einmal.'];
+            $this->getSimpleResponse();
+        }
+
+        $this->returnData = ['code' => 100, 'msg' => 'Vielen Dank für deine Antwort!'];
+        $this->getSimpleResponse();
     }
 
     public function hasAccess()

@@ -28,10 +28,6 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
         ]);
 
-        $this->view->addJsVars([
-            'replyOptionsStart' => count($this->poll->getReplies())
-        ]);
-
         $this->view->assign('poll', $this->poll);        
         $this->view->render();
         return true;

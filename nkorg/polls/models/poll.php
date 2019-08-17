@@ -226,5 +226,55 @@ class poll extends dbObj {
 
         return $this->data[__FUNCTION__];
     }
+    
+    final public function pushnewVote(array $replyIds) {
+        
+        if (!count($replyIds)) {
+            return false;
+        }
+
+        $replyIds = array_slice($replyIds, 0, $this->maxreplies);
+
+        array_walk($replyIds, [$this, 'updateReplySum']);
+        if (!empty($this->data['replyUpdateFailed']) || !$this->updateVoteSum(count($replyIds)) ) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    private function updateVoteSum(int $addSum = 1)
+    {
+        if ( !$this->dbcon->exec('UPDATE '.$this->dbcon->getTablePrefixed($this->table).' SET votessum=votessum+'.(int) $addSum.' WHERE id = ?', [$this->id]) ) {
+            trigger_error('Failed to update vote sum for poll '.$this->id);
+            return false;
+        }
+
+        return true;
+    }
+
+    private function updateReplySum(int $replyId)
+    {
+        fpcmLogSystem(__METHOD__.' :: '.$replyId);
+        fpcmLogSystem('UPDATE '.$this->dbcon->getTablePrefixed('module_nkorgpolls_polls_replies').' SET votes=votes+1 WHERE pollid = '.$this->id.' AND id = '.$replyId);
+        
+        if ( !$this->dbcon->exec('UPDATE '.$this->dbcon->getTablePrefixed('module_nkorgpolls_polls_replies').' SET votes=votes+1 WHERE pollid = ? AND id = ?', [$this->id, $replyId]) ) {
+            $this->data['replyUpdateFailed'] = true;
+            trigger_error('Failed to update vote count for reply '.$replyId);
+            return false;
+        }
+
+        $logEntry = (new vote_log())
+            ->setPollid($this->id)
+            ->setReplyid($replyId)
+            ->setReplytime(time())
+            ->setIp(\fpcm\classes\http::getIp());
+
+        if (!$logEntry->save()) {
+            trigger_error('Failed to add vote log entry for reply '.$replyId);
+        }
+
+        return true;
+    }
 
 }

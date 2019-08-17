@@ -33,7 +33,16 @@ fpcm.polls_pub = {
             });
 
             fpcm.ajax.post('polls/ajaxpublic', {
-                data: data
+                data: data,
+                execDone: function (result) {
+                    
+                    result = fpcm.ajax.fromJSON(result);
+                    fpcm.ui.addMessage({
+                        txt: result.msg,
+                        type: result.code < 0 ? 'error' : 'notice'
+                    });
+
+                }
             })
 
             return false;

@@ -20,7 +20,13 @@ final class polladd extends pollbase {
     {
         $this->poll->setStarttime(time());   
         $this->view->setFormAction('polls/add');
-        $this->view->assign('replies', $this->poll->getReplies(true));
+        
+        $replies = $this->poll->getReplies(true);
+        $this->view->assign('replies', $replies);
+        $this->view->addJsVars([
+            'replyOptionsStart' => count($replies)
+        ]);        
+        
         parent::process();
     }
 
