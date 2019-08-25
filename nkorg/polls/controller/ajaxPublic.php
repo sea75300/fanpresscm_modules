@@ -17,6 +17,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
         $fn = 'process'.$this->getRequestVar('fn', [
             \fpcm\classes\http::FILTER_FIRSTUPPER
         ]);
+
         if (!method_exists($this, $fn)) {
             trigger_error('Function '.$fn.' does not exists!');
             return false;
@@ -30,10 +31,40 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
             $this->getSimpleResponse();
         }
         
+        sleep(3);
+        
         call_user_func([$this, $fn]);
         $this->getSimpleResponse();
 
         return true;
+    }
+
+    public function hasAccess()
+    {
+        return true;
+    }
+    
+    final protected function processPollForm()
+    {
+        $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
+        if (!$poll->exists()) {
+            $this->returnData = ['code' => -100, 'msg' => 'Diese Umfrage wurde nicht gefunden.'];
+            $this->getSimpleResponse();
+        }
+
+        if (!$poll->isOpen()) {
+            $this->returnData = ['code' => -100, 'msg' => 'Die ausgewählte Umfrage wurde geschlossen oder beendet.'];
+            $this->getSimpleResponse();
+        }
+
+        $this->returnData = [
+            'code' => 400,
+            'msg' => '',
+            'html' => $poll->hasVoted()
+                    ? ( new \fpcm\modules\nkorg\polls\models\pollform($poll))->getResultForm()
+                    : ( new \fpcm\modules\nkorg\polls\models\pollform($poll))->getVoteForm()
+        ];
+
     }
     
     final protected function processVote()
@@ -56,12 +87,27 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
             $this->getSimpleResponse();
         }
 
-        $this->returnData = ['code' => 100, 'msg' => 'Vielen Dank für deine Antwort!'];
-        $this->getSimpleResponse();
-    }
+        $this->returnData = [
+            'code' => 100,
+            'msg' => 'Vielen Dank für deine Antwort!',
+            'html' => (new \fpcm\modules\nkorg\polls\models\pollform($poll))->getResultForm()
+        ];
 
-    public function hasAccess()
+    }
+    
+    final protected function processResult()
     {
-        return true;
+        $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
+        if (!$poll->exists()) {
+            $this->returnData = ['code' => -100, 'msg' => 'Diese Umfrage wurde nicht gefunden.'];
+            $this->getSimpleResponse();
+        }
+
+        $this->returnData = [
+            'code' => 300,
+            'msg' => '',
+            'html' => (new \fpcm\modules\nkorg\polls\models\pollform($poll))->getResultForm(true)
+        ];
+
     }
 }

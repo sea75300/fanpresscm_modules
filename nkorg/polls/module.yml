@@ -5,12 +5,14 @@ author: imagine
 name: Polls (unfinished)
 description: "Module to create polls with single/ multiple answers and so on."
 link: https://nobody-knows.org/
-version: 4.2.0-dev
+version: 4.2.0-a1
 help: 
 requirements:
     system: 4.2.0-a1
     php: 7.0.0
 tables:
+    alter:
+        polls
 configOptions:
     add:
         show_latest_poll: 0

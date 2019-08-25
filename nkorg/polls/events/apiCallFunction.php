@@ -6,6 +6,8 @@ use fpcm\classes\loader;
 
 final class apiCallFunction extends \fpcm\module\event {
 
+    private $jsVars = [];
+
     public function run()
     {
         $fn = $this->data['name'];
@@ -31,10 +33,12 @@ final class apiCallFunction extends \fpcm\module\event {
         //$view->showHeaderFooter(\fpcm\view\view::INCLUDE_HEADER_NONE);
         $view->showHeaderFooter(\fpcm\view\view::INCLUDE_HEADER_SIMPLE);
         $view->assign('pollJsFile', \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/fpcm-polls-pub.js'));
+        $this->jsVars['pollspub']['spinner'] = \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/spinner.gif');
+        $view->assign('pollJsVars', $this->jsVars);
         return $view;
     }
 
-    final protected function displayPoll($pollId = 0)
+    final public function displayPoll($pollId = 0)
     {
         if (!$pollId) {
             return false;
@@ -46,11 +50,8 @@ final class apiCallFunction extends \fpcm\module\event {
             return false;
         }
 
-        if (!$poll->isOpen()) {
-            $content = "Die ausgewählte Umfrage wurde geschlossen oder beendet.";
-        }
-        elseif ($poll->hasVoted()) {
-            $content = "Du hast bei dieser Umfrage bereits abgestimmt.";
+        if (!$poll->isOpen() || $poll->hasVoted()) {
+            $content = ( new \fpcm\modules\nkorg\polls\models\pollform($poll))->getResultForm();
         }
         else {
             $content = ( new \fpcm\modules\nkorg\polls\models\pollform($poll))->getVoteForm();
@@ -59,14 +60,12 @@ final class apiCallFunction extends \fpcm\module\event {
         $view = $this->getViewObj();
         $view->assign('pollId', $poll->getId() );
         $view->assign('content', $content);
-        $view->assign('pollJsVars', [ ]);
         $view->render();
         return true;
     }
 
     final protected function displayArchive($pollId = 0)
     {
-
         return true;
     }
 

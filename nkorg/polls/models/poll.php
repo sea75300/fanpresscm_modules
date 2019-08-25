@@ -12,12 +12,17 @@ class poll extends dbObj {
     protected $votessum = 0;
     protected $starttime = 0;
     protected $stoptime = 0;
+    protected $voteexpiration = 2678400;
     protected $createtime = 0;
     protected $createuser = 0;
 
     public function init() {
         parent::init();
         $this->pollCookieName = 'nkorgpollsvoted'.$this->id;
+        
+        if (!$this->voteexpiration) {
+            $this->voteexpiration = 2678400;
+        }
     }
 
     public function getText() {
@@ -48,6 +53,10 @@ class poll extends dbObj {
         return (int) $this->stoptime;
     }
 
+    public function getVoteExpiration() {
+        return $this->voteexpiration;
+    }
+
     public function getCreatetime() {
         return (int) $this->createtime;
     }
@@ -56,7 +65,7 @@ class poll extends dbObj {
         return (int) $this->createuser;
     }
 
-    public function setText($text) {
+    public function setText(string $text) {
         $this->text = $text;
         return $this;
     }
@@ -88,6 +97,11 @@ class poll extends dbObj {
 
     public function setStoptime(int $stoptime) {
         $this->stoptime = $stoptime;
+        return $this;
+    }
+
+    public function setVoteExpiration(int $voteexpiration) {
+        $this->voteexpiration = $voteexpiration;
         return $this;
     }
 
@@ -246,6 +260,9 @@ class poll extends dbObj {
         if ($this->replyUpdateFailed === true || !$this->updateVoteSum(count($replyIds)) ) {
             return false;
         }
+        
+        $this->data['getReplies'] = null;
+        $this->init();
 
         $this->setCookie('votedreplies_'.implode('_', $replyIds));
         return true;
@@ -288,7 +305,7 @@ class poll extends dbObj {
             return false;
         }
 
-        setcookie($this->pollCookieName, $value, time() + 2678400, '/', '', false, true);
+        setcookie($this->pollCookieName, $value, time() + $this->voteexpiration, '/', '', false, true);
         return true;
     }
 

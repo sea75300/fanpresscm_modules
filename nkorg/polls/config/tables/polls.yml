@@ -40,6 +40,10 @@ cols:
         type: bigint
         length: 20
         params: NOT NULL
+    voteexpiration:
+        type: bigint
+        length: 20
+        params: NOT NULL
     createtime:
         type: bigint
         length: 20

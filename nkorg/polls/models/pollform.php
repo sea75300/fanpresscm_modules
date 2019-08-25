@@ -43,7 +43,7 @@ class pollform {
 
         return array_map('file_get_contents', $data);
     }
-    
+
     private function replaceTags(string &$str, array $data) {
 
         $str = str_replace(array_keys($data), array_values($data), $str);
@@ -96,6 +96,42 @@ class pollform {
         }
 
         return $tpl['voteform_header.html'].PHP_EOL.implode(PHP_EOL, $options).$tpl['voteform_footer.html'];
+    }
+
+    public function getResultForm($pollBtn = false) {
+
+        $templates = glob($this->templateConfigPaths.'result_*.custom.html');
+        
+        $tpl = $this->getTemplates('result');
+
+        $this->replaceTags($tpl['result_header.html'], [
+            '{{poll_text}}' => $this->poll->getText()
+        ]);
+
+        $this->replaceTags($tpl['result_footer.html'], [
+            '{{poll_result_votesum}}' => $this->poll->getVotessum(),
+            '{{poll_button_tovote}}' => $pollBtn
+                                    ? ( new \fpcm\view\helper\button('pollform'.$this->poll->getId()) )->setClass('fpcm-polls-poll-form')->setData(['pollid' => $this->poll->getId()])->setText('Umfrage anzeigen')
+                                    : ''
+        ]);
+
+        $options = [];
+
+        /* @var $reply poll_reply */
+        foreach ($this->poll->getReplies() as $reply) {
+            $options[$reply->getId()] = $tpl['result_line.html'];
+
+            $percent = $reply->getPercentage($this->poll->getVotessum());
+
+            $this->replaceTags($options[$reply->getId()], [
+                '{{poll_reply_text}}' => $reply->getText(),
+                '{{poll_result_count}}' => $reply->getVotes(),
+                '{{poll_result_percent}}' => $percent,
+                '{{poll_result_percent_div}}' => "<div class=\"fpcm-polls-poll-bar\" style=\"width:{$percent}%;\"></div>",
+            ]);
+        }
+
+        return $tpl['result_header.html'].PHP_EOL.implode(PHP_EOL, $options).$tpl['result_footer.html'];
     }
 
 }

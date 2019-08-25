@@ -56,5 +56,14 @@ class poll_reply extends dbObj {
         $this->createuser = $createuser;
         return $this;
     }
+    
+    public function getPercentage(int $max) {
+        
+        if (!$max) {
+            return 0.00;
+        }
+        
+        return number_format($this->getVotes() * 100 / $max, 2);;
+    }
 
 }

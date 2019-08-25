@@ -60,6 +60,7 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
                     ->setStarttime((int) $data['starttime'])
                     ->setStoptime((int) $data['stoptime'])
                     ->setVotessum((int) $data['votessum'])
+                    ->setVoteExpiration((int) $data['voteexpiration'])
                     ->setIsclosed(isset($data['closed']) && $data['closed'])
                     ->setShowarchive(isset($data['inarchive']));
 

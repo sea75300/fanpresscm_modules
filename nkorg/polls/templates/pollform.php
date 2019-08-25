@@ -47,6 +47,16 @@
                         ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
                         ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
             </div>
+            <div class="row my-3 mx-1">
+                <?php $theView
+                        ->textInput("polldata[voteexpiration]")
+                        ->setText('Erneute Abstimmung nach X Sekunden (Standard: 31 Tage)')
+                        ->setValue($poll->getVoteExpiration())
+                        ->setType('number')
+                        ->setWrapper(false)
+                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+            </div>
             <?php if ($poll->getId()) : ?>
             <div class="row my-3 mx-1">
                 <?php $theView
