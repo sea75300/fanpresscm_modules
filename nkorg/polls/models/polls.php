@@ -15,6 +15,21 @@ class polls extends \fpcm\model\abstracts\tablelist {
         return $this->getResultFromDB(__FUNCTION__, 'id > 0');
     }
 
+    public function getLatestPoll()
+    {
+        if (isset($this->data[__FUNCTION__])) {
+            return $this->data[__FUNCTION__];
+        }
+
+        $params = (new \fpcm\model\dbal\selectParams($this->table))
+                ->setItem('id')
+                ->setWhere( 'showarchive = 0 AND isclosed = 0 AND stoptime >= ? '.$this->dbcon->orderBy(['starttime DESC']).' '.$this->dbcon->limitQuery(1, 0) )
+                ->setParams([ time() ]);
+        
+        $result = $this->dbcon->selectFetch($params);
+        return (int) ($result->id ?? 0);
+    }
+
     public function getArchivedPolls($force = false)
     {
         if (isset($this->data[__FUNCTION__]) && !$force) {

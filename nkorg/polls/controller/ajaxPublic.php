@@ -31,11 +31,11 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
             $this->getSimpleResponse();
         }
         
-        sleep(3);
         
         call_user_func([$this, $fn]);
-        $this->getSimpleResponse();
+        usleep(500);
 
+        $this->getSimpleResponse();
         return true;
     }
 

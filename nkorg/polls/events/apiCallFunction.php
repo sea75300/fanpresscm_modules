@@ -16,7 +16,8 @@ final class apiCallFunction extends \fpcm\module\event {
             return false;
         }
 
-        call_user_func([$this, $fn],$this->data['args'][0]);
+        $pollId = $this->data['args'][0] ?? 0;
+        call_user_func([$this, $fn], $pollId);
         return true;
     }
 
@@ -40,10 +41,15 @@ final class apiCallFunction extends \fpcm\module\event {
 
     final public function displayPoll($pollId = 0)
     {
+        $showLatest = loader::getObject('\fpcm\model\system\config')->module_nkorgpolls_show_latest_poll;
+        if (!$pollId && $showLatest) {
+            $pollId = (new \fpcm\modules\nkorg\polls\models\polls())->getLatestPoll();
+        }
+
         if (!$pollId) {
             return false;
         }
-        
+
         $poll = new \fpcm\modules\nkorg\polls\models\poll($pollId);
         if (!$poll->exists()) {
             print "Die ausgewählte Umfrage wurde nicht gefunden.";
