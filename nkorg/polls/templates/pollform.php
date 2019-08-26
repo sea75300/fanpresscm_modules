@@ -76,6 +76,14 @@
                 <?php $theView->boolSelect("polldata[closed]")->setSelected($poll->getIsclosed()); ?>
                 </div>
             </div>
+            <div class="row my-3 mx-1">
+                <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
+                    <?php $theView->write('Umfrage in Archiv anzeigen'); ?>
+                </label>
+                <div class="col-12 col-sm-6 col-md-1 fpcm-ui-padding-none-lr">
+                <?php $theView->boolSelect("polldata[inarchive]")->setSelected($poll->getShowarchive()); ?>
+                </div>
+            </div>
             <?php endif; ?>
         </div>
         

@@ -11,6 +11,8 @@ class pollform {
      * @var poll
      */
     private $poll;
+    
+    private $tplCache = [];
 
     public function __construct(poll $poll) {
         
@@ -18,13 +20,20 @@ class pollform {
         $this->templateConfigPaths = dirname(__DIR__).'/config/templates/';
     }
     
+    public function setPoll(poll $poll) {
+        $this->poll = $poll;
+        return $this;
+    }
+    
     private function getTemplates(string $name) {
-        
-        $data = [];
+
+        if (isset($this->tplCache[$name])) {
+            return $this->tplCache[$name];
+        }
         
         $customTpls = glob($this->templateConfigPaths.$name.'_*.custom.html');
         foreach ($customTpls as $tpl) {
-            $data[basename($tpl)] = $tpl;
+            $this->tplCache[$name][basename($tpl)] = $tpl;
         }
         
         unset($tpl);
@@ -32,16 +41,16 @@ class pollform {
         $defaultTpls = glob($this->templateConfigPaths.$name.'_*.html');
         foreach ($defaultTpls as $tpl) {
 
-            if (isset($data[basename($tpl)])) {
+            if (isset($this->tplCache[$name][basename($tpl)])) {
                 continue;
             }
 
-            $data[basename($tpl)] = $tpl;
+            $this->tplCache[$name][basename($tpl)] = $tpl;
         }
 
         unset($tpl);
 
-        return array_map('file_get_contents', $data);
+        return array_map('file_get_contents', $this->tplCache[$name]);
     }
 
     private function replaceTags(string &$str, array $data) {
@@ -51,8 +60,6 @@ class pollform {
     }
 
     public function getVoteForm() {
-
-        $templates = glob($this->templateConfigPaths.'voteform_*.custom.html');
         
         $tpl = $this->getTemplates('voteform');
 
@@ -99,8 +106,6 @@ class pollform {
     }
 
     public function getResultForm($pollBtn = false) {
-
-        $templates = glob($this->templateConfigPaths.'result_*.custom.html');
         
         $tpl = $this->getTemplates('result');
 
@@ -132,6 +137,40 @@ class pollform {
         }
 
         return $tpl['result_header.html'].PHP_EOL.implode(PHP_EOL, $options).$tpl['result_footer.html'];
+    }
+
+    public function getArchiveForm() {
+        
+        $tpl = $this->getTemplates('archive');
+
+        $this->replaceTags($tpl['archive_header.html'], [
+            '{{poll_text}}' => $this->poll->getText()
+        ]);
+
+        $this->replaceTags($tpl['archive_footer.html'], [
+            '{{poll_archive_votesum}}' => $this->poll->getVotessum(),
+            '{{poll_start}}' => new \fpcm\view\helper\dateText($this->poll->getStarttime(), 'd.m.Y'),
+            '{{poll_stop}}' => new \fpcm\view\helper\dateText($this->poll->getStoptime(), 'd.m.Y')
+        ]);
+
+        $options = [];
+
+        /* @var $reply poll_reply */
+        foreach ($this->poll->getReplies() as $reply) {
+
+            $options[$reply->getId()] = $tpl['archive_line.html'];
+
+            $percent = $reply->getPercentage($this->poll->getVotessum());
+
+            $this->replaceTags($options[$reply->getId()], [
+                '{{poll_reply_text}}' => $reply->getText(),
+                '{{poll_archive_count}}' => $reply->getVotes(),
+                '{{poll_archive_percent}}' => $percent,
+                '{{poll_archive_percent_div}}' => "<div class=\"fpcm-polls-poll-bar\" style=\"width:{$percent}%;\"></div>",
+            ]);
+        }
+
+        return $tpl['archive_header.html'].PHP_EOL.implode(PHP_EOL, $options).$tpl['archive_footer.html'];
     }
 
 }

@@ -23,7 +23,7 @@ class polls extends \fpcm\model\abstracts\tablelist {
 
         $params = (new \fpcm\model\dbal\selectParams($this->table))
                 ->setItem('id')
-                ->setWhere( 'showarchive = 0 AND isclosed = 0 AND stoptime >= ? '.$this->dbcon->orderBy(['starttime DESC']).' '.$this->dbcon->limitQuery(1, 0) )
+                ->setWhere( 'isclosed = 0 AND stoptime >= ? '.$this->dbcon->orderBy(['starttime DESC']).' '.$this->dbcon->limitQuery(1, 0) )
                 ->setParams([ time() ]);
         
         $result = $this->dbcon->selectFetch($params);
@@ -36,7 +36,7 @@ class polls extends \fpcm\model\abstracts\tablelist {
             return $this->data[__FUNCTION__];
         }
 
-        return $this->getResultFromDB(__FUNCTION__, 'showarchive > 1 AND (isclosed = 1 OR (stoptime > 0 AND stoptime <= ?)', [
+        return $this->getResultFromDB(__FUNCTION__, 'showarchive = 1 AND isclosed = 1 AND (stoptime > 0 OR stoptime <= ?)', [
             time()
         ]);
     }

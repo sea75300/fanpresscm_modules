@@ -70,8 +70,32 @@ final class apiCallFunction extends \fpcm\module\event {
         return true;
     }
 
-    final protected function displayArchive($pollId = 0)
+    final protected function displayArchive()
     {
+        $polls  = (new \fpcm\modules\nkorg\polls\models\polls())->getArchivedPolls();
+        if (!count($polls)) {
+            print "Es wurden keine archivierten Umfragen gefunden.";
+            return false;
+        }
+        
+        $pf = null;
+        $content = '';
+
+        /* @var $poll \fpcm\modules\nkorg\polls\models\poll */
+        foreach ($polls as $poll) {
+            
+            if ($pf === null) {
+                $pf = new \fpcm\modules\nkorg\polls\models\pollform($poll);
+            }
+            else {
+                $pf->setPoll($poll);
+            }
+            
+            $content .= '<!-- Archived poll '.$poll->getId().' -->'.PHP_EOL.$pf->getArchiveForm().PHP_EOL;
+   
+        }
+
+        print $content;
         return true;
     }
 
