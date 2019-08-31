@@ -77,17 +77,17 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
                 $this->view->addErrorMessage('Fehler beim Speichern der Antworten!');
                 return false;
             }
-            
+
             return true;
-        }
-        
-        if (!$this->poll->update()) {
-            $this->view->addErrorMessage('Fehler beim Speichern von Änderungen der Umfrage!');
-            return false;
         }
 
         if (!$this->poll->updateReplies($data['ids'], $data['replies'], $data['sums'])) {
             $this->view->addErrorMessage('Fehler beim Aktualisieren der Antworten!');
+            return false;
+        }
+        
+        if (!$this->poll->update()) {
+            $this->view->addErrorMessage('Fehler beim Speichern von Änderungen der Umfrage!');
             return false;
         }
 

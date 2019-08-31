@@ -194,14 +194,22 @@ class poll extends dbObj {
             }
         }
         
-        $res = $this->dbcon->delete(
-            'module_nkorgpolls_polls_replies', 'pollid = ? AND id NOT IN ('. implode(', ', array_fill(0, count($replyIds), '?')).')',
-            array_merge([$this->getId()], $replyIds)        
-        );
+        $idWhereStr = '('. implode(', ', array_fill(0, count($replyIds), '?')).')';
+        $idParams = array_merge([$this->getId()], $replyIds);
         
+        $res = $this->dbcon->delete(
+            'module_nkorgpolls_polls_replies', 'pollid = ? AND id NOT IN '. $idWhereStr,
+            $idParams
+        );
+
         if (!$res) {
             trigger_error('Unable to remove deleted replies from poll "'.$this->getText().'"!');
             return false;
+        }
+
+        $calcSum = array_sum($sums);
+        if ($this->getVotessum() !== (int) $calcSum) {
+            $this->setVotessum((int) $calcSum);
         }
 
         $this->addReplies($addedRepliues);
