@@ -17,15 +17,13 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
     
     public function process()
     {
-        $key = $this->getModuleKey();
-
         $this->view->addButtons([
             (new \fpcm\view\helper\saveButton('save')),
             (new \fpcm\view\helper\button('addReplyOption'))->setText('Antwort hinzufügen')->setIcon('plus'),
         ]);
         
         $this->view->addJsFiles([
-            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
+            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
         ]);
 
         $this->view->assign('poll', $this->poll);        

@@ -34,10 +34,55 @@ final class polledit extends pollbase {
         $replies = $this->poll->getReplies();
         $this->view->assign('replies', $replies);
         $this->view->addJsVars([
-            'replyOptionsStart' => count($replies)
+            'replyOptionsStart' => count($replies),
+            'pollChartData' => $this->getChartData()
+        ]);
+        
+        $this->getChartData();
+        parent::process();
+    }
+    
+    private function getChartData()
+    {
+        if (!$this->poll->getId()) {
+            return null;
+        }
+
+        $this->view->addJsFiles([
+            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/chart.min.js'),
         ]);
 
-        parent::process();
+        $labels = [];
+        $data = [];
+        $colors = [];
+
+        /* @var $reply \fpcm\modules\nkorg\polls\models\poll_reply */
+        foreach ($this->poll->getReplies() as $reply) {
+            
+            $labels[] = $reply->getText();
+            $data[] = $reply->getVotes();
+            $colors[] = $this->getRandomColor();
+        }
+
+        return [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => $this->poll->getText(),
+                    'fill' => true,
+                    'data' => $data,
+                    'backgroundColor' => $colors,
+                    'borderColor' => '#000',
+                    'borderWidth' => 0
+                ]
+            ]
+        ];
+    }
+
+    private function getRandomColor()
+    {
+        $colStr = '#' . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255));
+        return strlen($colStr) === 7 ? $colStr : str_pad($colStr, 7, dechex(mt_rand(0, 16)));
     }
 
 }

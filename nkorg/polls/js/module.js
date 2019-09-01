@@ -33,12 +33,11 @@ fpcm.polls = {
     
     initAfter: function() {
         
-        if (fpcm.dataview === undefined) {
-            return true;
+        if (fpcm.dataview !== undefined) {
+            fpcm.dataview.render('nkorgpolls');
         }
         
-        fpcm.dataview.render('nkorgpolls');
-        
+        fpcm.polls.drawChart();
     },
     
     initDeleteButtonAction: function () {
@@ -65,10 +64,32 @@ fpcm.polls = {
                 jQuery(obj).find('button.fpcm-ui-nkorgpolls-removereply').attr('data-idx', idx);
                 
             });
-            
-                    
-            
+
             return false;
+        });
+    },
+
+    drawChart: function () {
+
+        if (fpcm.vars.jsvars.pollChartData === undefined ||
+            fpcm.vars.jsvars.replyOptionsStart === undefined) {
+            return false;
+        }
+
+        window.chart = new Chart(jQuery('#fpcm-nkorg-polls-chart'), {
+            type: 'pie',
+            data: fpcm.vars.jsvars.pollChartData,
+            options: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    labels: {
+                        boxWidth: 25,
+                        fontSize: 12
+                    }
+                },
+                responsive: true
+            }
         });
     }
 

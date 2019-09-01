@@ -74,8 +74,9 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
             (new \fpcm\components\dataView\column('select', ''))->setSize(1)->setAlign('center'),
             (new \fpcm\components\dataView\column('button', ''))->setSize(1)->setAlign('center'),
             (new \fpcm\components\dataView\column('name', 'Umfrage'))->setSize(4),
-            (new \fpcm\components\dataView\column('time', 'Zeitraum'))->setSize(3),
-            (new \fpcm\components\dataView\column('status', 'Status'))->setSize(3),
+            (new \fpcm\components\dataView\column('time', 'Zeitraum'))->setSize(4)->setAlign('center'),
+            (new \fpcm\components\dataView\column('status', 'Status'))->setSize(1)->setAlign('center'),
+            (new \fpcm\components\dataView\column('votes', 'Stimmen'))->setSize(1)->setAlign('center'),
         ];
 
     }
@@ -91,10 +92,10 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
      */
     protected function initDataViewRow($poll)
     {
-        $time = 'Start: '.new \fpcm\view\helper\dateText($poll->getStarttime());
+        $time = new \fpcm\view\helper\dateText($poll->getStarttime(), 'd.m.Y');
         
         if ($poll->getStoptime()) {
-            $time .= ' &bull; Ende: '.new \fpcm\view\helper\dateText($poll->getStoptime());
+            $time .= ' bis '.new \fpcm\view\helper\dateText($poll->getStoptime(), 'd.m.Y');
         }
 
         return new \fpcm\components\dataView\row([
@@ -103,6 +104,7 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
             new \fpcm\components\dataView\rowCol('name', $poll->getText() ),
             new \fpcm\components\dataView\rowCol('time', $time ),
             new \fpcm\components\dataView\rowCol('status', $poll->getIsclosed() ? 'geschlossen' : 'offen' ),
+            new \fpcm\components\dataView\rowCol('votes', $poll->getVotessum() ),
         ]);
     }
 
