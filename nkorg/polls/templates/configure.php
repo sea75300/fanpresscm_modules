@@ -11,22 +11,22 @@
                     <fieldset>
                         <legend><?php $theView->write('Templates bearbeiten'); ?></legend>
                         Um die Anzeige anzupassen, erstelle im FanPress CM-Unterordner
-                        <em>/data/modules/config/templates</em> eine Kopie der jeweiligen
+                        <em>/data/nkorg_polls/templates</em> eine Kopie der jeweiligen
                         Datei mit der Endung <em>.custom.html</em>.
                         <dl>
-                            <dt>voteform_header.html / voteform_header.custom.html</dt>
+                            <dt>voteform_header.html</dt>
                             <dd class="mb-1">Kopfzeile einer Umfrage im Votingformular</dd>
-                            <dt>voteform_line.html / voteform_line.custom.html</dt>
+                            <dt>voteform_line.html</dt>
                             <dd class="mb-1">Zeile einer Antwort im Votingformular</dd>
-                            <dt>voteform_footer.html / voteform_footer.custom.html</dt>
+                            <dt>voteform_footer.html</dt>
                             <dd class="mb-1">Fußzeile im Votingformular</dd>
-                            <dt>result_header.html / result_header.custom.html</dt>
+                            <dt>result_header.html</dt>
                             <dd class="mb-1">Kopfzeile einer Umfrage im Ergebnisformular</dd>
-                            <dt>result_line.html / result_line.custom.html</dt>
+                            <dt>result_line.html</dt>
                             <dd class="mb-1">Zeile einer Antwort im Ergebnisformular</dd>
-                            <dt>result_footer.html / result_footer.custom.html</dt>
+                            <dt>result_footer.html</dt>
                             <dd class="mb-1">Fußzeile im Ergebnisformular</dd>
-                            <dt>archive_footer.html / archive_footer.custom.html</dt>
+                            <dt>archive_footer.html</dt>
                             <dd class="mb-1">Fußzeile im Archiv</dd>
                         </dl>
                     </fieldset>
@@ -41,7 +41,9 @@
                             <?php $theView->write('Standardmäßig aktuellste Umfrage anzeigen'); ?>:
                         </label>
                         <div class="col-auto fpcm-ui-padding-none-lr">
-                            <?php $theView->boolSelect("config[module_nkorgpolls_show_latest_poll]")->setSelected($options['module_nkorgpolls_show_latest_poll']); ?>
+                            <?php $theView->boolSelect("config[module_nkorgpolls_show_latest_poll]")
+                                    ->setSelected($options['module_nkorgpolls_show_latest_poll'])
+                                    ->setData(['remove_corner_left' => 1]); ?>
                         </div>
                     </div>
                 </div>

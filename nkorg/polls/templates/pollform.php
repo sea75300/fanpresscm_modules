@@ -4,14 +4,14 @@
 <div class="fpcm-content-wrapper">
     <div class="fpcm-ui-tabs-general">
         <ul>
-            <?php if ($poll->getId()) : ?>
+            <?php if ($poll->getId() && $poll->getVotessum()) : ?>
             <li><a href="#tabs-graphic"><?php $theView->write('Übersicht'); ?></a></li>
             <?php endif; ?>
             <li><a href="#tabs-poll"><?php $theView->write('Umfrage'); ?></a></li>
             <li><a href="#tabs-replies"><?php $theView->write('Antworten'); ?></a></li>
         </ul>            
 
-        <?php if ($poll->getId()) : ?>
+        <?php if ($poll->getId() && $poll->getVotessum()) : ?>
         <div id="tabs-graphic">
             <div class="row no-gutters align-self-center align-content-center justify-content-center">
                 <div class="col-12 col-md-9 col-lg-6">

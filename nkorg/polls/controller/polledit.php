@@ -38,7 +38,6 @@ final class polledit extends pollbase {
             'pollChartData' => $this->getChartData()
         ]);
         
-        $this->getChartData();
         parent::process();
     }
     
@@ -59,7 +58,7 @@ final class polledit extends pollbase {
         /* @var $reply \fpcm\modules\nkorg\polls\models\poll_reply */
         foreach ($this->poll->getReplies() as $reply) {
             
-            $labels[] = $reply->getText();
+            $labels[] = $reply->getText().' ('.$reply->getPercentage($this->poll->getVotessum()).'%)';
             $data[] = $reply->getVotes();
             $colors[] = $this->getRandomColor();
         }

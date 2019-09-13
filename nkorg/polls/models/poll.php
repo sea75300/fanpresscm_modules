@@ -319,7 +319,15 @@ class poll extends dbObj {
 
     final public function isOpen()
     {
-        return (!$this->getIsclosed() && $this->getStoptime() > time());
+        if ($this->getIsclosed()) {
+            return false;
+        }
+        
+        if (!$this->getStoptime()) {
+            return true;
+        }
+
+        return $this->getStoptime() >= time() ? true : false;
     }
 
     final public function hasVoted()

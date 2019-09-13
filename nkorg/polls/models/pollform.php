@@ -30,8 +30,8 @@ class pollform {
         if (isset($this->tplCache[$name])) {
             return $this->tplCache[$name];
         }
-        
-        $customTpls = glob($this->templateConfigPaths.$name.'_*.custom.html');
+
+        $customTpls = glob(\fpcm\classes\dirs::getDataDirPath('nkorg_polls', $name.'_*.html'));
         foreach ($customTpls as $tpl) {
             $this->tplCache[$name][basename($tpl)] = $tpl;
         }

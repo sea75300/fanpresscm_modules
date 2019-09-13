@@ -2,13 +2,13 @@
 ---
 key: nkorg/polls
 author: imagine
-name: Polls (unfinished)
+name: Polls
 description: "Module to create polls with single/ multiple answers and so on."
 link: https://nobody-knows.org/
-version: 4.2.0-a1
+version: 4.2.0-b1
 help: 
 requirements:
-    system: 4.2.0-a1
+    system: 4.2.1
     php: 7.0.0
 tables:
     alter:

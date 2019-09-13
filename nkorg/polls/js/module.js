@@ -9,6 +9,7 @@ fpcm.polls = {
 
     init: function () {
         
+        jQuery('.fpcm-ui-input-select').selectmenu( "option", "classes.ui-selectmenu-button", "fpcm-ui-border-radius-right" );
         fpcm.polls.replyOptionsStart = fpcm.vars.jsvars.replyOptionsStart;
         
         jQuery('#btnAddReplyOption').click(function () {
@@ -28,7 +29,6 @@ fpcm.polls = {
         });
 
         fpcm.polls.initDeleteButtonAction();
-        jQuery('.fpcm-ui-input-select').selectmenu( "option", "classes.ui-selectmenu-button", "fpcm-ui-border-radius-right" );
     },
     
     initAfter: function() {
