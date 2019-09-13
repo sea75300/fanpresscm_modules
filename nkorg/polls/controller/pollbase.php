@@ -19,9 +19,13 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
     {
         $this->view->addButtons([
             (new \fpcm\view\helper\saveButton('save')),
-            (new \fpcm\view\helper\button('addReplyOption'))->setText('Antwort hinzufügen')->setIcon('plus'),
+            (new \fpcm\view\helper\button('addReplyOption'))->setText('MODULE_NKORGPOLLS_GUI_ADD_REPLY')->setIcon('plus'),
         ]);
-        
+
+        $this->view->addJsLangVars([
+            'MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT'
+        ]);
+
         $this->view->addJsFiles([
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
         ]);
@@ -40,12 +44,12 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         ]);
 
         if (!is_array($data) || !count($data)) {
-            $this->view->addErrorMessage('Bitte fülle das Formular zum Erstellen der Umfrage aus!');
+            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_INSERTDATA');
             return false;
         }
 
         if (empty($data['text']) || empty($data['maxaw']) || empty($data['replies'])) {
-            $this->view->addErrorMessage('Bitte fülle das Formular zum Erstellen der Umfrage aus!');
+            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_INSERTDATA');
             return false;
         }
         
@@ -67,12 +71,12 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
             $this->poll->setCreatetime(time())->setCreateuser($this->session->getUserId());
 
             if (!$this->poll->save()) {
-                $this->view->addErrorMessage('Fehler beim Speichern der Umfrage!');
+                $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_SAVEPOLL');
                 return false;
             }
 
             if (!$this->poll->addReplies($data['replies'])) {
-                $this->view->addErrorMessage('Fehler beim Speichern der Antworten!');
+                $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_SAVEREPLY');
                 return false;
             }
 
@@ -80,12 +84,12 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         }
 
         if (!$this->poll->updateReplies($data['ids'], $data['replies'], $data['sums'])) {
-            $this->view->addErrorMessage('Fehler beim Aktualisieren der Antworten!');
+            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_UPDATEREPLY');
             return false;
         }
         
         if (!$this->poll->update()) {
-            $this->view->addErrorMessage('Fehler beim Speichern von Änderungen der Umfrage!');
+            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_UPDATEPOLL');
             return false;
         }
 

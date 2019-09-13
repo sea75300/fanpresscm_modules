@@ -5,10 +5,10 @@
     <div class="fpcm-ui-tabs-general">
         <ul>
             <?php if ($poll->getId() && $poll->getVotessum()) : ?>
-            <li><a href="#tabs-graphic"><?php $theView->write('Übersicht'); ?></a></li>
+            <li><a href="#tabs-graphic"><?php $theView->write('MODULE_NKORGPOLLS_GUI_RESULT'); ?></a></li>
             <?php endif; ?>
-            <li><a href="#tabs-poll"><?php $theView->write('Umfrage'); ?></a></li>
-            <li><a href="#tabs-replies"><?php $theView->write('Antworten'); ?></a></li>
+            <li><a href="#tabs-poll"><?php $theView->write('MODULE_NKORGPOLLS_GUI_POLL'); ?></a></li>
+            <li><a href="#tabs-replies"><?php $theView->write('MODULE_NKORGPOLLS_GUI_REPLIES'); ?></a></li>
         </ul>            
 
         <?php if ($poll->getId() && $poll->getVotessum()) : ?>
@@ -24,7 +24,7 @@
             <div class="row my-3 mx-1">
                 <?php $theView
                         ->textInput("polldata[text]")
-                        ->setText('Frage')
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_TEXT')
                         ->setSize(255)
                         ->setValue($poll->getText())
                         ->setWrapper(false)
@@ -34,7 +34,7 @@
             <div class="row my-3 mx-1">
                 <?php $theView
                         ->textInput("polldata[maxaw]")
-                        ->setText('Anzahl wählbarer Antworten')
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_MAXVOTES')
                         ->setType('number')
                         ->setValue($poll->getMaxreplies())
                         ->setWrapper(false)
@@ -44,7 +44,7 @@
             <div class="row my-3 mx-1">
                 <?php $theView
                         ->dateTimeInput("polldata[starttime]")
-                        ->setText('Beginn')
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_START')
                         ->setWrapper(false)
                         ->setValue($theView->dateText($poll->getStarttime(), 'Y-m-d'))
                         ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
@@ -53,7 +53,7 @@
             <div class="row my-3 mx-1">
                 <?php $theView
                         ->dateTimeInput("polldata[stoptime]")
-                        ->setText('Ende')
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_STOP')
                         ->setValue($poll->getStoptime() ? $theView->dateText($poll->getStoptime(), 'Y-m-d') : '')
                         ->setWrapper(false)
                         ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
@@ -62,7 +62,7 @@
             <div class="row my-3 mx-1">
                 <?php $theView
                         ->textInput("polldata[voteexpiration]")
-                        ->setText('Erneute Abstimmung nach X Sekunden (Standard: 31 Tage)')
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_COOKIE')
                         ->setValue($poll->getVoteExpiration())
                         ->setType('number')
                         ->setWrapper(false)
@@ -73,7 +73,7 @@
             <div class="row my-3 mx-1">
                 <?php $theView
                         ->dateTimeInput("polldata[votessum]")
-                        ->setText('Stimmenanzahl')
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_VOTES')
                         ->setValue($poll->getVotessum())
                         ->setType('number')
                         ->setWrapper(false)
@@ -82,7 +82,7 @@
             </div>
             <div class="row my-3 mx-1">
                 <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
-                    <?php $theView->write('Umfrage geschlossen'); ?>
+                    <?php $theView->write('MODULE_NKORGPOLLS_GUI_POLL_ISCLOSED'); ?>
                 </label>
                 <div class="col-12 col-sm-6 col-md-1 fpcm-ui-padding-none-lr">
                 <?php $theView->boolSelect("polldata[closed]")->setSelected($poll->getIsclosed()); ?>
@@ -90,7 +90,7 @@
             </div>
             <div class="row my-3 mx-1">
                 <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
-                    <?php $theView->write('Umfrage in Archiv anzeigen'); ?>
+                    <?php $theView->write('MODULE_NKORGPOLLS_GUI_POLL_INARCHIVE'); ?>
                 </label>
                 <div class="col-12 col-sm-6 col-md-1 fpcm-ui-padding-none-lr">
                 <?php $theView->boolSelect("polldata[inarchive]")->setSelected($poll->getShowarchive()); ?>
@@ -107,7 +107,9 @@
 
                 <?php $theView
                         ->textInput("polldata[replies][]", "polldatareplies{$idx}")
-                        ->setText('Antwort '. ($idx + 1) )
+                        ->setText('MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT', [
+                            'id' => ($idx + 1)
+                        ])
                         ->setValue($reply->getText())
                         ->setWrapper(false)
                         ->setClass('col-12 col-sm-6 col-md-5 fpcm-ui-field-input-nowrapper-general pr-0')

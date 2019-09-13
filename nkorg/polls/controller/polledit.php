@@ -16,11 +16,11 @@ final class polledit extends pollbase {
 
         $this->poll = new \fpcm\modules\nkorg\polls\models\poll($id);
         if (!$this->poll->exists()) {
-            return false;
+            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_PUB_NOTFOUND');
         }
         
         if ($this->buttonClicked('save') && $this->save()) {
-            $this->view->addNoticeMessage('Änderungen gespeichert!');
+            $this->view->addNoticeMessage('MODULE_NKORGPOLLS_MSG_SUCCESS_SAVEPOLL');
             return true;
         }
         

@@ -50,7 +50,7 @@ final class apiCallFunction extends \fpcm\module\event {
 
         $poll = new \fpcm\modules\nkorg\polls\models\poll($pollId);
         if (!$poll->exists()) {
-            print "Die ausgewählte Umfrage wurde nicht gefunden.";
+            loader::getObject('\fpcm\classes\language')->write('MODULE_NKORGPOLLS_MSG_PUB_NOTFOUND');
             return false;
         }
 
@@ -72,7 +72,7 @@ final class apiCallFunction extends \fpcm\module\event {
     {
         $polls  = (new \fpcm\modules\nkorg\polls\models\polls())->getArchivedPolls();
         if (!count($polls)) {
-            print "Es wurden keine archivierten Umfragen gefunden.";
+            loader::getObject('\fpcm\classes\language')->write('MODULE_NKORGPOLLS_MSG_PUB_NOARCHIVE');
             return false;
         }
         

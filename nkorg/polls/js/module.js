@@ -17,7 +17,7 @@ fpcm.polls = {
             jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone().attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#tabs-replies');
 
             var id = '#' + fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart;
-            jQuery(id).find('label span').text('Antwort ' + fpcm.polls.replyOptionsStart);
+            jQuery(id).find('label span').text(fpcm.ui.translate('MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT').replace('{{id}}', fpcm.polls.replyOptionsStart));
             jQuery(id).find('input').val('');
             jQuery(id).find('input').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
             jQuery(id).find('input[type=text]').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
@@ -58,7 +58,7 @@ fpcm.polls = {
                 idx = (idx + 1);
 
                 jQuery(obj).attr('id', fpcm.polls.replyOptionsIdSlug + idx);
-                jQuery(obj).find('label span').text('Antwort ' + idx);
+                jQuery(obj).find('label span').text(fpcm.ui.translate('MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT').replace('{{id}}', idx));
                 jQuery(obj).find('input[type=text]').attr('id', 'polldatareplies' + idx);
                 jQuery(obj).find('input[type=hidden]').attr('id', 'polldataids' + idx);
                 jQuery(obj).find('button.fpcm-ui-nkorgpolls-removereply').attr('data-idx', idx);

@@ -12,7 +12,7 @@ class polls extends \fpcm\model\abstracts\tablelist {
             return $this->data[__FUNCTION__];
         }
 
-        return $this->getResultFromDB(__FUNCTION__, 'id > 0');
+        return $this->getResultFromDB(__FUNCTION__, 'id > 0 '.$this->dbcon->orderBy(['isclosed ASC', 'starttime DESC']));
     }
 
     public function getLatestPoll()

@@ -37,8 +37,8 @@
                 <div class="col-12">
                     <div class="row">
                         <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
-                            <?php $theView->icon('language'); ?>
-                            <?php $theView->write('Standardmäßig aktuellste Umfrage anzeigen'); ?>:
+                            <?php $theView->icon('sort-alpha-down-alt'); ?>
+                            <?php $theView->write('MODULE_NKORGPOLLS_GUI_CONFIG_SHOWLATEST'); ?>:
                         </label>
                         <div class="col-auto fpcm-ui-padding-none-lr">
                             <?php $theView->boolSelect("config[module_nkorgpolls_show_latest_poll]")
