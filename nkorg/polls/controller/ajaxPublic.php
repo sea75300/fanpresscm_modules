@@ -12,7 +12,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
 
     public function request()
     {
-        $this->returnData = ['code' => 0, 'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_ERRCODE_GEN')];
+        $this->returnData = ['code' => 0, 'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_GEN'))];
 
         $fn = 'process'.$this->getRequestVar('fn', [
             \fpcm\classes\http::FILTER_FIRSTUPPER
@@ -58,7 +58,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
         if (!$poll->exists() || !$poll->isOpen() || $poll->hasVoted()) {
             $this->returnData = [
                 'code' => -404,
-                'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_ERRCODE_REPLY'),
+                'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_REPLY')),
                 'html' => ''
             ];
             $this->getSimpleResponse();
@@ -67,7 +67,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
         if (!$poll->pushnewVote($replyIds)) {
             $this->returnData = [
                 'code' => -101,
-                'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_ERRCODE_REPLY'),
+                'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_REPLY')),
                 'html' => ''
             ];
 
@@ -76,7 +76,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
 
         $this->returnData = [
             'code' => 100,
-            'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_SUCCESS_REPLY'),
+            'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_SUCCESS_REPLY')),
             'html' => (new \fpcm\modules\nkorg\polls\models\pollform($poll))->getResultForm()
         ];
 
@@ -86,7 +86,7 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
     {
         $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
         if (!$poll->exists()) {
-            $this->returnData = ['code' => -404, 'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_ERRCODE_POLL'), 'html' => ''];
+            $this->returnData = ['code' => -404, 'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_POLL')), 'html' => ''];
             $this->getSimpleResponse();
         }
 
@@ -102,12 +102,12 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
     {
         $poll = new \fpcm\modules\nkorg\polls\models\poll($this->pollId);
         if (!$poll->exists()) {
-            $this->returnData = ['code' => -404, 'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_ERRCODE_POLL')];
+            $this->returnData = ['code' => -404, 'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_POLL'))];
             $this->getSimpleResponse();
         }
 
         if (!$poll->isOpen()) {
-            $this->returnData = ['code' => -401, 'msg' => $this->language->translate('MODULE_NKORGPOLLS_MSG_PUB_ERRCODE_CLOSED')];
+            $this->returnData = ['code' => -401, 'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_CLOSED'))];
             $this->getSimpleResponse();
         }
 

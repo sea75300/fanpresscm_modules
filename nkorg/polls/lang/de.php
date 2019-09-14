@@ -8,6 +8,8 @@
  */
 $lang = [
     'HEADLINE' => 'Umfragen verwalten',
+    'GUI_ADD_POLL' => 'Umfragen erstellen',
+    'GUI_CLOSE_POLL' => 'Umfragen schließen',
     'GUI_ADD_REPLY' => 'Antwort hinzufügen',
 
     'GUI_POLL' => 'Umfrage',

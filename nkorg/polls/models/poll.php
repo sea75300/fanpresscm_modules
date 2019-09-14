@@ -193,13 +193,10 @@ class poll extends dbObj {
                 return false;
             }
         }
-        
-        $idWhereStr = '('. implode(', ', array_fill(0, count($replyIds), '?')).')';
-        $idParams = array_merge([$this->getId()], $replyIds);
-        
+
         $res = $this->dbcon->delete(
-            'module_nkorgpolls_polls_replies', 'pollid = ? AND id NOT IN '. $idWhereStr,
-            $idParams
+            'module_nkorgpolls_polls_replies', 'pollid = ? AND '. $this->dbcon->inQuery('id', $replyIds, true),
+            array_merge([$this->getId()], $replyIds)
         );
 
         if (!$res) {

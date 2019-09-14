@@ -19,11 +19,11 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
     {
         $this->view->addButtons([
             (new \fpcm\view\helper\saveButton('save')),
-            (new \fpcm\view\helper\button('addReplyOption'))->setText('MODULE_NKORGPOLLS_GUI_ADD_REPLY')->setIcon('plus'),
+            (new \fpcm\view\helper\button('addReplyOption'))->setText($this->addLangVarPrefix('GUI_ADD_REPLY'))->setIcon('plus'),
         ]);
 
         $this->view->addJsLangVars([
-            'MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT'
+            $this->addLangVarPrefix('GUI_POLL_REPLY_TXT')
         ]);
 
         $this->view->addJsFiles([
@@ -44,12 +44,12 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         ]);
 
         if (!is_array($data) || !count($data)) {
-            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_INSERTDATA');
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_INSERTDATA'));
             return false;
         }
 
         if (empty($data['text']) || empty($data['maxaw']) || empty($data['replies'])) {
-            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_INSERTDATA');
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_INSERTDATA'));
             return false;
         }
         
@@ -71,12 +71,12 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
             $this->poll->setCreatetime(time())->setCreateuser($this->session->getUserId());
 
             if (!$this->poll->save()) {
-                $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_SAVEPOLL');
+                $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_SAVEPOLL'));
                 return false;
             }
 
             if (!$this->poll->addReplies($data['replies'])) {
-                $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_SAVEREPLY');
+                $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_SAVEREPLY'));
                 return false;
             }
 
@@ -84,12 +84,12 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         }
 
         if (!$this->poll->updateReplies($data['ids'], $data['replies'], $data['sums'])) {
-            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_UPDATEREPLY');
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_UPDATEREPLY'));
             return false;
         }
         
         if (!$this->poll->update()) {
-            $this->view->addErrorMessage('MODULE_NKORGPOLLS_MSG_ERR_UPDATEPOLL');
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_UPDATEPOLL'));
             return false;
         }
 
