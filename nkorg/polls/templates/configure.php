@@ -48,6 +48,22 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="row my-3 mx-1">
+                <div class="col-12">
+                    <div class="row">
+                        <?php $theView->textInput("config[module_nkorgpolls_vote_expiration_default]")
+                                ->setText('MODULE_NKORGPOLLS_GUI_POLL_COOKIE_DEFAULT')
+                                ->setValue($options['module_nkorgpolls_vote_expiration_default'])
+                                ->setWrapper(false)
+                                ->setType('number')
+                                ->setIcon('stopwatch')
+                                ->setSize('lg')
+                                ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                                ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

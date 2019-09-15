@@ -16,3 +16,4 @@ tables:
 configOptions:
     add:
         show_latest_poll: 0
+        vote_expiration_default: 2678400

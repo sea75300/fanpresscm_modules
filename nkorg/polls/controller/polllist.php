@@ -150,7 +150,7 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
             new \fpcm\components\dataView\rowCol('name', $poll->getText() ),
             new \fpcm\components\dataView\rowCol('time', $time ),
             new \fpcm\components\dataView\rowCol('status', $this->language->translate($this->addLangVarPrefix('POLL_STATUS'.(int) $poll->getIsclosed()))),
-            new \fpcm\components\dataView\rowCol('votes', $poll->getVotessum() ),
+            new \fpcm\components\dataView\rowCol('votes', $poll->getVotessum() ? $poll->getVotessum() : 0 ),
         ]);
     }
 

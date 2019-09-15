@@ -12,7 +12,7 @@ class poll extends dbObj {
     protected $votessum = 0;
     protected $starttime = 0;
     protected $stoptime = 0;
-    protected $voteexpiration = 2678400;
+    protected $voteexpiration = 0;
     protected $createtime = 0;
     protected $createuser = 0;
 
@@ -21,7 +21,7 @@ class poll extends dbObj {
         $this->pollCookieName = 'nkorgpollsvoted'.$this->id;
         
         if (!$this->voteexpiration) {
-            $this->voteexpiration = 2678400;
+            $this->voteexpiration = $this->config->module_nkorgpolls_vote_expiration_default;
         }
     }
 

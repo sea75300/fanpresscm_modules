@@ -18,9 +18,10 @@ final class polladd extends pollbase {
 
     public function process()
     {
+        $this->poll->setVoteExpiration($this->config->module_nkorgpolls_vote_expiration_default);
         $this->poll->setStarttime(time());   
         $this->view->setFormAction('polls/add');
-        
+
         $replies = $this->poll->getReplies(true);
         $this->view->assign('replies', $replies);
         $this->view->addJsVars([
