@@ -17,22 +17,38 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
         $this->closePoll();
         
         $key = $this->getModuleKey();
+        $filterStatus = $this->getRequestVar('filterStatus', [
+            \fpcm\classes\http::FILTER_CASTINT
+        ]);
 
         $this->view->addButtons([
             (new \fpcm\view\helper\linkButton('pollAdd'))->setText($this->addLangVarPrefix('GUI_ADD_POLL'))->setIcon('plus')->setUrl(\fpcm\classes\tools::getControllerLink('polls/add')),
             (new \fpcm\view\helper\submitButton('pollClose'))->setText($this->addLangVarPrefix('GUI_CLOSE_POLL'))->setIcon('lock'),
-            (new \fpcm\view\helper\deleteButton('pollDelete'))
+            (new \fpcm\view\helper\select('filterStatus'))
+                ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED)
+                ->setSelected($filterStatus >= 0 ? $filterStatus : -1)
+                ->setOptions([
+                $this->addLangVarPrefix('POLL_STATUS_ALL') => '-1',
+                $this->addLangVarPrefix('POLL_STATUS0') => '0',
+                $this->addLangVarPrefix('POLL_STATUS1') => '1',
+            ]),
+            (new \fpcm\view\helper\deleteButton('pollDelete')),
         ]);
         
         $this->view->addJsVars([
-            'polls' => []
+            'polls' => [],
+            'isPollsList' => true
         ]);
 
         $this->view->addJsFiles([
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
         ]);
-        
-        $this->items = (new \fpcm\modules\nkorg\polls\models\polls())->getAllPolls();
+
+        $search = new \fpcm\modules\nkorg\polls\models\search();
+        $search->force = false;
+        $search->isClosed = $filterStatus;
+
+        $this->items = (new \fpcm\modules\nkorg\polls\models\polls())->getAllPolls($search);
         $this->initDataView();
 
         $this->view->setFormAction('polls/list');

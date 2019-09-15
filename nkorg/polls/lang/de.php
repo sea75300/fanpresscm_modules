@@ -30,6 +30,7 @@ $lang = [
 
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
 
+    'POLL_STATUS_ALL' => 'Alle Umfragen anzeigen',
     'POLL_STATUS0' => 'Offen',
     'POLL_STATUS1' => 'Geschlossen',
     

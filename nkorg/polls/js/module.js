@@ -8,10 +8,43 @@ fpcm.polls = {
     replyOptionsIdSlug: 'fpcm-nkorgpolls-reply-',
 
     init: function () {
+        fpcm.polls._initPollsList();
+        fpcm.polls._initPollForm();
+    },
+    
+    initAfter: function() {
+
+        if (fpcm.dataview !== undefined) {
+            fpcm.dataview.render('nkorgpolls');
+        }
+
+        fpcm.polls._drawChart();
+    },
+
+    _initPollsList: function() {
+
+        if (fpcm.vars.jsvars.isPollsList === undefined) {
+            return false;
+        }
         
-        jQuery('.fpcm-ui-input-select').selectmenu( "option", "classes.ui-selectmenu-button", "fpcm-ui-border-radius-right" );
+        fpcm.ui.selectmenu('#filterStatus', {
+            change: function () {
+                jQuery('#fpcm-ui-form').submit();
+            }
+        });
+
+    },
+
+    _initPollForm: function() {
+
+        if (fpcm.vars.jsvars.replyOptionsStart === undefined) {
+            return false;
+        }
+
         fpcm.polls.replyOptionsStart = fpcm.vars.jsvars.replyOptionsStart;
         
+        jQuery('.fpcm-ui-input-select').selectmenu( "option", "classes.ui-selectmenu-button", "fpcm-ui-border-radius-right" );            
+
         jQuery('#btnAddReplyOption').click(function () {
             fpcm.polls.replyOptionsStart++;
             jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone().attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#tabs-replies');
@@ -24,23 +57,15 @@ fpcm.polls = {
             jQuery(id).find('input[type=hidden]').attr('id', 'polldataids' + fpcm.polls.replyOptionsStart);
             jQuery(id).find('button.fpcm-ui-nkorgpolls-removereply').attr('data-idx', fpcm.polls.replyOptionsStart);
             jQuery('.fpcm-ui-nkorgpolls-removereply').unbind('click');
-            fpcm.polls.initDeleteButtonAction();
+            fpcm.polls._initDeleteButtonAction();
             return false;
         });
 
-        fpcm.polls.initDeleteButtonAction();
+        fpcm.polls._initDeleteButtonAction();
+        return true;
     },
-    
-    initAfter: function() {
-        
-        if (fpcm.dataview !== undefined) {
-            fpcm.dataview.render('nkorgpolls');
-        }
-        
-        fpcm.polls.drawChart();
-    },
-    
-    initDeleteButtonAction: function () {
+
+    _initDeleteButtonAction: function () {
 
         jQuery('.fpcm-ui-nkorgpolls-removereply').click(function () {
             
@@ -69,7 +94,7 @@ fpcm.polls = {
         });
     },
 
-    drawChart: function () {
+    _drawChart: function () {
 
         if (fpcm.vars.jsvars.pollChartData === undefined ||
             fpcm.vars.jsvars.replyOptionsStart === undefined) {

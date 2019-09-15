@@ -6,13 +6,20 @@ class polls extends \fpcm\model\abstracts\tablelist {
 
     protected $table = 'module_nkorgpolls_polls';
 
-    public function getAllPolls($force = false)
+    public function getAllPolls(search $params)
     {
-        if (isset($this->data[__FUNCTION__]) && !$force) {
+        if (isset($this->data[__FUNCTION__]) && $params->force !== true) {
             return $this->data[__FUNCTION__];
         }
 
-        return $this->getResultFromDB(__FUNCTION__, 'id > 0 '.$this->dbcon->orderBy(['isclosed ASC', 'starttime DESC']));
+        $cond = 'id > ? ';
+        $values = [0];
+        if ($params->isClosed !== null && $params->isClosed > -1) {
+            $cond .= 'AND isclosed = ? ';
+            $values[] = $params->isClosed;
+        }
+
+        return $this->getResultFromDB(__FUNCTION__, $cond.$this->dbcon->orderBy(['isclosed ASC', 'starttime DESC']), $values);
     }
 
     public function getLatestPoll()
