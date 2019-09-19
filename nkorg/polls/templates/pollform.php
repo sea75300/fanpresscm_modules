@@ -14,7 +14,7 @@
         <?php if ($poll->getId() && $poll->getVotessum()) : ?>
         <div id="tabs-graphic">
             <div class="row no-gutters align-self-center align-content-center justify-content-center">
-                <div class="col-12 col-md-9 col-lg-6">
+                <div class="col-12 col-lg-9 col-lg-6">
                     <canvas id="fpcm-nkorg-polls-chart" class="fpcm-ui-full-width fpcm-ui-full-height"></canvas>
                 </div>
             </div>
@@ -28,8 +28,8 @@
                         ->setSize(255)
                         ->setValue($poll->getText())
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-9 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-9 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
             </div>
             <div class="row my-3 mx-1">
                 <?php $theView
@@ -38,8 +38,8 @@
                         ->setType('number')
                         ->setValue($poll->getMaxreplies())
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
             </div>
             <div class="row my-3 mx-1">
                 <?php $theView
@@ -47,8 +47,8 @@
                         ->setText('MODULE_NKORGPOLLS_GUI_POLL_START')
                         ->setWrapper(false)
                         ->setValue($theView->dateText($poll->getStarttime(), 'Y-m-d'))
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
             </div>
             <div class="row my-3 mx-1">
                 <?php $theView
@@ -56,8 +56,8 @@
                         ->setText('MODULE_NKORGPOLLS_GUI_POLL_STOP')
                         ->setValue($poll->getStoptime() ? $theView->dateText($poll->getStoptime(), 'Y-m-d') : '')
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
             </div>
             <div class="row my-3 mx-1">
                 <?php $theView
@@ -66,8 +66,8 @@
                         ->setValue($poll->getVoteExpiration())
                         ->setType('number')
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
             </div>
             <?php if ($poll->getId()) : ?>
             <div class="row my-3 mx-1">
@@ -77,22 +77,22 @@
                         ->setValue($poll->getVotessum())
                         ->setType('number')
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-1 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
             </div>
             <div class="row my-3 mx-1">
-                <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
+                <label class="col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general">
                     <?php $theView->write('MODULE_NKORGPOLLS_GUI_POLL_ISCLOSED'); ?>
                 </label>
-                <div class="col-12 col-sm-6 col-md-1 fpcm-ui-padding-none-lr">
+                <div class="col-12 col-sm-6 col-lg-1 fpcm-ui-padding-none-lr">
                 <?php $theView->boolSelect("polldata[closed]")->setSelected($poll->getIsclosed()); ?>
                 </div>
             </div>
             <div class="row my-3 mx-1">
-                <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
+                <label class="col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general">
                     <?php $theView->write('MODULE_NKORGPOLLS_GUI_POLL_INARCHIVE'); ?>
                 </label>
-                <div class="col-12 col-sm-6 col-md-1 fpcm-ui-padding-none-lr">
+                <div class="col-12 col-sm-6 col-lg-1 fpcm-ui-padding-none-lr">
                 <?php $theView->boolSelect("polldata[inarchive]")->setSelected($poll->getShowarchive()); ?>
                 </div>
             </div>
@@ -112,11 +112,11 @@
                         ])
                         ->setValue($reply->getText())
                         ->setWrapper(false)
-                        ->setClass('col-12 col-sm-6 col-md-5 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setClass('col-12 col-sm-6 col-lg-5 fpcm-ui-field-input-nowrapper-general pr-0')
+                        ->setLabelClass('col-12 col-sm-6 col-lg-3 fpcm-ui-field-label-general'); ?>
                 
                 <?php if ($poll->getId()) : ?>
-                <div class="col-12 col-sm-3 col-md-1">
+                <div class="col-12 col-sm-3 col-lg-1">
                     <?php $theView
                             ->textInput("polldata[sums][]", "polldatareplies{$idx}")
                             ->setValue($reply->getVotes())
@@ -124,7 +124,7 @@
                 </div>
                 <?php endif; ?>
 
-                <div class="col-12 col-sm-6 col-md-2">
+                <div class="col-12 col-sm-6 col-lg-2">
                     <?php $theView->deleteButton('removeReply1')->setClass('fpcm-ui-nkorgpolls-removereply')->setData(['idx' => $idx ]); ?>
                 </div>
                 

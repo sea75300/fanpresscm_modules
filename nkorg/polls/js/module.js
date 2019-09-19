@@ -40,20 +40,26 @@ fpcm.polls = {
         if (fpcm.vars.jsvars.replyOptionsStart === undefined) {
             return false;
         }
-
-        fpcm.polls.replyOptionsStart = fpcm.vars.jsvars.replyOptionsStart;
         
-        jQuery('.fpcm-ui-input-select').selectmenu( "option", "classes.ui-selectmenu-button", "fpcm-ui-border-radius-right" );            
+        fpcm.ui.selectmenu('.fpcm-ui-input-select', {
+            removeCornerLeft: true
+        });
 
+        fpcm.polls.replyOptionsStart = fpcm.vars.jsvars.replyOptionsStart;         
+
+        jQuery('#btnAddReplyOption').unbind('click');
         jQuery('#btnAddReplyOption').click(function () {
             fpcm.polls.replyOptionsStart++;
             jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone().attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#tabs-replies');
 
             var id = '#' + fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart;
             jQuery(id).find('label span').text(fpcm.ui.translate('MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT').replace('{{id}}', fpcm.polls.replyOptionsStart));
-            jQuery(id).find('input').val('');
-            jQuery(id).find('input').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
-            jQuery(id).find('input[type=text]').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
+            
+            var inputEL = jQuery(id).find('input');
+            inputEL.val('');
+            inputEL.attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart);
+
+            jQuery(id).find('input[type=number]').attr('id', 'polldatareplies' + fpcm.polls.replyOptionsStart).val(0);
             jQuery(id).find('input[type=hidden]').attr('id', 'polldataids' + fpcm.polls.replyOptionsStart);
             jQuery(id).find('button.fpcm-ui-nkorgpolls-removereply').attr('data-idx', fpcm.polls.replyOptionsStart);
             jQuery('.fpcm-ui-nkorgpolls-removereply').unbind('click');
@@ -97,7 +103,8 @@ fpcm.polls = {
     _drawChart: function () {
 
         if (fpcm.vars.jsvars.pollChartData === undefined ||
-            fpcm.vars.jsvars.replyOptionsStart === undefined) {
+            fpcm.vars.jsvars.replyOptionsStart === undefined ||
+            !fpcm.vars.jsvars.voteSum) {
             return false;
         }
 

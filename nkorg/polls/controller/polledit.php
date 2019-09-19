@@ -35,7 +35,8 @@ final class polledit extends pollbase {
         $this->view->assign('replies', $replies);
         $this->view->addJsVars([
             'replyOptionsStart' => count($replies),
-            'pollChartData' => $this->getChartData()
+            'pollChartData' => $this->getChartData(),
+            'voteSum' => $this->poll->getVotessum()
         ]);
         
         parent::process();
