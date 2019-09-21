@@ -30,6 +30,7 @@ $lang = [
     'GUI_POLL_INARCHIVE' => 'Umfrage in Archiv anzeigen',
     'GUI_POLL_REPLY_TXT' => 'Antwort {{id}}',
     'GUI_POLL_REPLYSAVED' => 'Abgestimmt um',
+    'GUI_POLL_VOTELOG_REPLY_NOTFOUND' => 'Antwort mit ID "{{replyId}}" nicht gefunden',
 
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
 
