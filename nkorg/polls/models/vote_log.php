@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\polls\models;
 
-class vote_log extends dbObj {
+class vote_log extends dbObj implements \JsonSerializable {
 
     protected $table = 'module_nkorgpolls_vote_log';
 
@@ -47,5 +47,12 @@ class vote_log extends dbObj {
         return $this;
     }
 
+    public function jsonSerialize() {
+        return [
+            'replyid' => $this->getId(),
+            'replytime' => (string) new \fpcm\view\helper\dateText($this->getReplytime()),
+            'ip' => $this->getIp()
+        ];
+    }
 
 }

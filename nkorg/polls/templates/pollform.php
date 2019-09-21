@@ -9,6 +9,9 @@
             <?php endif; ?>
             <li><a href="#tabs-poll"><?php $theView->write('MODULE_NKORGPOLLS_GUI_POLL'); ?></a></li>
             <li><a href="#tabs-replies"><?php $theView->write('MODULE_NKORGPOLLS_GUI_REPLIES'); ?></a></li>
+            <?php if ($poll->getId() && $poll->getVotessum()) : ?>
+            <li><a href="<?php print $theView->controllerLink('polls/votelog', ['pid' => $poll->getId()]); ?>"><?php $theView->write('MODULE_NKORGPOLLS_GUI_VOTESLIST'); ?></a></li>
+            <?php endif; ?>
         </ul>            
 
         <?php if ($poll->getId() && $poll->getVotessum()) : ?>

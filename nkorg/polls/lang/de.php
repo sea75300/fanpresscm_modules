@@ -15,6 +15,7 @@ $lang = [
     'GUI_POLL' => 'Umfrage',
     'GUI_REPLIES' => 'Antworten',
     'GUI_RESULT' => 'Übersicht',
+    'GUI_VOTESLIST' => 'Stimmenübrsicht',
 
     'GUI_POLL_TEXT' => 'Frage',
     'GUI_POLL_TIMESPAN' => 'Zeitraum',
@@ -28,6 +29,7 @@ $lang = [
     'GUI_POLL_ISCLOSED' => 'Umfrage geschlossen',
     'GUI_POLL_INARCHIVE' => 'Umfrage in Archiv anzeigen',
     'GUI_POLL_REPLY_TXT' => 'Antwort {{id}}',
+    'GUI_POLL_REPLYSAVED' => 'Abgestimmt um',
 
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
 
