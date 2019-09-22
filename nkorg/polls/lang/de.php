@@ -33,6 +33,10 @@ $lang = [
     'GUI_POLL_VOTELOG_REPLY_NOTFOUND' => 'Antwort mit ID "{{replyId}}" nicht gefunden',
 
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
+    
+    'GUI_PUB_SUBMITVOTE' => 'Abstimmen',
+    'GUI_PUB_SHOWRESULTS' => 'Ergebnisse anzeigen',
+    'GUI_PUB_SHOWPOLL' => 'Umfrage anzeigen',
 
     'POLL_STATUS_ALL' => 'Alle Umfragen anzeigen',
     'POLL_STATUS0' => 'Offen',

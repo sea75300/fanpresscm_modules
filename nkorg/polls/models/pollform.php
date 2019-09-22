@@ -3,6 +3,8 @@
 namespace fpcm\modules\nkorg\polls\models;
 
 class pollform {
+    
+    use \fpcm\controller\traits\modules\tools;
 
     private $templateConfigPaths;
 
@@ -59,6 +61,16 @@ class pollform {
         return true;
     }
 
+    private function parseCondition(string &$str, string $replace, string $condStr = '') {
+
+        if (!trim($condStr)) {
+            $condStr = '([\$a-zA-Z0-9]+)';
+        }
+
+        $str = preg_replace('/\{if(\s{1})'.$condStr.'\}{1}(.+)\{\/if\}/', $replace, $str);
+        return true;
+    }
+
     public function getVoteForm() {
         
         $tpl = $this->getTemplates('voteform');
@@ -68,9 +80,19 @@ class pollform {
         ]);
 
         $this->replaceTags($tpl['voteform_footer.html'], [
-            '{{poll_button_sumit}}' => ( new \fpcm\view\helper\button('vote'.$this->poll->getId()) )->setClass('fpcm-polls-poll-submit')->setData(['pollid' => $this->poll->getId()])->setText('Abstimmen'),
-            '{{poll_button_reset}}' => ( new \fpcm\view\helper\button('reset'.$this->poll->getId()) )->setClass('fpcm-polls-poll-reset')->setData(['pollid' => $this->poll->getId()])->setText('Zurücksetzen'),
-            '{{poll_button_results}}' => ( new \fpcm\view\helper\button('result'.$this->poll->getId()) )->setClass('fpcm-polls-poll-result')->setData(['pollid' => $this->poll->getId()])->setText('Ergebnisse anzeigen')
+            '{{poll_button_sumit}}' => ( new \fpcm\view\helper\button('vote'.$this->poll->getId()) )
+                ->setClass('fpcm-polls-poll-submit')
+                ->setData(['pollid' => $this->poll->getId()])
+                ->setText($this->addLangVarPrefix('GUI_PUB_SUBMITVOTE')),
+
+            '{{poll_button_reset}}' => ( new \fpcm\view\helper\button('reset'.$this->poll->getId()) )
+                ->setClass('fpcm-polls-poll-reset')
+                ->setData(['pollid' => $this->poll->getId()])
+                ->setText('GLOBAL_RESET'),
+            '{{poll_button_results}}' => ( new \fpcm\view\helper\button('result'.$this->poll->getId()) )
+                ->setClass('fpcm-polls-poll-result')
+                ->setData(['pollid' => $this->poll->getId()])
+                ->setText($this->addLangVarPrefix('GUI_PUB_SHOWRESULTS'))
         ]);
 
         if ($this->poll->getMaxreplies() > 1) {
@@ -113,11 +135,16 @@ class pollform {
             '{{poll_text}}' => $this->poll->getText()
         ]);
 
+        $pollBtnObj = (string) ( new \fpcm\view\helper\button('pollform'.$this->poll->getId()) )
+                        ->setClass('fpcm-polls-poll-form')
+                        ->setData(['pollid' => $this->poll->getId()])
+                        ->setText($this->addLangVarPrefix('GUI_PUB_SHOWPOLL'));
+
+        $this->parseCondition($tpl['result_footer.html'], $pollBtn ? '$2' : '', '\$hasVoted');
+
         $this->replaceTags($tpl['result_footer.html'], [
             '{{poll_result_votesum}}' => $this->poll->getVotessum(),
-            '{{poll_button_tovote}}' => $pollBtn
-                                    ? ( new \fpcm\view\helper\button('pollform'.$this->poll->getId()) )->setClass('fpcm-polls-poll-form')->setData(['pollid' => $this->poll->getId()])->setText('Umfrage anzeigen')
-                                    : ''
+            '{{poll_button_tovote}}' => $pollBtn ? $pollBtnObj : '',
         ]);
 
         $options = [];
