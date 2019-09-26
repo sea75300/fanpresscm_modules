@@ -5,7 +5,7 @@ author: imagine
 name: Extended statistics
 description: "Extended statistics for articles, shares, coments and more."
 link: https://nobody-knows.org/
-version: 4.2.6
+version: 4.2.7
 help: 
 requirements:
     system: 4.1.0-rc4

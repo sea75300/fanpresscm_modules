@@ -122,6 +122,7 @@
                 <div class="col-12 col-sm-3 col-lg-1">
                     <?php $theView
                             ->textInput("polldata[sums][]", "polldatareplies{$idx}")
+                            ->setText('')
                             ->setValue($reply->getVotes())
                             ->setType('number'); ?>
                 </div>
