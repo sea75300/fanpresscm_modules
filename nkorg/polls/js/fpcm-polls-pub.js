@@ -6,6 +6,10 @@ if (fpcm === undefined) {
     };
 }
 
+if (typeof window.onload === 'function') {
+    window.onload();
+}
+
 window.onload = function () {
 
     if (typeof jQuery !== 'undefined') {
