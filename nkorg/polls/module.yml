@@ -5,10 +5,10 @@ author: imagine
 name: Polls
 description: "Module to create polls with single/ multiple answers and so on."
 link: https://nobody-knows.org/
-version: 4.2.0-rc6
+version: 4.3.0
 help: 
 requirements:
-    system: 4.2.1
+    system: 4.3.0-rc1
     php: 7.0.0
 tables:
     alter:
