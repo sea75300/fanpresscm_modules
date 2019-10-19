@@ -48,9 +48,9 @@ final class polledit extends pollbase {
             return null;
         }
 
-        $this->view->addJsFiles([
-            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/chart.min.js'),
-        ]);
+        $chart = new \fpcm\components\charts\chart('pie', 'fpcm-nkorg-polls-chart');
+        
+        $this->view->addJsFiles($chart->getJsFiles());
 
         $labels = [];
         $data = [];
@@ -61,22 +61,13 @@ final class polledit extends pollbase {
             
             $labels[] = $reply->getText().' ('.$reply->getPercentage($this->poll->getVotessum()).'%)';
             $data[] = $reply->getVotes();
-            $colors[] = $this->getRandomColor();
+            $colors[] = \fpcm\components\charts\chartItem::getRandomColor();
         }
+        
+        $chart->setLabels($labels);
+        $chart->setValues((new \fpcm\components\charts\chartItem($data, $colors))->setFill(true));
 
-        return [
-            'labels' => $labels,
-            'datasets' => [
-                [
-                    'label' => $this->poll->getText(),
-                    'fill' => true,
-                    'data' => $data,
-                    'backgroundColor' => $colors,
-                    'borderColor' => '#000',
-                    'borderWidth' => 0
-                ]
-            ]
-        ];
+        return $chart;
     }
 
     private function getRandomColor()

@@ -108,21 +108,7 @@ fpcm.polls = {
             return false;
         }
 
-        window.chart = new Chart(jQuery('#fpcm-nkorg-polls-chart'), {
-            type: 'pie',
-            data: fpcm.vars.jsvars.pollChartData,
-            options: {
-                legend: {
-                    display: true,
-                    position: 'right',
-                    labels: {
-                        boxWidth: 25,
-                        fontSize: 12
-                    }
-                },
-                responsive: true
-            }
-        });
+        fpcm.ui_chart.draw(fpcm.vars.jsvars.pollChartData);
     }
 
 };
