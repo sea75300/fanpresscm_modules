@@ -15,8 +15,8 @@
                 </div>
             </div>
 
-            <div class="row no-gutters">
-                <div class="col-12">
+            <div class="row no-gutters align-self-center align-content-center justify-content-center">
+                <div class="col-12<?php if (!$notfound) : ?> col-md-10 col-lg-7<?php endif; ?>">
                 <?php if ($notfound) : ?>
                     <p class="fpcm-ui-padding-none fpcm-ui-margin-none"><?php $theView->icon('images', 'far')->setStack('ban fpcm-ui-important-text')->setSize('lg')->setStackTop(true); ?> <?php $theView->write('GLOBAL_NOTFOUND2'); ?></p>
                 <?php else : ?>

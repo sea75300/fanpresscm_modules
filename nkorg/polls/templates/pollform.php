@@ -17,7 +17,7 @@
         <?php if ($poll->getId() && $poll->getVotessum()) : ?>
         <div id="tabs-graphic">
             <div class="row no-gutters align-self-center align-content-center justify-content-center">
-                <div class="col-12 col-lg-9 col-lg-6">
+                <div class="col-12 col-md-9 col-lg-6">
                     <canvas id="fpcm-nkorg-polls-chart" class="fpcm-ui-full-width fpcm-ui-full-height"></canvas>
                 </div>
             </div>
