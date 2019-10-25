@@ -61,7 +61,7 @@ fpcm.extStats = {
     drawChart: function (type) {
 
         if (window.chart) {
-            window.chart.destroy();
+             window.chart.destroy();
         }
 
         if (!fpcm.vars.jsvars.extStats.chartValues.datasets) {

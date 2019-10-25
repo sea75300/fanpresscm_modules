@@ -103,7 +103,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $values = call_user_func([$counter, $fn], $start, $stop, $chartMode);
         $this->view->assign('notfound', empty($values['datasets']) ? true : false);
-        
+
         $this->view->addJsVars([
             'extStats' => [
                 'chartValues' => $values,
@@ -117,7 +117,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         
         $this->view->addJslangVars([$this->addLangVarPrefix('HITS_LIST_LATEST')]);
         $this->view->addJsFiles([
-            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/chart.min.js'),
+            \fpcm\classes\loader::libGetFileUrl('chart-js/chart.min.js'),
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
         ]);
 
