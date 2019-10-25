@@ -6,10 +6,12 @@ final class includeDumpTables extends \fpcm\module\event {
 
     public function run()
     {
-        $this->data[] = 'module_nkorgpolls_polls';
-        $this->data[] = 'module_nkorgpolls_poll_replies';
-        $this->data[] = 'module_nkorgpolls_vote_log';
-        return true;
+        $db = \fpcm\classes\loader::getObject('\fpcm\classes\database');
+        
+        $this->data[] = $db->getTablePrefixed('module_nkorgpolls_polls');
+        $this->data[] = $db->getTablePrefixed('module_nkorgpolls_poll_replies');
+        $this->data[] = $db->getTablePrefixed('module_nkorgpolls_vote_log');
+        return $this->data;
     }
 
     public function init(): bool
