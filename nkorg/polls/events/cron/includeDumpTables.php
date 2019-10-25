@@ -1,6 +1,6 @@
 <?php
 
-namespace fpcm\modules\nkorg\polls\events;
+namespace fpcm\modules\nkorg\polls\events\cron;
 
 final class includeDumpTables extends \fpcm\module\event {
 

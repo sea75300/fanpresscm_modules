@@ -1,6 +1,6 @@
 <?php
 
-namespace fpcm\modules\nkorg\extstats\events;
+namespace fpcm\modules\nkorg\extstats\events\cron;
 
 final class includeDumpTables extends \fpcm\module\event {
 
