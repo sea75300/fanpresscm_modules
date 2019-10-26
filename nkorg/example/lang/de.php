@@ -9,4 +9,5 @@
 $lang = [
     'HEADLINE' => 'Example Module',
     'DESCRIPTION' => 'This is an example module description',
+    'CRONJOB_TESTING' => 'Cronjob by nkorg/example module',
 ];

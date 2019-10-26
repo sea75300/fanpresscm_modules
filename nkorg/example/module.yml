@@ -24,4 +24,5 @@ configOptions:
     remove:
         opt5: 5
         opt6: 6
-
+crons:
+    testing: 3600

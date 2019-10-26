@@ -57,5 +57,7 @@ $lang = [
     'MSG_ERR_UPDATEPOLL' => 'Fehler beim Speichern von Änderungen der Umfrage!',
     'MSG_ERR_DELETEPOLL' => 'Die gewählte Umfrage konnte nicht gelöscht werden!',
     'MSG_ERR_CLOSEPOLL' => 'Die gewählte Umfrage konnte nicht geschlossen werden!',
+    
+    'CRONJOB_ANONYMIZEVOTELOG' => 'Stimmenübersicht anonymisieren',
 
 ];
