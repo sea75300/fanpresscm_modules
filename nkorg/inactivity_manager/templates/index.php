@@ -22,7 +22,7 @@
                     <?php $theView->write('MODULE_NKORGINACTIVITY_MANAGER_MSGSTART'); ?>
                 </div>
                 <div class="col-12 col-md-6 fpcm-ui-padding-lg-bottom align-self-center">
-                    <?php $theView->textInput('msg[dateFrom]')->setText('')->setValue(date('Y-m-d', $obj->getStarttime()))->setClass('fpcm-ui-datepicker')->setWrapperClass('fpcm-ui-datepicker-inputwrapper'); ?>
+                    <?php $theView->textInput('msg[dateFrom]')->setText('')->setWrapper(true)->setValue(date('Y-m-d', $obj->getStarttime()))->setClass('fpcm-ui-datepicker')->setWrapperClass('fpcm-ui-datepicker-inputwrapper'); ?>
                     <span class="fpcm-ui-padding-md-left"><?php $theView->write('MODULE_NKORGINACTIVITY_MANAGER_MSGSTART_TIME'); ?></span>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                     <?php $theView->write('MODULE_NKORGINACTIVITY_MANAGER_MSGEND'); ?>
                 </div>
                 <div class="col-12 col-md-6 fpcm-ui-padding-lg-bottom align-self-center">
-                    <?php $theView->textInput('msg[dateTo]')->setText('')->setValue(date('Y-m-d', $obj->getStoptime()))->setClass('fpcm-ui-datepicker')->setWrapperClass('fpcm-ui-datepicker-inputwrapper'); ?>
+                    <?php $theView->textInput('msg[dateTo]')->setText('')->setWrapper(true)->setValue(date('Y-m-d', $obj->getStoptime()))->setClass('fpcm-ui-datepicker')->setWrapperClass('fpcm-ui-datepicker-inputwrapper'); ?>
                     <span class="fpcm-ui-padding-md-left"><?php $theView->write('MODULE_NKORGINACTIVITY_MANAGER_MSGEND_TIME'); ?></span>
                 </div>
             </div>

@@ -7,5 +7,5 @@
  * @license http://www.gnu.org/licenses/gpl.txt GPLv3
  */
 $lang = [
-    'SITEMAPPATH' => 'Pfad zur sitemap.xml',
+    'LABEL_FIELD_CONFIG_MODULE_NKORGSITEMAPLINKS_SITEMAPPATH' => 'Pfad zur sitemap.xml',
 ];

@@ -1,7 +1,7 @@
 <?php /* @var $theView fpcm\view\viewVars */ ?>
 <div class="row no-gutters fpcm-ui-padding-md-tb">
     <div class="col-12 col-sm-6"><?php $theView->write('MODULE_NKORGINTEGRATION_TEXT_SHOWTITLE_DELIMITER'); ?>:</div>
-    <div class="col-12 col-sm-3"><?php $theView->textInput('titlePages[delimited]')->setValue('&bull; Page'); ?></div>
+    <div class="col-12 col-sm-3"><?php $theView->textInput('titlePages[delimited]')->setValue('&bull; Page')->setText('')->setWrapper(true); ?></div>
 </div>
 
 <div class="row no-gutters fpcm-ui-padding-md-tb">

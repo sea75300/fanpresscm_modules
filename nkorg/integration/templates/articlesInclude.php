@@ -2,7 +2,7 @@
 
 <div class="row no-gutters fpcm-ui-padding-md-tb">
     <div class="col-12 col-sm-6"><?php $theView->write('MODULE_NKORGINTEGRATION_TEXT_SHOWARTICLES_COUNT'); ?>:</div>
-    <div class="col-12 col-sm-3"><?php $theView->textInput('article[count]')->setValue($articleCount); ?></div>
+    <div class="col-12 col-sm-3"><?php $theView->textInput('article[count]')->setValue($articleCount)->setText('')->setWrapper(true); ?></div>
 </div>
 
 <div class="row no-gutters fpcm-ui-padding-md-tb">
