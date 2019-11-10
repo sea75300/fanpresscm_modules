@@ -11,6 +11,7 @@ $lang = [
     'GUI_ADD_POLL' => 'Umfragen erstellen',
     'GUI_CLOSE_POLL' => 'Umfragen schließen',
     'GUI_ADD_REPLY' => 'Antwort hinzufügen',
+    'GUI_GOTO_LIST' => 'zur Übersicht',
 
     'GUI_POLL' => 'Umfrage',
     'GUI_REPLIES' => 'Antworten',
@@ -33,6 +34,7 @@ $lang = [
     'GUI_POLL_VOTELOG_REPLY_NOTFOUND' => 'Antwort mit ID "{{replyId}}" nicht gefunden',
 
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
+    'GUI_CONFIG_CHARTTYPE' => 'Standardmäßig aktuellste Umfrage anzeigen',
     
     'GUI_PUB_SUBMITVOTE' => 'Abstimmen',
     'GUI_PUB_SHOWRESULTS' => 'Ergebnisse anzeigen',
@@ -41,6 +43,10 @@ $lang = [
     'POLL_STATUS_ALL' => 'Alle Umfragen anzeigen',
     'POLL_STATUS0' => 'Offen',
     'POLL_STATUS1' => 'Geschlossen',
+    
+    'GUI_CHARTTYPE_BAR' => 'Balkendiagramm',
+    'GUI_CHARTTYPE_PIE' => 'Tortendiagramm',
+    'GUI_CHARTTYPE_DOUGHNUT' => 'Ringdiagramm',
     
     'MSG_SUCCESS_SAVEPOLL' => 'Die Umfrage wurden gespeichert!',
     'MSG_PUB_NOTFOUND' => 'Die ausgewählte Umfrage wurde nicht gefunden',

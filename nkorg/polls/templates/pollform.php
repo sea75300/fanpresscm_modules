@@ -18,7 +18,9 @@
         <div id="tabs-graphic">
             <div class="row no-gutters align-self-center align-content-center justify-content-center">
                 <div class="col-12 col-md-9 col-lg-6">
-                    <canvas id="fpcm-nkorg-polls-chart" class="fpcm-ui-full-width fpcm-ui-full-height"></canvas>
+                    <h3 class="mb-3"><?php print $theView->escapeVal($poll->getText()); ?></h3>
+                    
+                    <canvas id="fpcm-nkorg-polls-chart"></canvas>
                 </div>
             </div>
         </div>

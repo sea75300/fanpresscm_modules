@@ -48,6 +48,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row my-3 mx-1">
+                <div class="col-12">
+                    <div class="row">
+                        <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
+                            <?php $theView->icon('chart-pie'); ?>
+                            <?php $theView->write('MODULE_NKORGPOLLS_GUI_CONFIG_CHARTTYPE'); ?>:
+                        </label>
+                        <div class="col-auto fpcm-ui-padding-none-lr">
+                            <?php $theView->boolSelect("config[module_nkorgpolls_chart_type]")
+                                    ->setOptions($charTypes)
+                                    ->setSelected($options['module_nkorgpolls_chart_type'])
+                                    ->setData(['remove_corner_left' => 1]); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
             <div class="row my-3 mx-1">
                 <div class="col-12">

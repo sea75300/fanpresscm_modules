@@ -52,7 +52,8 @@ class pollform {
 
         unset($tpl);
 
-        return array_map('file_get_contents', $this->tplCache[$name]);
+        $this->tplCache[$name] = array_map('file_get_contents', $this->tplCache[$name]);
+        return $this->tplCache[$name];
     }
 
     private function replaceTags(string &$str, array $data) {
@@ -167,7 +168,7 @@ class pollform {
     }
 
     public function getArchiveForm() {
-        
+
         $tpl = $this->getTemplates('archive');
 
         $this->replaceTags($tpl['archive_header.html'], [

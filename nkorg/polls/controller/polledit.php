@@ -38,6 +38,10 @@ final class polledit extends pollbase {
             'pollChartData' => $this->getChartData(),
             'voteSum' => $this->poll->getVotessum()
         ]);
+
+        $this->view->addButtons([
+            (new \fpcm\view\helper\linkButton('backList'))->setUrl(\fpcm\classes\tools::getControllerLink('polls/list')) ->setText($this->addLangVarPrefix('GUI_GOTO_LIST'))->setIcon('arrow-circle-left'),
+        ]);
         
         parent::process();
     }
@@ -48,7 +52,7 @@ final class polledit extends pollbase {
             return null;
         }
 
-        $chart = new \fpcm\components\charts\chart('pie', 'fpcm-nkorg-polls-chart');
+        $chart = new \fpcm\components\charts\chart($this->config->module_nkorgpolls_chart_type, 'fpcm-nkorg-polls-chart');
         
         $this->view->addJsFiles($chart->getJsFiles());
 
