@@ -151,7 +151,7 @@ class pollform {
         $options = [];
 
         /* @var $reply poll_reply */
-        foreach ($this->poll->getReplies() as $reply) {
+        foreach ($this->poll->getReplies(false, ['votes DESC']) as $reply) {
             $options[$reply->getId()] = $tpl['result_line.html'];
 
             $percent = $reply->getPercentage($this->poll->getVotessum());

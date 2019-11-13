@@ -68,9 +68,11 @@ final class apiCallFunction extends \fpcm\module\event {
         return true;
     }
 
-    final protected function displayArchive()
+    final protected function displayArchive(array $params = [])
     {
-        $polls  = (new \fpcm\modules\nkorg\polls\models\polls())->getArchivedPolls();
+        $params['sort'] = $params['sort'] ?? ['starttime DESC'];
+
+        $polls  = (new \fpcm\modules\nkorg\polls\models\polls())->getArchivedPolls(false, $params['sort']);
         if (!count($polls)) {
             loader::getObject('\fpcm\classes\language')->write('MODULE_NKORGPOLLS_MSG_PUB_NOARCHIVE');
             return false;

@@ -212,7 +212,7 @@ class poll extends dbObj {
         return true;
     }
 
-    final public function getReplies($empty = false): array {
+    final public function getReplies($empty = false, array $sort = ['id ASC']): array {
 
         if ($empty) {
 
@@ -231,7 +231,7 @@ class poll extends dbObj {
         }
 
         $obj = (new \fpcm\model\dbal\selectParams('module_nkorgpolls_polls_replies'))
-                ->setWhere('pollid = ? ' . $this->dbcon->orderBy(['id ASC']))
+                ->setWhere('pollid = ? ' . $this->dbcon->orderBy($sort))
                 ->setParams([$this->getId()])
                 ->setFetchAll(true);
 

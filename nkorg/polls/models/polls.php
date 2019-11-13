@@ -22,7 +22,7 @@ class polls extends \fpcm\model\abstracts\tablelist {
         return $this->getResultFromDB(__FUNCTION__, $cond.$this->dbcon->orderBy(['isclosed ASC', 'starttime DESC']), $values);
     }
 
-    public function getLatestPoll()
+    public function getLatestPoll(array $sort = [' starttime DESC'])
     {
         if (isset($this->data[__FUNCTION__])) {
             return $this->data[__FUNCTION__];
@@ -37,13 +37,15 @@ class polls extends \fpcm\model\abstracts\tablelist {
         return (int) ($result->id ?? 0);
     }
 
-    public function getArchivedPolls($force = false)
+    public function getArchivedPolls($force = false, array $sort = ['starttime DESC'])
     {
         if (isset($this->data[__FUNCTION__]) && !$force) {
             return $this->data[__FUNCTION__];
         }
 
-        return $this->getResultFromDB(__FUNCTION__, 'showarchive = 1 AND isclosed = 1 AND (stoptime > 0 OR stoptime <= ?)', [
+        $where = 'showarchive = 1 AND isclosed = 1 AND (stoptime > 0 OR stoptime <= ?)' . $this->dbcon->orderBy($sort);
+        
+        return $this->getResultFromDB(__FUNCTION__, $where, [
             time()
         ]);
     }

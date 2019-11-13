@@ -126,7 +126,8 @@
                             ->textInput("polldata[sums][]", "polldatareplies{$idx}")
                             ->setText('')
                             ->setValue($reply->getVotes())
-                            ->setType('number'); ?>
+                            ->setType('number')
+                            ->setWrapper(true); ?>
                 </div>
                 <?php endif; ?>
 
