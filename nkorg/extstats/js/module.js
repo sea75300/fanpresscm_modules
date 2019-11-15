@@ -139,6 +139,7 @@ fpcm.extStats = {
         jQuery('.fpcm-extstats-links-delete').click(function () {
             
             var btnParent = jQuery(this).parent().parent();
+            fpcm.ui.showLoader(1);
             fpcm.ajax.exec('extstats/delete', {
                 data: {
                     id: jQuery(this).data('entry')
@@ -150,6 +151,7 @@ fpcm.extStats = {
                     }
 
                     jQuery(btnParent).remove();
+                    fpcm.ui.showLoader(0);
                 }
             });
 
