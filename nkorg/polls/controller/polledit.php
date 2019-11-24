@@ -53,23 +53,9 @@ final class polledit extends pollbase {
         }
 
         $chart = new \fpcm\components\charts\chart($this->config->module_nkorgpolls_chart_type, 'fpcm-nkorg-polls-chart');
-        
         $this->view->addJsFiles($chart->getJsFiles());
 
-        $labels = [];
-        $data = [];
-        $colors = [];
-
-        /* @var $reply \fpcm\modules\nkorg\polls\models\poll_reply */
-        foreach ($this->poll->getReplies() as $reply) {
-            
-            $labels[] = $reply->getText().' ('.$reply->getPercentage($this->poll->getVotessum()).'%)';
-            $data[] = $reply->getVotes();
-            $colors[] = \fpcm\components\charts\chartItem::getRandomColor();
-        }
-        
-        $chart->setLabels($labels);
-        $chart->setValues((new \fpcm\components\charts\chartItem($data, $colors))->setFill(true));
+        \fpcm\modules\nkorg\polls\models\chartdraw::draw($chart, $this->poll);
 
         return $chart;
     }

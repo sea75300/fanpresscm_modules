@@ -33,6 +33,8 @@ $lang = [
     'GUI_POLL_REPLYSAVED' => 'Abgestimmt um',
     'GUI_POLL_VOTELOG_REPLY_NOTFOUND' => 'Antwort mit ID "{{replyId}}" nicht gefunden',
 
+    'GUI_DASHBOARD_LATEST' => 'Umfrage: {{text}}',
+
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
     'GUI_CONFIG_CHARTTYPE' => 'Standardmäßig aktuellste Umfrage anzeigen',
     
