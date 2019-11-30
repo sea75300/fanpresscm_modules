@@ -121,15 +121,20 @@ fpcm.extStats = {
         }
 
         var elList = jQuery('#fpcm-nkorg-extendedstats-list');
-        var btnEl = '';
+        var btnDelEl = '';
+        var btnOpenEl = '';
         
         jQuery.each(fpcm.vars.jsvars.extStats.chartValues.listValues, function (index, object) {
-            btnEl = fpcm.vars.jsvars.extStats.deleteButtonStr;
+            btnDelEl = fpcm.vars.jsvars.extStats.deleteButtonStr;
+            btnOpenEl = fpcm.vars.jsvars.extStats.openButtonStr;
             
             elList.append(
                 '<div class="row my-1">' +
-                '<div class="col-1 align-self-center">' + btnEl.replace('_{$id}', object.intid).replace('{$id}', object.intid) +
-                '</div><div class="col-7 align-self-center">' + object.label +
+                '<div class="col-1 align-self-center">' + 
+                    btnOpenEl.replace('_{$id}', object.intid).replace('{$url}', object.fullUrl) +
+                    btnDelEl.replace('_{$id}', object.intid).replace('{$id}', object.intid) +
+                    
+                '</div><div class="col align-self-center">' + object.label +
                 '</div><div class="col-1 align-self-center">' + object.value +
                 '</div><div class="col-3 align-self-center">' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + ': ' + object.latest +
                 '</div></div>'

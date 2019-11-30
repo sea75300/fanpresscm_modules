@@ -111,7 +111,8 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'minDate' => date('Y-m-d', $minMax['minDate']),
                 'showMode' => $hideMode ? false : true,
                 'showDate' => $isLinks,
-                'deleteButtonStr' => $isLinks ? (string) (new \fpcm\view\helper\button('entry_{$id}'))->setText('GLOBAL_DELETE')->setIcon('trash')->setIconOnly(true)->setData(['entry' => '{$id}'])->setClass('fpcm-extstats-links-delete') : ''
+                'deleteButtonStr' => $isLinks ? (string) (new \fpcm\view\helper\button('entry_{$id}'))->setText('GLOBAL_DELETE')->setIcon('trash')->setIconOnly(true)->setData(['entry' => '{$id}'])->setClass('fpcm-extstats-links-delete') : '',
+                'openButtonStr' => $isLinks ? (string) (new \fpcm\view\helper\openButton('open_{$id}'))->setText('GLOBAL_OPEN')->setUrl('{$url}')->setTarget('_blank')->setRel('external') : ''
             ]
         ]);
         

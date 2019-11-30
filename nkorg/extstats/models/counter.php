@@ -195,6 +195,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             return [];
         }
         
+        $baseUrl = $this->config->system_url;
 
         $data = [];
         foreach ($values as $value) {
@@ -207,6 +208,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
                 'label' => (string) new \fpcm\view\helper\escape($value->url),
                 'latest' => date($this->config->system_dtmask, $value->lasthit),
                 'value' => $val,
+                'fullUrl' => $value->url,
                 'intid' => $value->id
             ];
         }
