@@ -4,6 +4,8 @@ namespace fpcm\modules\nkorg\extstats\models;
 
 class counter extends \fpcm\model\abstracts\tablelist {
 
+    use \fpcm\controller\traits\modules\tools;
+    
     const MODE_MONTH = 1;
     const MODE_YEAR = 2;
     const MODE_DAY = 3;
@@ -154,21 +156,19 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['hits']['values'][] = (string) ($value->sumhits ?? $value->counthits);
             $data['hits']['colors'][] = $this->getRandomColor();
         }
-        
-        $langPrefix = \fpcm\module\module::getLanguageVarPrefixed(\fpcm\module\module::getKeyFromClass(get_called_class()));
 
         return [
             'labels' => $data['labels'],
             'datasets' => [
                 [
-                    'label' => $this->language->translate($langPrefix.'LEGEND_UNIQUE'),
+                    'label' => $this->language->translate($this->addLangVarPrefix('LEGEND_UNIQUE')),
                     'fill' => false,
                     'data' => $data['unique']['values'],
                     'backgroundColor' => $data['unique']['colors'],
                     'borderColor' => $this->getRandomColor(),
                 ],
                 [
-                    'label' => $this->language->translate($langPrefix.'LEGEND_HITS'),
+                    'label' => $this->language->translate($this->addLangVarPrefix('LEGEND_HITS')),
                     'fill' => false,
                     'data' => $data['hits']['values'],
                     'backgroundColor' => $data['hits']['colors'],
@@ -194,8 +194,6 @@ class counter extends \fpcm\model\abstracts\tablelist {
         if (!$values) {
             return [];
         }
-        
-        $baseUrl = $this->config->system_url;
 
         $data = [];
         foreach ($values as $value) {
@@ -212,8 +210,6 @@ class counter extends \fpcm\model\abstracts\tablelist {
                 'intid' => $value->id
             ];
         }
-        
-        $langPrefix = \fpcm\module\module::getLanguageVarPrefixed(\fpcm\module\module::getKeyFromClass(get_called_class()));
 
         return [
             'listValues' => $data['listValues'],
