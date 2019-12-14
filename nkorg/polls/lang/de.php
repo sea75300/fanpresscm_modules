@@ -36,7 +36,7 @@ $lang = [
     'GUI_DASHBOARD_LATEST' => 'Umfrage: {{text}}',
 
     'GUI_CONFIG_SHOWLATEST' => 'Standardmäßig aktuellste Umfrage anzeigen',
-    'GUI_CONFIG_CHARTTYPE' => 'Standardmäßig aktuellste Umfrage anzeigen',
+    'GUI_CONFIG_CHARTTYPE' => 'Diagram-Typ',
     
     'GUI_PUB_SUBMITVOTE' => 'Abstimmen',
     'GUI_PUB_SHOWRESULTS' => 'Ergebnisse anzeigen',
