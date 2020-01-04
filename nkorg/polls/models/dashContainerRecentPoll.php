@@ -62,6 +62,12 @@ class dashContainerRecentPoll extends \fpcm\model\abstracts\dashcontainer {
 
     public function getHeadline() : string
     {
+        if ($this->poll === false) {
+            return $this->language->translate($this->addLangVarPrefix('GUI_DASHBOARD_LATEST'), [
+                'text' => $this->language->translate('GLOBAL_NOTFOUND2')
+            ]);
+        }
+
         return $this->language->translate($this->addLangVarPrefix('GUI_DASHBOARD_LATEST'), [
             'text' => (string) new \fpcm\view\helper\escape($this->poll->getText())
         ]);
