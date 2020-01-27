@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\calendar\controller;
 
-final class polledit extends base {
+final class EDIT extends base {
 
     public function request()
     {
@@ -14,13 +14,13 @@ final class polledit extends base {
             return false;
         }
 
-        $this->poll = new \fpcm\modules\nkorg\calendar\models\poll($id);
-        if (!$this->poll->exists()) {
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_PUB_NOTFOUND'));
+        $this->appointment = new \fpcm\modules\nkorg\calendar\models\appointment($id);
+        if (!$this->appointment->exists()) {
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_NOTFOUND'));
         }
         
         if ($this->buttonClicked('save') && $this->save()) {
-            $this->view->addNoticeMessage($this->addLangVarPrefix('MSG_SUCCESS_SAVEPOLL'));
+            $this->view->addNoticeMessage($this->addLangVarPrefix('MSG_SUCCESS_SAVE'));
             return true;
         }
         
@@ -29,41 +29,13 @@ final class polledit extends base {
 
     public function process()
     {
-        $this->view->setFormAction('polls/edit&id='.$this->poll->getId());
-        
-        $replies = $this->poll->getReplies();
-        $this->view->assign('replies', $replies);
-        $this->view->addJsVars([
-            'replyOptionsStart' => count($replies),
-            'pollChartData' => $this->getChartData(),
-            'voteSum' => $this->poll->getVotessum()
-        ]);
-
         $this->view->addButtons([
-            (new \fpcm\view\helper\linkButton('backList'))->setUrl(\fpcm\classes\tools::getControllerLink('polls/list')) ->setText($this->addLangVarPrefix('GUI_GOTO_LIST'))->setIcon('arrow-circle-left'),
+            (new \fpcm\view\helper\linkButton('backList'))->setUrl(\fpcm\classes\tools::getControllerLink('calendar/overview')) ->setText($this->addLangVarPrefix('GUI_GOtO_OVERVIEW'))->setIcon('arrow-circle-left'),
         ]);
-        
+
+        $this->view->setFormAction('calendar/edit&id='.$this->appointment->getId());
+
         parent::process();
-    }
-    
-    private function getChartData()
-    {
-        if (!$this->poll->getId()) {
-            return null;
-        }
-
-        $chart = new \fpcm\components\charts\chart($this->config->module_nkorgpolls_chart_type, 'fpcm-nkorg-polls-chart');
-        $this->view->addJsFiles($chart->getJsFiles());
-
-        \fpcm\modules\nkorg\calendar\models\chartdraw::draw($chart, $this->poll);
-
-        return $chart;
-    }
-
-    private function getRandomColor()
-    {
-        $colStr = '#' . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255));
-        return strlen($colStr) === 7 ? $colStr : str_pad($colStr, 7, dechex(mt_rand(0, 16)));
     }
 
 }

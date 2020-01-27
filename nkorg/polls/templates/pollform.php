@@ -77,7 +77,7 @@
             <?php if ($poll->getId()) : ?>
             <div class="row my-3 mx-1">
                 <?php $theView
-                        ->dateTimeInput("polldata[votessum]")
+                        ->textInput("polldata[votessum]")
                         ->setText('MODULE_NKORGPOLLS_GUI_POLL_VOTES')
                         ->setValue($poll->getVotessum())
                         ->setType('number')

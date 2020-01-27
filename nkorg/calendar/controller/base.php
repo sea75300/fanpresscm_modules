@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\calendar\controller;
 
-class base extends \fpcm\controller\abstracts\module\controller {
+class base extends \fpcm\controller\abstracts\module\controller implements \fpcm\controller\interfaces\isAccessible {
 
     /**
      *
@@ -22,10 +22,6 @@ class base extends \fpcm\controller\abstracts\module\controller {
             \fpcm\module\module::getJsDirByKey($this->getModuleKey(), 'module.js')
         ]);
 
-        $this->view->addTabs('calendar', [
-            (new \fpcm\view\helper\tabItem('appointmentform'))->setText('Termin')->setFile('templates/appointmentform.php')
-        ]);
-        
         $this->view->assign('appointment', $this->appointment);        
         $this->view->render();
         return true;
@@ -38,20 +34,26 @@ class base extends \fpcm\controller\abstracts\module\controller {
             \fpcm\classes\http::FILTER_STRIPTAGS,
             \fpcm\classes\http::FILTER_STRIPSLASHES
         ]);
-
+        
         if (!is_array($data) || !count($data)) {
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_INSERTDATA'));
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA'));
             return false;
         }
 
-        if (empty($data['description']) || empty($data['datetime'])) {
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_INSERTDATA'));
+        if (empty($data['description']) || empty($data['date']) || empty($data['time'])) {
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA'));
+            return false;
+        }
+
+        $data['datetime'] = strtotime($data['date'].' '.$data['time']);
+        if ($data['datetime'] === false || date('Y-m-d H:s', $data['datetime']) !== $data['date'].' '.$data['time']) {
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA'));
             return false;
         }
 
         $this->appointment
                 ->setDescription($data['description'])
-                ->setDatetime(strtotime($data['datetime']))
+                ->setDatetime($data['datetime'])
                 ->setPending($data['pending'] ?? 0)
                 ->setVisible($data['visible'] ?? 0);
 
@@ -60,12 +62,7 @@ class base extends \fpcm\controller\abstracts\module\controller {
             $this->appointment->setCreatetime(time())->setCreateuser($this->session->getUserId());
 
             if (!$this->appointment->save()) {
-                $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_SAVEPOLL'));
-                return false;
-            }
-
-            if (!$this->appointment->addReplies($data['replies'])) {
-                $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_SAVEREPLY'));
+                $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_SAVE'));
                 return false;
             }
 
@@ -73,11 +70,21 @@ class base extends \fpcm\controller\abstracts\module\controller {
         }
         
         if (!$this->appointment->update()) {
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERR_UPDATEPOLL'));
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_SAVE'));
             return false;
         }
 
         return true;
+    }
+
+    public function isAccessible(): bool
+    {
+        return true;
+    }
+    
+    protected function getViewPath() : string
+    {
+        return 'editor';
     }
 
 }

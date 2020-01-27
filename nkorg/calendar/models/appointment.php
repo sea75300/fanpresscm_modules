@@ -25,13 +25,15 @@ class appointment extends \fpcm\model\abstracts\dataset {
         return '';
     }
 
-    public function getEditLink() {
+    public function getEditLink()
+    {
         return \fpcm\classes\tools::getControllerLink('calendar/edit', [
             'id' => $this->getId()
         ]);
     }
 
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
         return $this;
     }
