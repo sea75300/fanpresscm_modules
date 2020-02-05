@@ -8,7 +8,7 @@ final class add extends \fpcm\module\event {
     {
         $this->data[\fpcm\model\theme\navigationItem::AREA_AFTER][] = (new \fpcm\model\theme\navigationItem())
                 ->setDescription($this->addLangVarPrefix('HEADLINE'))
-                ->setIcon('fa fa-calendar fa-fw')
+                ->setIcon('calendar-day')
                 ->setUrl('calendar/overview');
 
         return $this->data;

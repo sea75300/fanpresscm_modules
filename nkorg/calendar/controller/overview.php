@@ -11,8 +11,8 @@ final class overview extends \fpcm\controller\abstracts\module\controller implem
         $this->delete();
 
         $this->view->addButtons([
-            (new \fpcm\view\helper\linkButton('appointmentAdd'))->setText($this->addLangVarPrefix('GUI_APPOINTMENT_ADD'))->setIcon('plus')->setUrl(\fpcm\classes\tools::getControllerLink('calendar/add')),
-            (new \fpcm\view\helper\deleteButton('appointmentDelete')),
+            (new \fpcm\view\helper\linkButton('appointmentAdd'))->setText($this->addLangVarPrefix('GUI_APPOINTMENT_ADD'))->setIcon('calendar-plus')->setUrl(\fpcm\classes\tools::getControllerLink('calendar/add')),
+            (new \fpcm\view\helper\deleteButton('appointmentDelete'))->setIcon('calendar-minus'),
         ]);
         
         $this->view->addJsVars([

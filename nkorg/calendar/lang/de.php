@@ -22,4 +22,6 @@ $lang = [
     'MSG_ERROR_DELETE' => 'Der Termin konnte nicht gelöscht werden!',
     'MSG_ERROR_INSERTDATA' => 'Bitte fülle das Formular zum Erstellen des Termins komplett aus!',
 
+    'MSG_ERROR_NOTFOUND_PUB' => 'Aktuell keine Termine eingetragen.',
+
 ];
