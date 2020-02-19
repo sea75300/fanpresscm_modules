@@ -38,7 +38,7 @@ final class apiCallFunction extends \fpcm\module\event {
         foreach ($appointments as $appointment) {
             
             $html[] = '<li>';
-            $html[] = '<strong>'.(new \fpcm\view\helper\dateText($appointment->getDatetime(), $appointment->getPending() ? 'M / Y' : 'd.m.Y')).'</strong>';
+            $html[] = '<strong>'.(new \fpcm\view\helper\dateText($appointment->getDatetime(), $appointment->getPending() ? 'M / Y' : 'd.m.Y')).'</strong>: ';
             $html[] = (new \fpcm\view\helper\escape($appointment->getDescription()));
             $html[] = '</li>';
         }
