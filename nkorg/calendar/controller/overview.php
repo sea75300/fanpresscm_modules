@@ -39,7 +39,7 @@ final class overview extends \fpcm\controller\abstracts\module\controller implem
         }
 
         $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
+            \fpcm\model\http\request::FILTER_CASTINT
         ]);
         
         if (!$id) {

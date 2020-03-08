@@ -31,9 +31,9 @@ implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces
     protected function processSave()
     {
         $data = $this->request->fromPOST('appointmentdata', [
-            \fpcm\classes\http::FILTER_TRIM,
-            \fpcm\classes\http::FILTER_STRIPTAGS,
-            \fpcm\classes\http::FILTER_STRIPSLASHES
+            \fpcm\model\http\request::FILTER_TRIM,
+            \fpcm\model\http\request::FILTER_STRIPTAGS,
+            \fpcm\model\http\request::FILTER_STRIPSLASHES
         ]);
         
         if (!is_array($data) || !count($data)) {
