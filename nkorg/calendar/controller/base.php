@@ -2,7 +2,8 @@
 
 namespace fpcm\modules\nkorg\calendar\controller;
 
-class base extends \fpcm\controller\abstracts\module\controller implements \fpcm\controller\interfaces\isAccessible {
+class base extends \fpcm\controller\abstracts\module\controller
+implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces\requestFunctions {
 
     /**
      *
@@ -27,9 +28,9 @@ class base extends \fpcm\controller\abstracts\module\controller implements \fpcm
         return true;
     }
     
-    protected function save()
+    protected function processSave()
     {
-        $data = $this->getRequestVar('appointmentdata', [
+        $data = $this->request->fromPOST('appointmentdata', [
             \fpcm\classes\http::FILTER_TRIM,
             \fpcm\classes\http::FILTER_STRIPTAGS,
             \fpcm\classes\http::FILTER_STRIPSLASHES
@@ -66,6 +67,10 @@ class base extends \fpcm\controller\abstracts\module\controller implements \fpcm
                 return false;
             }
 
+            $this->redirect('calendar/edit', [
+                'id' => $this->appointment->getId()
+            ]);
+
             return true;
         }
         
@@ -74,6 +79,7 @@ class base extends \fpcm\controller\abstracts\module\controller implements \fpcm
             return false;
         }
 
+        $this->view->addNoticeMessage($this->addLangVarPrefix('MSG_SUCCESS_SAVE'));
         return true;
     }
 

@@ -2,28 +2,21 @@
 
 namespace fpcm\modules\nkorg\calendar\controller;
 
-final class EDIT extends base {
+final class edit extends base {
 
     public function request()
     {
-        $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
-        ]);
-        
+        $id = $this->request->getID();
         if (!$id) {
+            $this->view = new \fpcm\view\error($this->addLangVarPrefix('MSG_ERROR_NOTFOUND'));
             return false;
         }
 
         $this->appointment = new \fpcm\modules\nkorg\calendar\models\appointment($id);
         if (!$this->appointment->exists()) {
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_NOTFOUND'));
+            $this->view = new \fpcm\view\error($this->addLangVarPrefix('MSG_ERROR_NOTFOUND'));
         }
-        
-        if ($this->buttonClicked('save') && $this->save()) {
-            $this->view->addNoticeMessage($this->addLangVarPrefix('MSG_SUCCESS_SAVE'));
-            return true;
-        }
-        
+
         return true;
     }
 

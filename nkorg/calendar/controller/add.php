@@ -7,12 +7,6 @@ final class add extends base {
     public function request()
     {
         $this->appointment = new \fpcm\modules\nkorg\calendar\models\appointment;
-        if ($this->buttonClicked('save') && $this->save()) {
-            $this->redirect('calendar/edit', [
-                'id' => $this->appointment->getId()
-            ]);
-        }
-
         return true;
     }
 
