@@ -5,10 +5,10 @@ author: imagine
 name: Calendar
 description: "Calendar module"
 link: https://nobody-knows.org/
-version: 1.0.0
+version: 1.0.0-b1
 help: 
 requirements:
-    system: 4.3.999
+    system: 4.4.0-b2
     php: 7.0.0
 tables:
     add:
