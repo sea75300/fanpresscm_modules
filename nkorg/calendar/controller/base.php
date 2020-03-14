@@ -28,7 +28,7 @@ implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces
         return true;
     }
     
-    protected function processSave()
+    protected function onSave()
     {
         $data = $this->request->fromPOST('appointmentdata', [
             \fpcm\model\http\request::FILTER_TRIM,
