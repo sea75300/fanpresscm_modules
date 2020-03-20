@@ -7,7 +7,8 @@ final class addToList extends \fpcm\modules\nkorg\example\events\eventBase {
     public function run()
     {
         $this->data[] = (new \fpcm\view\helper\tabItem('logs-module-example'))->setText('Example module')->setUrl(\fpcm\classes\tools::getFullControllerLink('ajax/logs/reload', [
-            'log' => 'nkorg-example'
+            'log' => 'nkorg-example',
+            'key' => $this->getModuleKey()
         ]))->setDataViewId('logs');
 
         $this->logEvent($this->data);
