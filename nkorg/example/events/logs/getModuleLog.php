@@ -8,7 +8,7 @@ final class getModuleLog extends \fpcm\modules\nkorg\example\events\eventBase {
     {
         return new \fpcm\model\logs\logfileResult(
             $this->getData(),
-            0,
+            null,
             $this->getSize(), 
             function () {
                 return [
