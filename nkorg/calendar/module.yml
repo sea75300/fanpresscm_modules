@@ -14,3 +14,5 @@ tables:
     add:
         appointments
 configOptions:
+    add:
+        frontend_days: 30

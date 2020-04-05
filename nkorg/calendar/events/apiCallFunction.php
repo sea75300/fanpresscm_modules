@@ -25,6 +25,7 @@ final class apiCallFunction extends \fpcm\module\event {
     {
         $search = new \fpcm\modules\nkorg\calendar\models\search();
         $search->start = mktime(0,0,0);
+        $search->stop = mktime(23,59,59) + $this->getObject()->getOption('frontend_days') * FPCM_DATE_SECONDS;
         $search->visible = 1;
         
         $appointments = (new \fpcm\modules\nkorg\calendar\models\appointments)->getAppointments($search);

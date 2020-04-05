@@ -16,6 +16,7 @@ $lang = [
     'GUI_APPOINTMENT_DATETIME' => 'Datum & Uhrzeit',
     'GUI_APPOINTMENT_PENDING' => 'Vorläufiger Eintrag',
     'GUI_APPOINTMENT_VISIBLE' => 'Sichtbar',
+    'GUI_APPOINTMENT_FRONTEND_DAYS' => 'Termine für XX Tage anzeigen',
     
     'MSG_ERROR_SAVE' => 'Der Termin wurde nicht gespeichert.',
     'MSG_ERROR_NOTFOUND' => 'Der Termin wurde nicht gefunden',
