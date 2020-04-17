@@ -130,7 +130,7 @@ fpcm.extStats = {
             
             elList.append(
                 '<div class="row my-1">' +
-                '<div class="col-1 align-self-center">' + 
+                '<div class="col-auto align-self-center">' + 
                     btnOpenEl.replace('_{$id}', object.intid).replace('{$url}', object.fullUrl) +
                     btnDelEl.replace('_{$id}', object.intid).replace('{$id}', object.intid) +
                     

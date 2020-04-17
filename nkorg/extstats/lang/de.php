@@ -30,6 +30,7 @@ $lang = [
     'COOKIE_DURATION_VALUE' => 'Sekunden bis besucher erneut als Unique gezählt wird (min. 600)',
     'DEFAULT_GRAPH_TIMESPAN' => 'Daten für letzen X Tage abrufen',
     'DEAULT_SHOW_VISITORS' => 'Standardmäßig Besucher-Statistik laden',
+    'URL_BASE' => 'URL-Präfix für Link-Auswertung',
     'CLEANUP_LIMIT' => 'Komprimierung auf X Element',
     'CLEANUP_SUCCESS' => 'Komprimierung auf Top {{limit}} erfolgreich.',
     'CLEANUP_FAILED' => 'Komprimierung auf Top {{limit}} fehlgeschlagen, weitere Information enthält das Datenbank-Protokoll.',

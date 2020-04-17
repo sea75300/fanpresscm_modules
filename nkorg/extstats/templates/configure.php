@@ -6,43 +6,37 @@
         </ul>            
 
         <div id="tabs-user">                
-            <div class="row my-3 mx-1">
+            <div class="row m-3">
                 <?php $theView
                         ->textInput("config[module_nkorgextstats_cookie_duration]")
                         ->setValue($options['module_nkorgextstats_cookie_duration'])
                         ->setText('MODULE_NKORGEXTSTATS_COOKIE_DURATION_VALUE')
-                        ->setWrapper(false)
                         ->setType('number')
                         ->setIcon('chart-line')
                         ->setSize('lg')
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setDisplaySizesDefault(); ?>
             </div>
-            <div class="row my-3 mx-1">
+            <div class="row m-3">
                 <?php $theView
                         ->textInput("config[module_nkorgextstats_timespan_default]")
                         ->setValue($options['module_nkorgextstats_timespan_default'])
                         ->setText('MODULE_NKORGEXTSTATS_DEFAULT_GRAPH_TIMESPAN')
-                        ->setWrapper(false)
                         ->setType('number')
                         ->setIcon('clock', 'far')
                         ->setSize('lg')
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setDisplaySizesDefault(); ?>
             </div>
-            <div class="row my-3 mx-1">
+            <div class="row m-3">
                 <?php $theView
                         ->textInput("config[module_nkorgextstats_link_compress]")
                         ->setValue($options['module_nkorgextstats_link_compress'])
                         ->setText('MODULE_NKORGEXTSTATS_CLEANUP_LIMIT')
-                        ->setWrapper(false)
                         ->setType('number')
                         ->setIcon('eraser')
                         ->setSize('lg')
-                        ->setClass('col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0')
-                        ->setLabelClass('col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general'); ?>
+                        ->setDisplaySizesDefault(); ?>
             </div>
-            <div class="row my-3 mx-1">
+            <div class="row m-3">
                 <div class="col-12 px-0">
                     <div class="row">
                         <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
@@ -54,6 +48,16 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row m-3">
+                <?php $theView
+                        ->textInput("config[module_nkorgextstats_url_base]")
+                        ->setValue($options['module_nkorgextstats_url_base'])
+                        ->setText('MODULE_NKORGEXTSTATS_URL_BASE')
+                        ->setType('url')
+                        ->setIcon('link')
+                        ->setSize('lg')
+                        ->setDisplaySizesDefault(); ?>
             </div>
         </div>
     </div>

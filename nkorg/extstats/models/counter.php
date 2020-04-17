@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\extstats\models;
 
 class counter extends \fpcm\model\abstracts\tablelist {
 
-    use \fpcm\controller\traits\modules\tools;
+    use \fpcm\module\tools;
     
     const MODE_MONTH = 1;
     const MODE_YEAR = 2;
@@ -195,10 +195,24 @@ class counter extends \fpcm\model\abstracts\tablelist {
             return [];
         }
 
+        $base = $this->getObject()->getOption('url_base');
+        
         $data = [];
         foreach ($values as $value) {
+
             $val = (string) ($value->counthits ?? 0);
 
+            $startStr = substr($value->url, 0, 2);
+            if ($startStr == '//') {
+                $value->url = $base . substr($value->url, 3);
+            }
+            elseif ($startStr == '/?') {
+                $value->url = $base . substr($value->url, 2);
+            }
+            elseif (substr($value->url, 0, 1) == '/') {
+                $value->url = $base . substr($value->url, 1);
+            }
+            
             $data['labels'][] = $value->url;
             $data['values'][] = $val;
             $data['colors'][] = $this->getRandomColor();
