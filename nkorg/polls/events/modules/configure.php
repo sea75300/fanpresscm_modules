@@ -4,8 +4,6 @@ namespace fpcm\modules\nkorg\polls\events\modules;
 
 final class configure extends \fpcm\module\event {
 
-    use \fpcm\controller\traits\modules\tools;
-    
     public function run()
     {
         $this->data = [

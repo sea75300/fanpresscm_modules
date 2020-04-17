@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\polls\models;
 
 class pollform {
     
-    use \fpcm\controller\traits\modules\tools;
+    use \fpcm\module\tools;
 
     private $templateConfigPaths;
 

@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\polls\models;
 
 class dashContainerRecentPoll extends \fpcm\model\abstracts\dashcontainer {
 
-    use \fpcm\controller\traits\modules\tools;
+    use \fpcm\module\tools;
 
     /**
      * Container chart

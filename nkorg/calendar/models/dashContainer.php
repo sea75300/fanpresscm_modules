@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\calendar\models;
 
 class dashContainer extends \fpcm\model\abstracts\dashcontainer {
 
-    use \fpcm\controller\traits\modules\tools;
+    use \fpcm\module\tools;
 
     /**
      * Container chart
