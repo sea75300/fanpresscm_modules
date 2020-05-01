@@ -206,13 +206,13 @@ class counter extends \fpcm\model\abstracts\tablelist {
             if ($startStr == '//') {
                 $value->url = $base . substr($value->url, 3);
             }
-            elseif ($startStr == '/?') {
-                $value->url = $base . substr($value->url, 2);
-            }
-            elseif (substr($value->url, 0, 1) == '/') {
+            elseif ($startStr == '/?' || substr($value->url, 0, 1) == '/') {
                 $value->url = $base . substr($value->url, 1);
             }
-            
+            elseif (substr($value->url, 0, 2) == 'www') {
+                $value->url = 'http://' . $value->url;
+            }
+
             $data['labels'][] = $value->url;
             $data['values'][] = $val;
             $data['colors'][] = $this->getRandomColor();
