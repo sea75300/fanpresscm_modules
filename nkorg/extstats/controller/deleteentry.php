@@ -6,18 +6,17 @@ final class deleteentry extends \fpcm\controller\abstracts\module\ajaxController
 
     public function request()
     {
-        $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
+        $this->response = new \fpcm\model\http\response;
+        
+        $id = $this->request->fromPOST('id', [
+        \fpcm\model\http\request::FILTER_CASTINT
         ]);
 
         if (!$id) {
-            $this->returnData = 0;
-            $this->getSimpleResponse();
+            $this->response->setReturnData(0)->fetch();
         }
 
-        $this->returnData = (new \fpcm\modules\nkorg\extstats\models\counter())->deleteLinkEntry($id) ? 1 : 0;
-        $this->getSimpleResponse();
-        return true;
+        $this->response->setReturnData( (new \fpcm\modules\nkorg\extstats\models\counter())->deleteLinkEntry($id) ? 1 : 0 )->fetch();
     }
 
 }

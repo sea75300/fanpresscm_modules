@@ -36,6 +36,7 @@ fpcm.modules.pollspub = {
 
             fpcm.modules.pollspub._displayLoader(data.pid);
             fpcm.modules.pollspub._execAjax({
+                method: 'post',
                 action: 'ajaxpublic',
                 data: data
             });
@@ -75,6 +76,7 @@ fpcm.modules.pollspub = {
 
             fpcm.modules.pollspub._displayLoader(data.pid);
             fpcm.modules.pollspub._execAjax({
+                method: 'post',
                 action: 'ajaxpublic',
                 okCode: 300,
                 data: data,
@@ -100,6 +102,7 @@ fpcm.modules.pollspub = {
 
             fpcm.modules.pollspub._displayLoader(data.pid);
             fpcm.modules.pollspub._execAjax({
+                method: 'post',
                 action: 'ajaxpublic',
                 okCode: 400,
                 data: data,
@@ -152,13 +155,11 @@ fpcm.modules.pollspub = {
         
         _params.execDone = function (result) {
 
-            if (result.search('FATAL ERROR:') === 3) {
+            if (!result instanceof Object && result.search('FATAL ERROR:') === 3) {
                 alert('Während der Anfrage ist ein Fehler aufgetreten!');
                 console.error('ERROR MESSAGE: ' + errorThrown + '\n\n STATUS MESSAGE: ' + textStatus);
                 return false;
             }
-
-            result = JSON.parse(result);
 
             if (result.code !== _params.okCode) {
                 result.msgId = _params.data.fn + 'pid' + _params.data.pid + (new Date()).getTime();

@@ -35,7 +35,7 @@ implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces
             \fpcm\model\http\request::FILTER_STRIPTAGS,
             \fpcm\model\http\request::FILTER_STRIPSLASHES
         ]);
-        
+
         if (!is_array($data) || !count($data)) {
             $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA'));
             return false;
@@ -47,7 +47,7 @@ implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces
         }
 
         $data['datetime'] = strtotime($data['date'].' '.$data['time']);
-        if ($data['datetime'] === false || date('Y-m-d H:s', $data['datetime']) !== $data['date'].' '.$data['time']) {
+        if ($data['datetime'] === false || date('Y-m-d H:i', $data['datetime']) !== $data['date'].' '.$data['time']) {
             $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA'));
             return false;
         }

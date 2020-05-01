@@ -72,9 +72,11 @@ final class apiCallFunction extends \fpcm\module\event {
         
         $expire = time() + $duration;
         
-        $str = 'This cookie marks you as unique visitor until '. date(DATE_ISO8601, $expire).'. Source: '.\fpcm\classes\http::filter($_SERVER['REQUEST_URI'] ?? 'localhost', [
-            \fpcm\classes\http::FILTER_STRIPTAGS,            
-            \fpcm\classes\http::FILTER_TRIM,            
+        /* @var $request \fpcm\model\http\request */
+        $request = \fpcm\classes\loader::getObject('\fpcm\model\http\request');
+        $str = 'This cookie marks you as unique visitor until '. date(DATE_ISO8601, $expire).'. Source: '. $request->filter($_SERVER['REQUEST_URI'] ?? 'localhost', [
+            \fpcm\model\http\request::FILTER_STRIPTAGS,            
+            \fpcm\model\http\request::FILTER_TRIM,            
         ]);
 
         setcookie('extstatsts', $str, $expire, '/', '', false, true);

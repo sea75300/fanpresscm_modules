@@ -182,12 +182,19 @@ class counter extends \fpcm\model\abstracts\tablelist {
     {
         $this->table = countLink::TABLE;
 
-        $items = 'url, counthits, lasthit, id';
+        $where = '1=1 ';
+        $this->createTimeVar = 'lasthit';
+        
+        $params = [];
+        
+        $this->getTmeQuery($start, $stop, $where, $params);
+        $where .= $this->dbcon->orderBy(['counthits DESC']);
 
         $values = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams($this->table))
-                ->setItem($items)
-                ->setWhere('1=1 '.$this->dbcon->orderBy(['counthits DESC']))
+                ->setItem('url, counthits, lasthit, id')
+                ->setWhere($where)
+                ->setParams($params)
                 ->setFetchAll(true)
         );
 
@@ -357,6 +364,31 @@ class counter extends \fpcm\model\abstracts\tablelist {
         }
 
         return "to_char(to_timestamp({$this->createTimeVar}), 'YYYY-MM') AS dtstr";
+    }
+
+    /**
+     * 
+     * @param string $start
+     * @param string $stop
+     * @param string $where
+     * @param array $params
+     * @return bool
+     * @since nkorg/extstats 4.4.1
+     */
+    private function getTmeQuery($start, $stop, string &$where, array &$params) : bool
+    {
+        $where .= (trim($start) ? ' AND ' . $this->createTimeVar . ' >= ?'  : '');
+        $where .= (trim($stop) ? ' AND ' . $this->createTimeVar . ' < ?' : '');
+
+        if (trim($start)) {
+            $params[] = strtotime($start);
+        }
+
+        if (trim($stop)) {
+            $params[] = strtotime($stop);
+        }
+
+        return true;
     }
 
     private function getRandomColor()

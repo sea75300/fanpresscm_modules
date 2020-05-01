@@ -316,7 +316,7 @@ class poll extends dbObj {
                 ->setPollid($this->id)
                 ->setReplyid($replyId)
                 ->setReplytime(time())
-                ->setIp(\fpcm\classes\http::getIp());
+                ->setIp(\fpcm\classes\loader::getObject('\fpcm\model\http\request')->getIp());
 
         if (!$logEntry->save()) {
             trigger_error('Failed to add vote log entry for reply ' . $replyId);
@@ -348,7 +348,7 @@ class poll extends dbObj {
 
     final public function hasVoted() : bool {
 
-        if (\fpcm\classes\http::cookieOnly($this->pollCookieName) === null) {
+        if (\fpcm\classes\loader::getObject('\fpcm\model\http\request')->fromCookie($this->pollCookieName) === null) {
             return false;
         }
 

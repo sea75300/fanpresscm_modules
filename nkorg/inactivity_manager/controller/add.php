@@ -19,7 +19,7 @@ final class add extends \fpcm\controller\abstracts\module\controller {
     {
         $this->obj = new \fpcm\modules\nkorg\inactivity_manager\models\message();
 
-        $msgData = $this->getRequestVar('msg');
+        $msgData = $this->request->fetchAll('msg');
         if (!$this->buttonClicked('save') || !count($msgData)) {
             return true;
         }

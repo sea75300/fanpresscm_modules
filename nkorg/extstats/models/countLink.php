@@ -19,10 +19,13 @@ class countLink extends dbObj {
         if ($this->url === '/') {
             $this->url = $_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ??'localhost' );
         }
-        
-        $this->url = \fpcm\classes\http::filter($this->url, [
-            \fpcm\classes\http::FILTER_STRIPTAGS,            
-            \fpcm\classes\http::FILTER_TRIM,            
+
+        /* @var $request \fpcm\model\http\request */
+        $request = \fpcm\classes\loader::getObject('\fpcm\model\http\request');
+
+        $this->url = $request->filter($this->url, [
+            \fpcm\model\http\request::FILTER_STRIPTAGS,            
+            \fpcm\model\http\request::FILTER_TRIM,            
         ]);
         
         $this->urlhash = \fpcm\classes\tools::getHash($this->url);

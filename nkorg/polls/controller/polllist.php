@@ -17,8 +17,8 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
         $this->closePoll();
         
         $key = $this->getModuleKey();
-        $filterStatus = $this->getRequestVar('filterStatus', [
-            \fpcm\classes\http::FILTER_CASTINT
+        $filterStatus = $this->request->fromPOST('filterStatus', [
+            \fpcm\model\http\request::FILTER_CASTINT
         ]);
 
         $this->view->addButtons([
@@ -62,8 +62,8 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
             return true;
         }
 
-        $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
+        $id = $this->request->fromPOST('id', [
+            \fpcm\model\http\request::FILTER_CASTINT
         ]);
         
         if (!$id) {
@@ -89,8 +89,8 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
             return true;
         }
 
-        $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
+        $id = $this->request->fromPOST('id', [
+            \fpcm\model\http\request::FILTER_CASTINT
         ]);
         
         if (!$id) {

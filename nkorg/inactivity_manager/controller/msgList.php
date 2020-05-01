@@ -14,11 +14,11 @@ final class msgList extends \fpcm\controller\abstracts\module\controller {
 
     public function request()
     {
-        if ($this->getRequestVar('msg')) {
+        if ($this->request->hasMessage('msg')) {
             $this->view->addNoticeMessage($this->addLangVarPrefix('MSGSAVE_SUCCESS'));
         }
 
-        $ids = $this->getRequestVar('ids');
+        $ids = $this->request->getIDs();
         if (!$this->buttonClicked('delete') || !is_array($ids) || !count($ids)) {
             return true;
         }

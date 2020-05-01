@@ -37,10 +37,10 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
     
     protected function save()
     {
-        $data = $this->getRequestVar('polldata', [
-            \fpcm\classes\http::FILTER_TRIM,
-            \fpcm\classes\http::FILTER_STRIPTAGS,
-            \fpcm\classes\http::FILTER_STRIPSLASHES
+        $data = $this->request->fromPOST('polldata', [
+            \fpcm\model\http\request::FILTER_TRIM,
+            \fpcm\model\http\request::FILTER_STRIPTAGS,
+            \fpcm\model\http\request::FILTER_STRIPSLASHES
         ]);
 
         if (!is_array($data) || !count($data)) {

@@ -38,7 +38,7 @@ final class overview extends \fpcm\controller\abstracts\module\controller implem
             return true;
         }
 
-        $id = $this->getRequestVar('id', [
+        $id = $this->request->fromPOST('id', [
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
         

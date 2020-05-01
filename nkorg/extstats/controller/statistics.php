@@ -42,10 +42,12 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $isLinks = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
 
         $this->view->assign('modeStr',  $hideMode ? '' : strtoupper($modeStr));
-        $this->view->assign('showDate', $isLinks);
         $this->view->assign('sourceStr', array_search($source, $dataSource));
+        $this->view->assign('isLinks', $isLinks);
         $this->view->assign('start', trim($start) ? $start : '');
         $this->view->assign('stop', trim($stop) ? $stop : '');
+        $this->view->assign('chartTypes', $chartTypes);
+        $this->view->assign('chartType', $chartType);
 
         $buttons = [
             (new \fpcm\view\helper\select('source'))
@@ -56,11 +58,6 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             (new \fpcm\view\helper\select('chartMode'))
                 ->setClass('fpcm-ui-input-select-articleactions ')
                 ->setOptions($chartModes)->setSelected($chartMode)
-                ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED),
-
-            (new \fpcm\view\helper\select('chartType'))
-                ->setClass('fpcm-ui-input-select-articleactions')
-                ->setOptions($chartTypes)->setSelected($chartType)
                 ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED),
 
             (new \fpcm\view\helper\submitButton('setdatespan'))
@@ -129,20 +126,20 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
     
     private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop)
     {
-        $source = \fpcm\classes\http::postOnly('source');
+        $source = $this->request->fromPOST('source');
         if (!trim($source)) {
             $source = $this->config->module_nkorgextstats_show_visitors
                     ? \fpcm\modules\nkorg\extstats\models\counter::SRC_VISITORS
                     : \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
         }
         
-        $chartType = \fpcm\classes\http::postOnly('chartType');
+        $chartType = $this->request->fromPOST('chartType');
         if (!trim($chartType)) {
             $chartType = 'bar';
         }
 
-        $chartMode = \fpcm\classes\http::postOnly('chartMode', [
-            \fpcm\classes\http::FILTER_CASTINT
+        $chartMode = $this->request->fromPOST('chartMode', [
+            \fpcm\model\http\request::FILTER_CASTINT
         ]);
 
         if (!trim($chartMode)) {
@@ -155,11 +152,15 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                  ? 'YEAR'
                  : ($chartMode === \fpcm\modules\nkorg\extstats\models\counter::MODE_DAY ? 'DAY' : 'MONTH' );
 
-        $start = \fpcm\classes\http::postOnly('dateFrom');
-        $stop = \fpcm\classes\http::postOnly('dateTo');
+        $start = $this->request->fromPOST('dateFrom');
+        $stop = $this->request->fromPOST('dateTo');
         
-        if ($start === null) {
+        if ($start === null || !\fpcm\classes\tools::validateDateString($start)) {
             $start = date('Y-m-d', time() - $this->config->module_nkorgextstats_timespan_default * 86400);
+        }
+        
+        if (trim($stop) && !\fpcm\classes\tools::validateDateString($stop)) {
+            $stop = '';
         }
 
         return true;

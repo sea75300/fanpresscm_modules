@@ -5,7 +5,7 @@ author: imagine
 name: Polls
 description: "Module to create polls with single/ multiple answers and so on."
 link: https://nobody-knows.org/
-version: 4.4.0
+version: 4.4.1
 help: 
 requirements:
     system: 4.4.0-b5

@@ -6,9 +6,7 @@ final class polledit extends pollbase {
 
     public function request()
     {
-        $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
-        ]);
+        $id = $this->request->getID();
         
         if (!$id) {
             return false;

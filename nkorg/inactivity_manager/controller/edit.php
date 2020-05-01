@@ -17,9 +17,7 @@ final class edit extends \fpcm\controller\abstracts\module\controller {
 
     public function request()
     {
-        $id = $this->getRequestVar('id', [
-            \fpcm\classes\http::FILTER_CASTINT
-        ]);
+        $id = $this->request->getID();
         
         if (!$id) {
             $this->view = new \fpcm\view\error($this->addLangVarPrefix('MSGSAVE_NOTFOUND'));
@@ -34,7 +32,7 @@ final class edit extends \fpcm\controller\abstracts\module\controller {
             exit;
         }
 
-        $msgData = $this->getRequestVar('msg');
+        $msgData = $this->request->fetchAll('msg');
         if (!$this->buttonClicked('save') || !count($msgData)) {
             return true;
         }

@@ -56,6 +56,7 @@ class countVisit extends dbObj {
 
     public function updateUnique()
     {
-        return (\fpcm\classes\http::cookieOnly('extstatsts') ? false : true);        
+        return \fpcm\classes\loader::getObject('\fpcm\model\http\request')->fromCookie('extstatsts') ? false : true;
     }
+
 }

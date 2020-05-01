@@ -14,8 +14,8 @@ final class votelog extends \fpcm\controller\abstracts\module\controller {
     {
         $this->returnData = [];
 
-        $this->pollId = $this->getRequestVar('pid', [
-            \fpcm\classes\http::FILTER_CASTINT
+        $this->pollId = $this->request->fromPOST('pid', [
+            \fpcm\model\http\request::FILTER_CASTINT
         ]);
         
         if (!$this->pollId) {
