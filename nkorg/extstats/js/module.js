@@ -124,19 +124,32 @@ fpcm.extStats = {
         var btnDelEl = '';
         var btnOpenEl = '';
         
+        elList.append(
+            '<div class="row my-1">' +
+            '<div class="col-4 col-md-1 align-self-center">' + 
+            '</div><div class="col-4 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LINK') + '</b>' +
+            '</div><div class="col-1 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_COUNT') + '</b>' +
+            '</div><div class="col-1 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + '</b>' +
+            '</div><div class="col-2 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_IP') + '</b>' +
+            '</div><div class="col-3 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_USERAGENT') + '</b>' +
+            '</div></div>'
+        );
+        
         jQuery.each(fpcm.vars.jsvars.extStats.chartValues.listValues, function (index, object) {
             btnDelEl = fpcm.vars.jsvars.extStats.deleteButtonStr;
             btnOpenEl = fpcm.vars.jsvars.extStats.openButtonStr;
             
             elList.append(
                 '<div class="row my-1">' +
-                '<div class="col-auto align-self-center">' + 
+                '<div class="col-4 col-md-1 align-self-center">' + 
                     btnOpenEl.replace('_{$id}', object.intid).replace('{$url}', object.fullUrl) +
                     btnDelEl.replace('_{$id}', object.intid).replace('{$id}', object.intid) +
                     
-                '</div><div class="col align-self-center">' + object.label +
+                '</div><div class="col-4 align-self-center">' + object.label +
                 '</div><div class="col-1 align-self-center">' + object.value +
-                '</div><div class="col-3 align-self-center">' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + ': ' + object.latest +
+                '</div><div class="col-1 align-self-center">' + object.latest +
+                '</div><div class="col-2 align-self-center">' + (object.lastip ? object.lastip : fpcm.ui.translate('GLOBAL_NOTFOUND')) +
+                '</div><div class="col-3 align-self-center">' + (object.lastagent ? object.lastagent : fpcm.ui.translate('GLOBAL_NOTFOUND')) +
                 '</div></div>'
             );
         });
@@ -144,19 +157,17 @@ fpcm.extStats = {
         jQuery('.fpcm-extstats-links-delete').click(function () {
             
             var btnParent = jQuery(this).parent().parent();
-            fpcm.ui.showLoader(1);
-            fpcm.ajax.exec('extstats/delete', {
+            fpcm.ajax.post('extstats/delete', {
                 data: {
                     id: jQuery(this).data('entry')
                 },
                 execDone: function (result) {
-                    
-                    if (result == 0) {
+
+                    if (!result.code) {
                         return false;
                     }
 
                     jQuery(btnParent).remove();
-                    fpcm.ui.showLoader(0);
                 }
             });
 

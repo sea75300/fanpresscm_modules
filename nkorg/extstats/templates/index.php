@@ -25,6 +25,12 @@
                         <div class="row my-2">
                         <?php $theView->select('chartType')->setClass('fpcm-ui-input-select-articleactions')->setOptions($chartTypes)->setSelected($chartType)->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED); ?>
                         </div>
+
+                        <?php if ($isLinks) : ?> 
+                        <div class="row my-2">
+                        <?php $theView->select('sortType')->setOptions($sortTypes)->setSelected($sortType)->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED); ?>
+                        </div>
+                        <?php endif; ?> 
                     </fieldset>
                 </div>
             </div>            

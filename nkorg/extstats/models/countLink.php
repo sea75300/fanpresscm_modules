@@ -10,6 +10,8 @@ class countLink extends dbObj {
     protected $urlhash = '';
     protected $counthits = 0;
     protected $lasthit = 0;
+    protected $lastip = '';
+    protected $lastagent = '';
 
     public function __construct()
     {
@@ -28,7 +30,7 @@ class countLink extends dbObj {
             \fpcm\model\http\request::FILTER_TRIM,            
         ]);
         
-        $this->urlhash = \fpcm\classes\tools::getHash($this->url);
+        $this->urlhash = \fpcm\classes\tools::getHash($this->url);        
         $this->init();
     }
     
@@ -67,6 +69,15 @@ class countLink extends dbObj {
         $this->lasthit = $lasthit;
         return $this;
     }
+
+    function setLastip($lastip) {
+        $this->lastip = $lastip;
+    }
+
+    function setLastagent($lastagent) {
+        $this->lastagent = $lastagent;
+    }
+
 
 
 }

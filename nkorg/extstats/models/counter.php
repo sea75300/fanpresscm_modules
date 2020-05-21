@@ -15,6 +15,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
     const SRC_FILES = 'files';
     const SRC_VISITORS = 'visitors';
     const SRC_LINKS = 'links';
+    const SORT_COUNT = 0;
+    const SORT_DATE = 1;
+    const SORT_LINK = 2;
 
     protected $mode;
     protected $months;
@@ -178,7 +181,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         ];
     }
 
-    public function fetchLinks($start, $stop, $mode = 1)
+    public function fetchLinks($start, $stop, $mode = 1, $sort = 0)
     {
         $this->table = countLink::TABLE;
 
@@ -188,11 +191,11 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $params = [];
         
         $this->getTmeQuery($start, $stop, $where, $params);
-        $where .= $this->dbcon->orderBy(['counthits DESC']);
+        $this->getOrder($sort, $where);
 
         $values = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams($this->table))
-                ->setItem('url, counthits, lasthit, id')
+                ->setItem('url, counthits, lasthit, lastagent, lastip, id')
                 ->setWhere($where)
                 ->setParams($params)
                 ->setFetchAll(true)
@@ -210,7 +213,10 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $val = (string) ($value->counthits ?? 0);
 
             $startStr = substr($value->url, 0, 2);
-            if ($startStr == '//') {
+            if ($startStr == '//' && strpos($value->url, 'www.') !== false) {
+                $value->url = $value->url;
+            }
+            elseif ($startStr == '//' && strpos($value->url, 'www.') === false) {
                 $value->url = $base . substr($value->url, 3);
             }
             elseif ($startStr == '/?' || substr($value->url, 0, 1) == '/') {
@@ -226,6 +232,8 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['listValues'][] = [
                 'label' => (string) new \fpcm\view\helper\escape($value->url),
                 'latest' => date($this->config->system_dtmask, $value->lasthit),
+                'lastip' => $value->lastip,
+                'lastagent' => $value->lastagent,
                 'value' => $val,
                 'fullUrl' => $value->url,
                 'intid' => $value->id
@@ -395,6 +403,25 @@ class counter extends \fpcm\model\abstracts\tablelist {
     {
         $colStr = '#' . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255));
         return strlen($colStr) === 7 ? $colStr : str_pad($colStr, 7, dechex(mt_rand(0, 16)));
+    }
+    
+    private function getOrder($type, &$where)
+    {
+        switch ($type) {
+            case self::SORT_DATE :
+                $order = 'lasthit DESC';
+                break;
+            case self::SORT_LINK :
+                $order = 'url';
+                break;
+            default:
+                $order = 'counthits DESC';
+                break;
+        }
+        
+        
+        $where .= $this->dbcon->orderBy([$order]);
+        return true;
     }
 
 }

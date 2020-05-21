@@ -14,11 +14,17 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $key = $this->getModuleKey();
 
         $chartTypes = [
-            $this->addLangVarPrefix('TYPEBAR') => 'bar',
-            $this->addLangVarPrefix('TYPELINE') => 'line',
-            $this->addLangVarPrefix('TYPEPIE') => 'pie',
-            $this->addLangVarPrefix('TYPEDOUGHNUT') => 'doughnut',
-            $this->addLangVarPrefix('TYPEPOLAR') => 'polarArea',
+            $this->addLangVarPrefix('TYPEBAR') => \fpcm\components\charts\chart::TYPE_BAR,
+            $this->addLangVarPrefix('TYPELINE') => \fpcm\components\charts\chart::TYPE_LINE,
+            $this->addLangVarPrefix('TYPEPIE') => \fpcm\components\charts\chart::TYPE_PIE,
+            $this->addLangVarPrefix('TYPEDOUGHNUT') => \fpcm\components\charts\chart::TYPE_DOUGHNUT,
+            $this->addLangVarPrefix('TYPEPOLAR') => \fpcm\components\charts\chart::TYPE_POLAR,
+        ];
+
+        $sortTypes = [
+            $this->addLangVarPrefix('LINKSORT_COUNT') => \fpcm\modules\nkorg\extstats\models\counter::SORT_COUNT,
+            $this->addLangVarPrefix('LINKSORT_DATE') => \fpcm\modules\nkorg\extstats\models\counter::SORT_DATE,
+            $this->addLangVarPrefix('LINKSORT_LINK') => \fpcm\modules\nkorg\extstats\models\counter::SORT_LINK
         ];
 
         $chartModes = [
@@ -36,7 +42,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $this->addLangVarPrefix('FROMLINKS') => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS
         ];
 
-        $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop);
+        $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop, $sortType);
 
         $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS]);
         $isLinks = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
@@ -48,6 +54,8 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->assign('stop', trim($stop) ? $stop : '');
         $this->view->assign('chartTypes', $chartTypes);
         $this->view->assign('chartType', $chartType);
+        $this->view->assign('sortTypes', $sortTypes);
+        $this->view->assign('sortType', $sortType);
 
         $buttons = [
             (new \fpcm\view\helper\select('source'))
@@ -98,7 +106,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             return true;
         }
 
-        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode);
+        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode, $sortType);
         $this->view->assign('notfound', empty($values['datasets']) ? true : false);
 
         $this->view->addJsVars([
@@ -113,7 +121,13 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             ]
         ]);
         
-        $this->view->addJslangVars([$this->addLangVarPrefix('HITS_LIST_LATEST')]);
+        $this->view->addJslangVars([
+            $this->addLangVarPrefix('HITS_LIST_LINK'),
+            $this->addLangVarPrefix('HITS_LIST_COUNT'),
+            $this->addLangVarPrefix('HITS_LIST_IP'),
+            $this->addLangVarPrefix('HITS_LIST_USERAGENT'),
+            $this->addLangVarPrefix('HITS_LIST_LATEST'),
+        ]);
         $this->view->addJsFiles([
             \fpcm\classes\loader::libGetFileUrl('chart-js/chart.min.js'),
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
@@ -124,7 +138,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         return true;
     }
     
-    private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop)
+    private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop, &$sortType)
     {
         $source = $this->request->fromPOST('source');
         if (!trim($source)) {
@@ -139,6 +153,10 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         }
 
         $chartMode = $this->request->fromPOST('chartMode', [
+            \fpcm\model\http\request::FILTER_CASTINT
+        ]);
+
+        $sortType = $this->request->fromPOST('sortType', [
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
 
