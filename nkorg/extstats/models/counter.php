@@ -212,20 +212,21 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
             $val = (string) ($value->counthits ?? 0);
 
-            $startStr = substr($value->url, 0, 2);
-            if ($startStr == '//' && strpos($value->url, 'www.') !== false) {
-                $value->url = $value->url;
+            $parsed = parse_url($value->url);
+            if (!isset($parsed['host'])) {
+                $parsed['host'] = rtrim($base, '/');
             }
-            elseif ($startStr == '//' && strpos($value->url, 'www.') === false) {
-                $value->url = $base . substr($value->url, 3);
-            }
-            elseif ($startStr == '/?' || substr($value->url, 0, 1) == '/') {
-                $value->url = $base . substr($value->url, 1);
-            }
-            elseif (substr($value->url, 0, 2) == 'www') {
-                $value->url = 'http://' . $value->url;
-            }
-
+            
+            $value->url = $parsed['scheme'] ?? '';
+            $value->url .= $parsed['user'] ?? '';
+            $value->url .= isset($parsed['pass']) ? ':'.$parsed['pass'] : '';
+            $value->url .= isset($parsed['user']) || isset($parsed['pass']) ? '@' : '';
+            $value->url .= $parsed['host'];
+            $value->url .= $parsed['port'] ?? '';
+            $value->url .= $parsed['path'] ?? '';
+            $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
+            $value->url .= $parsed['fragment'] ?? '';
+            
             $data['labels'][] = $value->url;
             $data['values'][] = $val;
             $data['colors'][] = $this->getRandomColor();
