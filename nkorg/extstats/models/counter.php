@@ -205,25 +205,23 @@ class counter extends \fpcm\model\abstracts\tablelist {
             return [];
         }
 
-        $base = $this->getObject()->getOption('url_base');
-        
+        $baseParsed = parse_url($this->getObject()->getOption('url_base'));
+
         $data = [];
         foreach ($values as $value) {
 
             $val = (string) ($value->counthits ?? 0);
 
             $parsed = parse_url($value->url);
-            if (!isset($parsed['host'])) {
-                $parsed['host'] = rtrim($base, '/');
-            }
-            
-            $value->url = $parsed['scheme'] ?? '';
+
+            $value->url = $parsed['scheme'] ?? $baseParsed['scheme'];
+            $value->url .= '://';
             $value->url .= $parsed['user'] ?? '';
             $value->url .= isset($parsed['pass']) ? ':'.$parsed['pass'] : '';
             $value->url .= isset($parsed['user']) || isset($parsed['pass']) ? '@' : '';
-            $value->url .= $parsed['host'];
+            $value->url .= $parsed['host'] ?? $baseParsed['host'];
             $value->url .= $parsed['port'] ?? '';
-            $value->url .= $parsed['path'] ?? '';
+            $value->url .= str_replace(['//'.$baseParsed['host'], '/'.$baseParsed['host']], '',  ($parsed['path'] ?? '') ) ;
             $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
             $value->url .= $parsed['fragment'] ?? '';
             
