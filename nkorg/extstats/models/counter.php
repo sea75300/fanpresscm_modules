@@ -219,9 +219,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $value->url .= $parsed['user'] ?? '';
             $value->url .= isset($parsed['pass']) ? ':'.$parsed['pass'] : '';
             $value->url .= isset($parsed['user']) || isset($parsed['pass']) ? '@' : '';
-            $value->url .= $parsed['host'] ?? $baseParsed['host'];
+            $value->url .= $parsed['host'] ?? (strpos($parsed['path'], $baseParsed['host']) === false ? $baseParsed['host'] : '');
             $value->url .= $parsed['port'] ?? '';
-            $value->url .= str_replace(['//'.$baseParsed['host'], '/'.$baseParsed['host']], '',  ($parsed['path'] ?? '') ) ;
+            $value->url .= $parsed['path'] ?? '';
             $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
             $value->url .= $parsed['fragment'] ?? '';
             
