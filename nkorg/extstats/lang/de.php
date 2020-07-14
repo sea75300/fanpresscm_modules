@@ -3,7 +3,7 @@
 /**
  * Example module language file
  * @author Stefan Seehafer <sea75300@yahoo.de>
- * @copyright (c) 2011-2018, Stefan Seehafer
+ * @copyright (c) 2011-2020, Stefan Seehafer
  * @license http://www.gnu.org/licenses/gpl.txt GPLv3
  */
 $lang = [
@@ -41,4 +41,5 @@ $lang = [
     'CLEANUP_LIMIT' => 'Komprimierung auf X Element',
     'CLEANUP_SUCCESS' => 'Komprimierung auf Top {{limit}} erfolgreich.',
     'CLEANUP_FAILED' => 'Komprimierung auf Top {{limit}} fehlgeschlagen, weitere Information enthält das Datenbank-Protokoll.',
+    'CRONJOB_ANONYMIZELINKS' => 'Besuchte Links anonymisieren'
 ];
