@@ -18,10 +18,13 @@ $lang = [
     'GUI_APPOINTMENT_VISIBLE' => 'Sichtbar',
     'GUI_APPOINTMENT_FRONTEND_DAYS' => 'Termine für XX Tage anzeigen',
     
+    'MSG_SUCCESS_SAVE' => 'Die Änderungen wurden gespeichert.',
+    
     'MSG_ERROR_SAVE' => 'Der Termin wurde nicht gespeichert.',
     'MSG_ERROR_NOTFOUND' => 'Der Termin wurde nicht gefunden',
     'MSG_ERROR_DELETE' => 'Der Termin konnte nicht gelöscht werden!',
     'MSG_ERROR_INSERTDATA' => 'Bitte fülle das Formular zum Erstellen des Termins komplett aus!',
+    'MSG_ERROR_INSERTDATA_DT' => 'Die Datums- und Zeitangabe ist fehlerhaft!',
 
     'MSG_ERROR_NOTFOUND_PUB' => 'Aktuell keine Termine eingetragen.',
 

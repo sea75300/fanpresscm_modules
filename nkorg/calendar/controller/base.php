@@ -47,8 +47,15 @@ implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces
         }
 
         $data['datetime'] = strtotime($data['date'].' '.$data['time']);
+
+        if (defined('FPCM_MODULE_DEBUG_CALENDAR')) {
+            fpcmLogSystem(__METHOD__);
+            fpcmLogSystem($data);
+            fpcmLogSystem('Test-DT: '.date('Y-m-d H:i', $data['datetime']));
+        }
+
         if ($data['datetime'] === false || date('Y-m-d H:i', $data['datetime']) !== $data['date'].' '.$data['time']) {
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA'));
+            $this->view->addErrorMessage($this->addLangVarPrefix('MSG_ERROR_INSERTDATA_DT'));
             return false;
         }
 
