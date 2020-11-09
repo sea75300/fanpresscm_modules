@@ -6,7 +6,7 @@ final class save extends \fpcm\modules\nkorg\example\events\eventBase {
 
     public function run()
     {
-        return $this->data.' '. microtime(true).' '.$this->key.' '. get_class($this);
+        return $this->data.' '. microtime(true).' '.$this->getModuleKey().' '. get_class($this);
     }
 
 }

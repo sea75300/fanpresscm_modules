@@ -6,7 +6,7 @@ final class save extends \fpcm\modules\nkorg\example\events\eventBase {
 
     public function run()
     {
-        $this->data['searchtext'] = $this->data['searchtext'].' '. microtime(true).' '.$this->key.' '. get_class($this);
+        $this->data['searchtext'] = $this->data['searchtext'].' '. microtime(true).' '.$this->getModuleKey().' '. get_class($this);
         return $this->data;
     }
 

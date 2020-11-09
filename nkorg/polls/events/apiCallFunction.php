@@ -28,10 +28,10 @@ final class apiCallFunction extends \fpcm\module\event {
     
     private function getViewObj()
     {
-        $view = new \fpcm\view\view('publicform', $this->key);
+        $view = new \fpcm\view\view('publicform', $this->getModuleKey());
         $view->showHeaderFooter(\fpcm\view\view::INCLUDE_HEADER_NONE);
-        $view->assign('pollJsFile', \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->key . '/js/fpcm-polls-pub.js'));
-        $this->jsVars['spinner'] = \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->key . '/js/spinner.gif');
+        $view->assign('pollJsFile', \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/fpcm-polls-pub.js'));
+        $this->jsVars['spinner'] = \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/spinner.gif');
         $this->jsVars['actionPath'] = \fpcm\classes\tools::getFullControllerLink('ajax/polls/');
         $view->assign('pollJsVars', $this->jsVars);
         return $view;

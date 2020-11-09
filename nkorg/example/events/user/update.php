@@ -6,7 +6,7 @@ final class update extends \fpcm\modules\nkorg\example\events\eventBase {
 
     public function run()
     {
-        $this->data['usrinfo'] = $this->data['usrinfo'].' '. microtime(true).' '.$this->key.' '. get_class($this);
+        $this->data['usrinfo'] = $this->data['usrinfo'].' '. microtime(true).' '.$this->getModuleKey().' '. get_class($this);
         return $this->data;
     }
 
