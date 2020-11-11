@@ -10,11 +10,15 @@ final class votelog extends \fpcm\controller\abstracts\module\controller {
      */
     private $pollId;
 
+    /**
+     *
+     * @var array
+     */
+    protected $returnData = [];
+
     public function request()
     {
-        $this->returnData = [];
-
-        $this->pollId = $this->request->fromPOST('pid', [
+        $this->pollId = $this->request->fromGET('pid', [
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
         
