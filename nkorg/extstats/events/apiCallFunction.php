@@ -105,6 +105,29 @@ final class apiCallFunction extends \fpcm\module\event {
         return true;
     }
 
+    final protected function referrerCount()
+    {
+        if ($this->excludeCount) {
+            return true;
+        }
+
+        $countObj = new \fpcm\modules\nkorg\extstats\models\countReferrer();
+        if (!$countObj->isExternal()) {
+            return true;
+        }
+
+        $fn = 'save';
+        if ($countObj->exists()) {
+            $countObj->init();
+            $fn = 'update';
+        }
+
+        $countObj->setCountHits($countObj->getCountHits() + 1);
+        $countObj->setLastHit(time());
+        call_user_func([$countObj, $fn]);
+        return true;
+    }
+
     private function excludeCount()
     {
         if ($this->excludeCount !== null) {

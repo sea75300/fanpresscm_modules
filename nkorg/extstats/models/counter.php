@@ -15,6 +15,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
     const SRC_FILES = 'files';
     const SRC_VISITORS = 'visitors';
     const SRC_LINKS = 'links';
+    const SRC_REFERRER = 'referrer';
     const SORT_COUNT = 0;
     const SORT_DATE = 1;
     const SORT_LINK = 2;
@@ -27,6 +28,15 @@ class counter extends \fpcm\model\abstracts\tablelist {
     public function deleteLinkEntry($id)
     {
         $result = $this->dbcon->delete(countLink::TABLE, 'id = ?', [
+            (int) $id
+        ]);
+
+        return $result ? true : false;
+    }
+
+    public function deleteReferrerEntry($id)
+    {
+        $result = $this->dbcon->delete(countReferrer::TABLE, 'id = ?', [
             (int) $id
         ]);
 
@@ -235,6 +245,62 @@ class counter extends \fpcm\model\abstracts\tablelist {
                 'lastagent' => $value->lastagent,
                 'value' => $val,
                 'fullUrl' => $value->url,
+                'intid' => $value->id
+            ];
+        }
+
+        return [
+            'listValues' => $data['listValues'],
+            'labels' => array_slice($data['labels'], 0, 10),
+            'datasets' => [
+                [
+                    'label' => '',
+                    'fill' => false,
+                    'data' => array_slice($data['values'], 0, 10),
+                    'backgroundColor' => array_slice($data['colors'], 0, 10),
+                    'borderColor' => $this->getRandomColor(),
+                ]
+            ]
+        ];
+    }
+
+    public function fetchReferrer($start, $stop, $mode = 1, $sort = 0)
+    {
+        $this->table = countReferrer::TABLE;
+
+        $where = '1=1 ';
+        $this->createTimeVar = 'lasthit';
+        
+        $params = [];
+        
+        $this->getTmeQuery($start, $stop, $where, $params);
+        $this->getOrder($sort, $where);
+
+        $values = $this->dbcon->selectFetch(
+            (new \fpcm\model\dbal\selectParams($this->table))
+                ->setItem('refurl, counthits, lasthit, id')
+                ->setWhere($where)
+                ->setParams($params)
+                ->setFetchAll(true)
+        );
+
+        if (!$values) {
+            return [];
+        }
+
+        $data = [];
+        foreach ($values as $value) {
+
+            $val = (string) ($value->counthits ?? 0);
+            
+            $data['labels'][] = $value->refurl;
+            $data['values'][] = $val;
+            $data['colors'][] = $this->getRandomColor();
+            $data['listValues'][] = [
+                'label' => (string) new \fpcm\view\helper\escape($value->refurl),
+                'latest' => date($this->config->system_dtmask, $value->lasthit),
+                'value' => $val,
+                'fullUrl' => $value->refurl,
                 'intid' => $value->id
             ];
         }

@@ -39,13 +39,14 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $this->addLangVarPrefix('FROMCOMMENTS') => \fpcm\modules\nkorg\extstats\models\counter::SRC_COMMENTS,
             $this->addLangVarPrefix('FROMFILES') => \fpcm\modules\nkorg\extstats\models\counter::SRC_FILES,
             $this->addLangVarPrefix('FROMVISITS') => \fpcm\modules\nkorg\extstats\models\counter::SRC_VISITORS,
-            $this->addLangVarPrefix('FROMLINKS') => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS
+            $this->addLangVarPrefix('FROMLINKS') => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS,
+            $this->addLangVarPrefix('FROMREFERRER') => \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER
         ];
 
         $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop, $sortType);
 
-        $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS]);
-        $isLinks = $source === \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS ? true : false;
+        $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
+        $isLinks = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
 
         $this->view->assign('modeStr',  $hideMode ? '' : strtoupper($modeStr));
         $this->view->assign('sourceStr', array_search($source, $dataSource));
@@ -111,6 +112,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $this->view->addJsVars([
             'extStats' => [
+                'delList' => $source,
                 'chartValues' => $values,
                 'chartType' => trim($chartType) ? $chartType : 'bar',
                 'minDate' => date('Y-m-d', $minMax['minDate']),

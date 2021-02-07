@@ -37,7 +37,7 @@ fpcm.extStats = {
         fpcm.ui.selectmenu('#source', {
             change: function (event, ui) {
                 
-                var noModes = ['shares' , 'links'];
+                var noModes = ['shares' , 'links' , 'referrer'];
                 if (noModes.includes(ui.item.value)) {
                     jQuery('#chartMode-button').hide();
                 }
@@ -45,7 +45,7 @@ fpcm.extStats = {
                     jQuery('#chartMode-button').show();
                 }
 
-                if (ui.item.value == 'links') {
+                if (ui.item.value == 'links' || ui.item.value == 'referrer') {
                     jQuery('#fpcm-nkorg-extendedstats-dateform').hide();
                 }
                 else {
@@ -159,7 +159,8 @@ fpcm.extStats = {
             var btnParent = jQuery(this).parent().parent();
             fpcm.ajax.post('extstats/delete', {
                 data: {
-                    id: jQuery(this).data('entry')
+                    id: jQuery(this).data('entry'),
+                    obj: fpcm.vars.jsvars.extStats.delList
                 },
                 execDone: function (result) {
 
