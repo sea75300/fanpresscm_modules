@@ -41,6 +41,7 @@ final class apiCallFunction extends \fpcm\module\event {
     {
         $this->visitorsCount();
         $this->linksCount();
+        $this->referrerCount();
     }
 
     final protected function visitorsCount()
