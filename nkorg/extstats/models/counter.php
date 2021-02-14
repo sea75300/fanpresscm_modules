@@ -239,6 +239,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['values'][] = $val;
             $data['colors'][] = $this->getRandomColor();
             $data['listValues'][] = [
+                'src' => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS,
                 'label' => (string) new \fpcm\view\helper\escape($value->url),
                 'latest' => date($this->config->system_dtmask, $value->lasthit),
                 'lastip' => $value->lastip,
@@ -297,6 +298,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['values'][] = $val;
             $data['colors'][] = $this->getRandomColor();
             $data['listValues'][] = [
+                'src' => \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER,
                 'label' => (string) new \fpcm\view\helper\escape($value->refurl),
                 'latest' => date($this->config->system_dtmask, $value->lasthit),
                 'value' => $val,

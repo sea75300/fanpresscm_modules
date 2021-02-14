@@ -121,37 +121,11 @@ fpcm.extStats = {
         }
 
         var elList = jQuery('#fpcm-nkorg-extendedstats-list');
-        var btnDelEl = '';
-        var btnOpenEl = '';
         
-        elList.append(
-            '<div class="row my-1">' +
-            '<div class="col-4 col-md-1 align-self-center">' + 
-            '</div><div class="col-4 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LINK') + '</b>' +
-            '</div><div class="col-1 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_COUNT') + '</b>' +
-            '</div><div class="col-1 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + '</b>' +
-            '</div><div class="col-2 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_IP') + '</b>' +
-            '</div><div class="col-3 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_USERAGENT') + '</b>' +
-            '</div></div>'
-        );
+        elList.append(fpcm.extStats.getHeader(fpcm.vars.jsvars.extStats.chartValues.listValues[0]));
         
         jQuery.each(fpcm.vars.jsvars.extStats.chartValues.listValues, function (index, object) {
-            btnDelEl = fpcm.vars.jsvars.extStats.deleteButtonStr;
-            btnOpenEl = fpcm.vars.jsvars.extStats.openButtonStr;
-            
-            elList.append(
-                '<div class="row my-1">' +
-                '<div class="col-4 col-md-1 align-self-center">' + 
-                    btnOpenEl.replace('_{$id}', object.intid).replace('{$url}', object.fullUrl) +
-                    btnDelEl.replace('_{$id}', object.intid).replace('{$id}', object.intid) +
-                    
-                '</div><div class="col-4 align-self-center">' + object.label +
-                '</div><div class="col-1 align-self-center">' + object.value +
-                '</div><div class="col-1 align-self-center">' + object.latest +
-                '</div><div class="col-2 align-self-center">' + (object.lastip ? object.lastip : fpcm.ui.translate('GLOBAL_NOTFOUND')) +
-                '</div><div class="col-3 align-self-center">' + (object.lastagent ? object.lastagent : fpcm.ui.translate('GLOBAL_NOTFOUND')) +
-                '</div></div>'
-            );
+            elList.append(fpcm.extStats.getRow(object));
         });
 
         jQuery('.fpcm-extstats-links-delete').click(function () {
@@ -174,6 +148,52 @@ fpcm.extStats = {
 
             return false;
         });
+
+    },
+    
+    getHeader: function (_object) {
+
+        let _return =   '<div class="row my-1">' +
+                        '<div class="col-4 col-md-1 align-self-center">' + 
+                        '</div><div class="col-4 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LINK') + '</b>' +
+                        '</div><div class="col-1 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_COUNT') + '</b>' +
+                        '</div><div class="col-1 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_LATEST') + '</b>';
+        
+        if (_object.src === 'referrer') {
+            return _return + '</div></div>';
+        }
+        
+        _return +=  '</div><div class="col-2 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_IP') + '</b>' +
+                    '</div><div class="col-3 align-self-center"><b>' + fpcm.ui.translate('MODULE_NKORGEXTSTATS_HITS_LIST_USERAGENT') + '</b>' +
+                    '</div></div>';
+
+        return _return;
+
+    },
+    
+    getRow: function (_object) {
+        
+        let btnDelEl = fpcm.vars.jsvars.extStats.deleteButtonStr;
+        let btnOpenEl = fpcm.vars.jsvars.extStats.openButtonStr;        
+        
+        let _return =   '<div class="row my-1">' +
+                        '<div class="col-4 col-md-1 align-self-center">' + 
+                            btnOpenEl.replace('_{$id}', _object.intid).replace('{$url}', _object.fullUrl) +
+                            btnDelEl.replace('_{$id}', _object.intid).replace('{$id}', _object.intid) +
+                    
+                        '</div><div class="col-4 align-self-center">' + _object.label +
+                        '</div><div class="col-1 align-self-center">' + _object.value +
+                        '</div><div class="col-1 align-self-center">' + _object.latest;
+        
+        if (_object.src === 'referrer') {
+            return _return + '</div></div>';
+        }
+        
+        _return +=  '</div><div class="col-2 align-self-center">' + (_object.lastip ? _object.lastip : fpcm.ui.translate('GLOBAL_NOTFOUND')) +
+                    '</div><div class="col-3 align-self-center">' + (_object.lastagent ? _object.lastagent : fpcm.ui.translate('GLOBAL_NOTFOUND')) +
+                    '</div></div>';
+
+        return _return;
 
     }
 
