@@ -100,6 +100,10 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->addButtons($buttons);
 
         $chart = new \fpcm\components\charts\chart($chartType, 'fpcm-nkorg-extendedstats-chart');
+        $chart->addOptions('legend', [
+            'display' => !in_array($chartType, [\fpcm\components\charts\chart::TYPE_LINE, \fpcm\components\charts\chart::TYPE_BAR]),
+            'position' => 'right',
+        ]);
         
         $counter = new \fpcm\modules\nkorg\extstats\models\counter();
         $counter->setChart($chart);

@@ -28,7 +28,9 @@ fpcm.extStats = {
                 }
 
                 fpcm.dom.fromId('fpcm-nkorg-extendedstats-chart').empty();
+
                 fpcm.vars.jsvars.extStats.chart.type = this.value;
+                fpcm.vars.jsvars.extStats.chart.options.legend.display = ((this.value === 'line' || this.value === 'bar') ? false : true);
                 fpcm.extStats.drawChart();
             }
 
@@ -67,15 +69,14 @@ fpcm.extStats = {
     drawChart: function () {
 
         if (window.chart) {
-             window.chart.destroy();
+            window.chart.destroy();
         }
 
         if (!fpcm.vars.jsvars.extStats.chart) {
             return true;
         }
 
-        fpcm.ui_chart.draw(fpcm.vars.jsvars.extStats.chart);
-
+        window.chart = fpcm.ui_chart.draw(fpcm.vars.jsvars.extStats.chart);
     },
 
     drawList: function () {

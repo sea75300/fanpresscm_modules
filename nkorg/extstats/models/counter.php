@@ -179,8 +179,8 @@ class counter extends \fpcm\model\abstracts\tablelist {
         }
         
         $this->chart->setLabels($data['labels']);
-        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['unique']['values'], $data['unique']['colors']))->setFill(true));
-        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['hits']['values'], $data['hits']['colors']))->setFill(true));
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['unique']['values'], $data['unique']['colors']))->setFill(true), 0);
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['hits']['values'], $data['hits']['colors']))->setFill(true), 1);
 
         return $data['labels'];
     }
@@ -229,7 +229,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
             $value->url .= $parsed['fragment'] ?? '';
             
-            $data['labels'][] = $value->url;
+            $data['labels'][] = strlen($value->url) >= 40 ? substr($value->url, 0, 40) . '...' : $value->url;
             $data['values'][] = $val;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
             $data['listValues'][] = [
@@ -283,7 +283,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
             $val = (string) ($value->counthits ?? 0);
             
-            $data['labels'][] = $value->refurl;
+            $data['labels'][] = strlen($value->refurl) >= 40 ? substr($value->refurl, 0, 40) . '...' : $value->refurl;
             $data['values'][] = $val;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
             $data['listValues'][] = [
