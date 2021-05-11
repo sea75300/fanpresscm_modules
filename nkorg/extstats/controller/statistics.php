@@ -4,6 +4,18 @@ namespace fpcm\modules\nkorg\extstats\controller;
 
 final class statistics extends \fpcm\controller\abstracts\module\controller {
 
+    /**
+     * 
+     * @var \fpcm\components\dataView\dataView
+     */
+    private $dv;
+
+    /**
+     * 
+     * @var bool
+     */
+    private $hasIpAgent;
+
     protected function getViewPath() : string
     {
         return 'index';
@@ -44,6 +56,9 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         ];
 
         $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop, $sortType);
+        if (!trim($chartType)) {
+            $chartType = \fpcm\components\charts\chart::TYPE_BAR;
+        }
 
         $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
         $isLinks = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
@@ -84,7 +99,11 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $this->view->addButtons($buttons);
 
+        $chart = new \fpcm\components\charts\chart($chartType, 'fpcm-nkorg-extendedstats-chart');
+        
         $counter = new \fpcm\modules\nkorg\extstats\models\counter();
+        $counter->setChart($chart);
+
         if ($this->buttonClicked('removeEntries')) {
             if (!$counter->cleanupLinks()) {
                 $this->view->addNoticeMessage($this->addLangVarPrefix('CLEANUP_FAILED'), [
@@ -107,19 +126,20 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             return true;
         }
 
-        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode, $sortType);
-        $this->view->assign('notfound', empty($values['datasets']) ? true : false);
+        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode, $sortType, $chart);
+        $this->view->assign('chart', $chart);
+        $this->view->assign('notfound', empty($values) ? true : false);
 
+        $this->getDataview($values, $isLinks, $source);
+        
         $this->view->addJsVars([
             'extStats' => [
                 'delList' => $source,
-                'chartValues' => $values,
-                'chartType' => trim($chartType) ? $chartType : 'bar',
+                'chart' => $counter->getChart(),
+                'hasList' => $isLinks && isset($values['listValues']),
                 'minDate' => date('Y-m-d', $minMax['minDate']),
                 'showMode' => $hideMode ? false : true,
-                'showDate' => $isLinks,
-                'deleteButtonStr' => $isLinks ? (string) (new \fpcm\view\helper\button('entry_{$id}'))->setText('GLOBAL_DELETE')->setIcon('trash')->setIconOnly(true)->setData(['entry' => '{$id}'])->setClass('fpcm-extstats-links-delete') : '',
-                'openButtonStr' => $isLinks ? (string) (new \fpcm\view\helper\openButton('open_{$id}'))->setText('GLOBAL_OPENNEWWIN')->setUrl('{$url}')->setTarget('_blank')->setRel('external') : ''
+                'showDate' => $isLinks
             ]
         ]);
         
@@ -130,11 +150,14 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $this->addLangVarPrefix('HITS_LIST_USERAGENT'),
             $this->addLangVarPrefix('HITS_LIST_LATEST'),
         ]);
-        $this->view->addJsFiles([
-            \fpcm\classes\loader::libGetFileUrl('chart-js/chart.min.js'),
-            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $key . '/js/module.js')
-        ]);
 
+        $jsF = $chart->getJsFiles();
+        $jsF[1] = \fpcm\view\view::ROOTURL_CORE_JS . $jsF[1];
+
+        $this->view->addJsFiles($jsF);
+        $this->view->addCssFiles($chart->getCssFiles());
+        
+        $this->view->addFromModule(['module.js']);
         $this->view->setFormAction('extstats/statistics');
         $this->view->render();
         return true;
@@ -183,6 +206,66 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $stop = '';
         }
 
+        return true;
+    }
+    
+    private function getDataview($values, $isLinks, $source) : bool
+    {
+        if (!$isLinks || !isset($values['listValues'])) {
+            return false;
+        }
+
+        $this->hasIpAgent = $source !== \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER;
+        
+        $this->dv = new \fpcm\components\dataView\dataView('extendedstats-list');
+        $this->view->addJsFiles($this->dv->getJsFiles());
+        $this->view->addJsLangVars($this->dv->getJsLangVars());
+        
+        $this->dv->addColumns([
+            (new \fpcm\components\dataView\column('btn', ''))->setSize('1')->setAlign('center'),
+            (new \fpcm\components\dataView\column('link', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('4'),
+            (new \fpcm\components\dataView\column('count', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('1')->setAlign('center'),
+            (new \fpcm\components\dataView\column('latest', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('2')->setAlign('center'),
+        ]);
+
+        if ($this->hasIpAgent) {
+        
+            $this->dv->addColumns([
+                (new \fpcm\components\dataView\column('ip', $this->addLangVarPrefix('HITS_LIST_IP')))->setSize('2')->setAlign('center'),
+                (new \fpcm\components\dataView\column('useragent', $this->addLangVarPrefix('HITS_LIST_USERAGENT')))->setSize('2')->setAlign('center')
+            ]); 
+
+        }
+
+        array_walk($values['listValues'], [$this, 'addDvRow']);
+        $this->view->addJsVars($this->dv->getJsVars());
+        return true;
+    }
+    
+    private function addDvRow(array $value)
+    {
+        if (!count($value)) {
+            return false;
+        }
+        
+        $btn = [
+            (string) (new \fpcm\view\helper\button('entry_' . $value['intid']))->setText('GLOBAL_DELETE')->setIcon('trash')->setIconOnly(true)->setData(['entry' =>  $value['intid']])->setClass('fpcm-extstats-links-delete'),
+            (string) (new \fpcm\view\helper\openButton('open_' . $value['intid']))->setText('GLOBAL_OPENNEWWIN')->setUrl($value['fullUrl'])->setTarget('_blank')->setRel('external')
+        ];
+
+        $row = [
+            new \fpcm\components\dataView\rowCol('btn', implode(' ', $btn) , '', \fpcm\components\dataView\rowCol::COLTYPE_ELEMENT),
+            new \fpcm\components\dataView\rowCol('link', $value['label'] ),
+            new \fpcm\components\dataView\rowCol('count', $value['value'] ),
+            new \fpcm\components\dataView\rowCol('latest', $value['latest'] ),
+        ];
+        
+        if ($this->hasIpAgent) {
+            $row[] = new \fpcm\components\dataView\rowCol('ip', $value['lastip'] ?? $this->language->translate('GLOBAL_NOTFOUND') );
+            $row[] = new \fpcm\components\dataView\rowCol('useragent', $value['lastagent'] ?? $this->language->translate('GLOBAL_NOTFOUND') );
+        }
+
+        $this->dv->addRow(new \fpcm\components\dataView\row($row));
         return true;
     }
 

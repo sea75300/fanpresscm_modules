@@ -19,12 +19,26 @@ class counter extends \fpcm\model\abstracts\tablelist {
     const SORT_COUNT = 0;
     const SORT_DATE = 1;
     const SORT_LINK = 2;
+    
+    const LINK_MAX_GRAPH = 15;
 
     protected $mode;
     protected $months;
     protected $table;
     protected $createTimeVar = 'createtime';
+    
+    protected $chart;
 
+    public function setChart(\fpcm\components\charts\chart $chart): void
+    {
+        $this->chart = $chart;
+    }
+
+    public function getChart() : \fpcm\components\charts\chart
+    {
+        return $this->chart;
+    }
+        
     public function deleteLinkEntry($id)
     {
         $result = $this->dbcon->delete(countLink::TABLE, 'id = ?', [
@@ -98,31 +112,25 @@ class counter extends \fpcm\model\abstracts\tablelist {
             return [];
         }
         
+
+        $data = [];
         foreach ($values as $value) {
 
             if (!isset($articles[$value->article_id])) {
                 continue;
             }
-            
+
             $len = strlen($articles[$value->article_id]);
             
-            $labels[] = ( $len >= 20 ? substr($articles[$value->article_id], 0, 20).'...' : $articles[$value->article_id] ). ' ('.$value->article_id.')';
-            $data[] = (string) $value->counted;
-            $colors[] = $this->getRandomColor();
+            $data['labels'][] = ( $len >= 20 ? substr($articles[$value->article_id], 0, 20).'...' : $articles[$value->article_id] ). ' ('.$value->article_id.')';
+            $data['values'][] = (string) $value->counted;
+            $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
+        
+        $this->chart->setLabels($data['labels']);
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));
 
-        return [
-            'labels' => $labels,
-            'datasets' => [
-                [
-                    'label' => '',
-                    'fill' => false,
-                    'data' => $data,
-                    'backgroundColor' => $colors,
-                    'borderColor' => $this->getRandomColor(),
-                ]
-            ]
-        ];
+        return $data['labels'];
     }
 
     public function fetchVisitors($start, $stop, $mode = 1)
@@ -165,30 +173,16 @@ class counter extends \fpcm\model\abstracts\tablelist {
         foreach ($values as $value) {
             $data['labels'][] = $this->getLabel($value->dtstr);
             $data['unique']['values'][] = (string) ($value->sumunique ?? $value->countunique);
-            $data['unique']['colors'][] = $this->getRandomColor();
+            $data['unique']['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
             $data['hits']['values'][] = (string) ($value->sumhits ?? $value->counthits);
-            $data['hits']['colors'][] = $this->getRandomColor();
+            $data['hits']['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
+        
+        $this->chart->setLabels($data['labels']);
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['unique']['values'], $data['unique']['colors']))->setFill(true));
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['hits']['values'], $data['hits']['colors']))->setFill(true));
 
-        return [
-            'labels' => $data['labels'],
-            'datasets' => [
-                [
-                    'label' => $this->language->translate($this->addLangVarPrefix('LEGEND_UNIQUE')),
-                    'fill' => false,
-                    'data' => $data['unique']['values'],
-                    'backgroundColor' => $data['unique']['colors'],
-                    'borderColor' => $this->getRandomColor(),
-                ],
-                [
-                    'label' => $this->language->translate($this->addLangVarPrefix('LEGEND_HITS')),
-                    'fill' => false,
-                    'data' => $data['hits']['values'],
-                    'backgroundColor' => $data['hits']['colors'],
-                    'borderColor' => $this->getRandomColor(),
-                ]
-            ]
-        ];
+        return $data['labels'];
     }
 
     public function fetchLinks($start, $stop, $mode = 1, $sort = 0)
@@ -230,14 +224,14 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $value->url .= isset($parsed['pass']) ? ':'.$parsed['pass'] : '';
             $value->url .= isset($parsed['user']) || isset($parsed['pass']) ? '@' : '';
             $value->url .= $parsed['host'] ?? (strpos($parsed['path'], $baseParsed['host']) === false ? $baseParsed['host'] : '');
-            $value->url .= $parsed['port'] ?? '';
+            $value->url .= isset($parsed['port']) ? ':' . $parsed['port'] : '';
             $value->url .= $parsed['path'] ?? '';
             $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
             $value->url .= $parsed['fragment'] ?? '';
             
             $data['labels'][] = $value->url;
             $data['values'][] = $val;
-            $data['colors'][] = $this->getRandomColor();
+            $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
             $data['listValues'][] = [
                 'src' => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS,
                 'label' => (string) new \fpcm\view\helper\escape($value->url),
@@ -250,19 +244,14 @@ class counter extends \fpcm\model\abstracts\tablelist {
             ];
         }
 
-        return [
-            'listValues' => $data['listValues'],
-            'labels' => array_slice($data['labels'], 0, 10),
-            'datasets' => [
-                [
-                    'label' => '',
-                    'fill' => false,
-                    'data' => array_slice($data['values'], 0, 10),
-                    'backgroundColor' => array_slice($data['colors'], 0, 10),
-                    'borderColor' => $this->getRandomColor(),
-                ]
-            ]
-        ];
+        $data['labels'] = array_slice($data['labels'], 0, self::LINK_MAX_GRAPH);
+        $data['values'] = array_slice($data['values'], 0, self::LINK_MAX_GRAPH);
+        $data['colors'] = array_slice($data['colors'], 0, self::LINK_MAX_GRAPH);
+        
+        $this->chart->setLabels($data['labels']);
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));        
+
+        return $data;
     }
 
     public function fetchReferrer($start, $stop, $mode = 1, $sort = 0)
@@ -296,7 +285,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             
             $data['labels'][] = $value->refurl;
             $data['values'][] = $val;
-            $data['colors'][] = $this->getRandomColor();
+            $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
             $data['listValues'][] = [
                 'src' => \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER,
                 'label' => (string) new \fpcm\view\helper\escape($value->refurl),
@@ -307,19 +296,14 @@ class counter extends \fpcm\model\abstracts\tablelist {
             ];
         }
 
-        return [
-            'listValues' => $data['listValues'],
-            'labels' => array_slice($data['labels'], 0, 10),
-            'datasets' => [
-                [
-                    'label' => '',
-                    'fill' => false,
-                    'data' => array_slice($data['values'], 0, 10),
-                    'backgroundColor' => array_slice($data['colors'], 0, 10),
-                    'borderColor' => $this->getRandomColor(),
-                ]
-            ]
-        ];
+        $data['labels'] = array_slice($data['labels'], 0, self::LINK_MAX_GRAPH);
+        $data['values'] = array_slice($data['values'], 0, self::LINK_MAX_GRAPH);
+        $data['colors'] = array_slice($data['colors'], 0, self::LINK_MAX_GRAPH);
+        
+        $this->chart->setLabels($data['labels']);
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));        
+
+        return $data;
     }
 
     public function cleanupLinks()
@@ -379,21 +363,13 @@ class counter extends \fpcm\model\abstracts\tablelist {
         foreach ($values as $value) {
             $data['labels'][] = $this->getLabel($value->dtstr);
             $data['values'][] = (string) $value->counted;
-            $data['colors'][] = $this->getRandomColor();            
+            $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
+        
+        $this->chart->setLabels($data['labels']);
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));
 
-        return [
-            'labels' => $data['labels'],
-            'datasets' => [
-                [
-                    'label' => '',
-                    'fill' => false,
-                    'data' => $data['values'],
-                    'backgroundColor' => $data['colors'],
-                    'borderColor' => $this->getRandomColor(),
-                ]
-            ]
-        ];
+        return $data['labels'];
     }
 
     private function getLabel($data)
@@ -464,12 +440,6 @@ class counter extends \fpcm\model\abstracts\tablelist {
         }
 
         return true;
-    }
-
-    private function getRandomColor()
-    {
-        $colStr = '#' . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255));
-        return strlen($colStr) === 7 ? $colStr : str_pad($colStr, 7, dechex(mt_rand(0, 16)));
     }
     
     private function getOrder($type, &$where)

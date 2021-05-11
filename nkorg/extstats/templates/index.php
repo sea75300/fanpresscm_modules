@@ -40,7 +40,7 @@
                 <?php if ($notfound) : ?>
                     <p class="fpcm-ui-padding-none fpcm-ui-margin-none"><?php $theView->icon('images', 'far')->setStack('ban fpcm-ui-important-text')->setSize('lg')->setStackTop(true); ?> <?php $theView->write('GLOBAL_NOTFOUND2'); ?></p>
                 <?php else : ?>
-                    <canvas id="fpcm-nkorg-extendedstats-chart"></canvas>
+                    <?php print $chart; ?>
                 <?php endif; ?>
                 </div>
             </div>
@@ -48,7 +48,7 @@
         <?php if (!$notfound) : ?>
             <h3<?php if (!$isLinks) : ?> class="fpcm ui-hidden"<?php endif; ?>><?php $theView->write('MODULE_NKORGEXTSTATS_HITS_LIST'); ?></h3>
             
-            <div id="fpcm-nkorg-extendedstats-list" class="fpcm-ui-padding-lg-top">
+            <div id="fpcm-dataview-extendedstats-list" class="fpcm-ui-padding-lg-top">
         <?php endif; ?>
             </div>
 
