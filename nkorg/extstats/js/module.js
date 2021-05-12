@@ -24,59 +24,34 @@ fpcm.extStats = {
             change: function () {
 
                 if (!fpcm.vars.jsvars.extStats.chart) {
-                    return;
+                    return true;
                 }
 
-                fpcm.dom.fromId('fpcm-nkorg-extendedstats-chart').empty();
-
-                fpcm.vars.jsvars.extStats.chart.type = this.value;
-                fpcm.vars.jsvars.extStats.chart.options.legend.display = ((this.value === 'line' || this.value === 'bar') ? false : true);
-                fpcm.extStats.drawChart();
+                fpcm.extStats.drawChart(this.value);
             }
 
-        });
-
-        fpcm.ui.selectmenu('#chartMode', {
-            classes: {
-                'ui-selectmenu-button' : fpcm.vars.jsvars.extStats.showMode ? '' : 'fpcm-ui-hidden'
-            }
-        });
-
-        fpcm.ui.selectmenu('#source', {
-            change: function (event, ui) {
-                
-                var noModes = ['shares' , 'links' , 'referrer'];
-                if (noModes.includes(ui.item.value)) {
-                    jQuery('#chartMode-button').hide();
-                }
-                else {
-                    jQuery('#chartMode-button').show();
-                }
-
-                if (ui.item.value == 'links' || ui.item.value == 'referrer') {
-                    jQuery('#fpcm-nkorg-extendedstats-dateform').hide();
-                }
-                else {
-                    jQuery('#fpcm-nkorg-extendedstats-dateform').show();
-                }
-                
-                fpcm.ui.controlgroup(fpcm.ui.mainToolbar, 'refresh');
-            }
         });
 
     },
 
-    drawChart: function () {
-
-        if (window.chart) {
-            window.chart.destroy();
-        }
+    drawChart: function (type) {
 
         if (!fpcm.vars.jsvars.extStats.chart) {
             return true;
         }
+        
+        if (window.chart) {
+            window.chart.destroy();
+        }
 
-        window.chart = fpcm.ui_chart.draw(fpcm.vars.jsvars.extStats.chart);
+        let _cnf = fpcm.vars.jsvars.extStats.chart;        
+        if (type) {
+            _cnf.type = type;
+            delete(_cnf.options.legend);
+            delete(_cnf.options.scales);
+        }
+        
+        window.chart = fpcm.ui_chart.draw(_cnf);
     },
 
     drawList: function () {

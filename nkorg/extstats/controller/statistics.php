@@ -72,16 +72,13 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->assign('chartType', $chartType);
         $this->view->assign('sortTypes', $sortTypes);
         $this->view->assign('sortType', $sortType);
+        $this->view->assign('chartModes', $chartModes);
+        $this->view->assign('chartMode', $chartMode);
 
         $buttons = [
             (new \fpcm\view\helper\select('source'))
                 ->setClass('fpcm-ui-input-select-articleactions')
                 ->setOptions($dataSource)->setSelected($source)
-                ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED),
-
-            (new \fpcm\view\helper\select('chartMode'))
-                ->setClass('fpcm-ui-input-select-articleactions ')
-                ->setOptions($chartModes)->setSelected($chartMode)
                 ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED),
 
             (new \fpcm\view\helper\submitButton('setdatespan'))
@@ -100,11 +97,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->addButtons($buttons);
 
         $chart = new \fpcm\components\charts\chart($chartType, 'fpcm-nkorg-extendedstats-chart');
-        $chart->addOptions('legend', [
-            'display' => !in_array($chartType, [\fpcm\components\charts\chart::TYPE_LINE, \fpcm\components\charts\chart::TYPE_BAR]),
-            'position' => 'right',
-        ]);
-        
+
         $counter = new \fpcm\modules\nkorg\extstats\models\counter();
         $counter->setChart($chart);
 
