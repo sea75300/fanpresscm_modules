@@ -27,11 +27,15 @@ class dashContainerStats extends \fpcm\model\abstracts\dashcontainer {
     protected function initObjects()
     {
         $this->chart = new \fpcm\components\charts\chart('bar', 'fpcm-nkorg-extstats-dashchart');
-        $this->datasets = (new \fpcm\modules\nkorg\extstats\models\counter())->fetchVisitors(
+
+        $counter = new \fpcm\modules\nkorg\extstats\models\counter();
+        $counter->setChart($this->chart);
+        $counter->fetchVisitors(
             date('Y-m-d', time() - 7 * FPCM_DATE_SECONDS),
             '',
             counter::MODE_DAY
         );
+        
         return true;
     }
 
@@ -79,7 +83,7 @@ class dashContainerStats extends \fpcm\model\abstracts\dashcontainer {
     public function getJavascriptVars() : array 
     {
         return [
-            'extstatsChartData' => $this->datasets
+            'extstatsChartData' => $this->chart
         ];
     }
 

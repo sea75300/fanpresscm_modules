@@ -10,15 +10,7 @@ fpcm.dashboard.onDone.extstatsChartData = {
             return false;
         }
 
-        fpcm.ui_chart.draw({
-            id: 'fpcm-nkorg-extstats-dashchart',
-            type: 'bar',
-            data: fpcm.vars.jsvars.extstatsChartData,
-            options: {
-                responsive: true
-            }
-        });
-
+        fpcm.ui_chart.draw(fpcm.vars.jsvars.extstatsChartData);
         return true;
     }
 
