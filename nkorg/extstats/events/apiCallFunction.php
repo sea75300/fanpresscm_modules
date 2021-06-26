@@ -65,22 +65,19 @@ final class apiCallFunction extends \fpcm\module\event {
         $countObj->setCountHits($countObj->getCountHits() + 1);
         call_user_func([$countObj, $fn]);
 
+        if (!\fpcm\classes\loader::getObject('\fpcm\model\system\config')->module_nkorgextstats_calc_unique) {
+            return true;
+        }
+
         /* @var $config \fpcm\model\system\config */
         $duration = (int) \fpcm\classes\loader::getObject('\fpcm\model\system\config')->module_nkorgextstats_cookie_duration;
         if (!$duration || $duration < 600) {
             $duration = 3600;
         }
-        
-        $expire = time() + $duration;
-        
-        /* @var $request \fpcm\model\http\request */
-        $request = \fpcm\classes\loader::getObject('\fpcm\model\http\request');
-        $str = 'This cookie marks you as unique visitor until '. date(DATE_ISO8601, $expire).'. Source: '. $request->filter($_SERVER['REQUEST_URI'] ?? 'localhost', [
-            \fpcm\model\http\request::FILTER_STRIPTAGS,            
-            \fpcm\model\http\request::FILTER_TRIM,            
-        ]);
 
-        setcookie('extstatsts', $str, $expire, '/', '', false, true);
+        $cookie = new \fpcm\model\http\cookie('extstatsts');
+        $cookie->setExpires((time() + $duration));
+        $cookie->set('nkorg-extstats-cookie');
         return true;
     }
 

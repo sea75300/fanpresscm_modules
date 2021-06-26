@@ -20,38 +20,15 @@ fpcm.extStats = {
             changeYear: true
         });
 
-        fpcm.ui.selectmenu('#chartType', {
-            change: function () {
-
-                if (!fpcm.vars.jsvars.extStats.chart) {
-                    return true;
-                }
-
-                fpcm.extStats.drawChart(this.value);
-            }
-
-        });
-
     },
 
-    drawChart: function (type) {
+    drawChart: function () {
 
         if (!fpcm.vars.jsvars.extStats.chart) {
             return true;
         }
         
-        if (window.chart) {
-            window.chart.destroy();
-        }
-
-        let _cnf = fpcm.vars.jsvars.extStats.chart;        
-        if (type) {
-            _cnf.type = type;
-            delete(_cnf.options.legend);
-            delete(_cnf.options.scales);
-        }
-        
-        window.chart = fpcm.ui_chart.draw(_cnf);
+        window.chart = fpcm.ui_chart.draw(fpcm.vars.jsvars.extStats.chart);
     },
 
     drawList: function () {

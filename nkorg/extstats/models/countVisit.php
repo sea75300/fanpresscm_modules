@@ -56,6 +56,10 @@ class countVisit extends dbObj {
 
     public function updateUnique()
     {
+        if (!$this->config->module_nkorgextstats_calc_unique) {
+            return true;
+        }
+        
         return \fpcm\classes\loader::getObject('\fpcm\model\http\request')->fromCookie('extstatsts') ? false : true;
     }
 

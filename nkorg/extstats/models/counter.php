@@ -178,10 +178,20 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['hits']['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
         
+        $unique = $this->getObject()->getOption('calc_unique');
+        if (!$unique) {
+            $data['unique'] = [];
+        }
+        
         $this->chart->setLabels($data['labels']);
-        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['unique']['values'], $data['unique']['colors']))->setFill(true), 0);
-        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['hits']['values'], $data['hits']['colors']))->setFill(true), 1);
+        
+        $index  = 0;
+        if ($unique) {
+            $this->chart->setValues((new \fpcm\components\charts\chartItem($data['unique']['values'], $data['unique']['colors']))->setFill(true), 0);
+            $index++;
+        }
 
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['hits']['values'], $data['hits']['colors']))->setFill(true), $index);
         return $data['labels'];
     }
 

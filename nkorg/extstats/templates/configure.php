@@ -37,17 +37,20 @@
                         ->setDisplaySizesDefault(); ?>
             </div>
             <div class="row m-3">
-                <div class="col-12 px-0">
-                    <div class="row">
-                        <label class="col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general">
-                            <?php $theView->icon('language'); ?>
-                            <?php $theView->write('MODULE_NKORGEXTSTATS_DEAULT_SHOW_VISITORS'); ?>:
-                        </label>
-                        <div class="col-auto fpcm-ui-padding-none-lr">
-                            <?php $theView->boolSelect("config[module_nkorgextstats_show_visitors]")->setSelected($options['module_nkorgextstats_show_visitors']); ?>
-                        </div>
-                    </div>
-                </div>
+                <?php $theView
+                        ->boolSelect("config[module_nkorgextstats_show_visitors]")
+                        ->setSelected($options['module_nkorgextstats_show_visitors'])
+                        ->setText('MODULE_NKORGEXTSTATS_DEFAULT_SHOW_VISITORS')
+                        ->setIcon('language')
+                        ->prependLabel(); ?>
+            </div>
+            <div class="row m-3">
+                <?php $theView
+                        ->boolSelect("config[module_nkorgextstats_calc_unique]")
+                        ->setSelected($options['module_nkorgextstats_calc_unique'])
+                        ->setText('MODULE_NKORGEXTSTATS_CALC_VISITORS_UNIQUE')
+                        ->setIcon('language')
+                        ->prependLabel(); ?>
             </div>
             <div class="row m-3">
                 <?php $theView
