@@ -61,6 +61,10 @@ class countReferrer extends dbObj {
         }
         
         $baseParsed = parse_url($this->getObject()->getOption('url_base'));
+        if (!isset($baseParsed['host'])) {
+            return true;
+        }
+
         return !($baseParsed['host'] === $parsed['host']);
     }
 
