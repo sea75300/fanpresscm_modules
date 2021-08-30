@@ -47,6 +47,14 @@ final class main extends \fpcm\controller\abstracts\module\controller {
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
         ]);
 
+        $this->view->addTabs('integration', [
+            (new \fpcm\view\helper\tabItem('editor'))
+                ->setText($this->addLangVarPrefix('HEADLINE'))
+                ->setModulekey($this->getModuleKey())
+                ->setFile( \fpcm\view\view::PATH_MODULE . $this->getViewPath() )
+        ]);
+        
+        $this->view->addFromModule(['module.js']);
         $this->view->setFormAction('integration/main');
         $this->view->render();
         return true;
