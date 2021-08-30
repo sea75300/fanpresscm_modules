@@ -1,0 +1,8 @@
+## Module configure config
+---
+frontend_days:
+    type: textInput
+    conf:
+        text: GUI_APPOINTMENT_FRONTEND_DAYS
+        icon: calendar
+        size: lg

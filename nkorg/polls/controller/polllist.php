@@ -8,7 +8,7 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
     
     protected function getViewPath() : string
     {
-        return 'index';
+        return 'dataview';
     }
 
     public function process()
@@ -50,6 +50,12 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
 
         $this->items = (new \fpcm\modules\nkorg\polls\models\polls())->getAllPolls($search);
         $this->initDataView();
+
+        $this->view->addTabs('polls', [
+            (new \fpcm\view\helper\tabItem('main'))
+                ->setText($this->addLangVarPrefix('HEADLINE'))
+                ->setFile( \fpcm\view\view::PATH_COMPONENTS . 'dataview__inline' )
+        ]);
 
         $this->view->setFormAction('polls/list');
         $this->view->render();

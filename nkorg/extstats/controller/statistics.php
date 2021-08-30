@@ -63,8 +63,6 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $hideMode = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_SHARES, \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
         $isLinks = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
 
-        $this->view->assign('modeStr',  $hideMode ? '' : strtoupper($modeStr));
-        $this->view->assign('sourceStr', array_search($source, $dataSource));
         $this->view->assign('isLinks', $isLinks);
         $this->view->assign('start', trim($start) ? $start : '');
         $this->view->assign('stop', trim($stop) ? $stop : '');
@@ -126,6 +124,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $values = call_user_func([$counter, $fn], $start, $stop, $chartMode, $sortType, $chart);
         $this->view->assign('chart', $chart);
         $this->view->assign('notfound', empty($values) ? true : false);
+        $this->view->assign('minDate', date('Y-m-d', $minMax['minDate']));
 
         $this->getDataview($values, $isLinks, $source);
         
@@ -134,7 +133,6 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'delList' => $source,
                 'chart' => $counter->getChart(),
                 'hasList' => $isLinks && isset($values['listValues']),
-                'minDate' => date('Y-m-d', $minMax['minDate']),
                 'showMode' => $hideMode ? false : true,
                 'showDate' => $isLinks
             ]
@@ -153,6 +151,13 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $this->view->addJsFiles($jsF);
         $this->view->addCssFiles($chart->getCssFiles());
+        
+        $this->view->addTabs('extstats', [
+            (new \fpcm\view\helper\tabItem('stats'))
+                ->setText( $this->language->translate(array_search($source, $dataSource)) . ' ' . (!$hideMode && $modeStr ? $this->language->translate($this->addLangVarPrefix('BY'.$modeStr)) : '') )
+                ->setModulekey($this->getModuleKey())
+                ->setFile(\fpcm\view\view::PATH_MODULE . 'index' )
+        ]);
         
         $this->view->addFromModule(['module.js']);
         $this->view->setFormAction('extstats/statistics');
@@ -205,7 +210,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         return true;
     }
-    
+
     private function getDataview($values, $isLinks, $source) : bool
     {
         if (!$isLinks || !isset($values['listValues'])) {

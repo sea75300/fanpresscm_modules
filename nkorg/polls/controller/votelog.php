@@ -11,7 +11,7 @@ final class votelog extends \fpcm\controller\abstracts\module\controller {
     private $pollId;
 
     /**
-     *
+     * 
      * @var array
      */
     protected $returnData = [];
@@ -58,7 +58,7 @@ final class votelog extends \fpcm\controller\abstracts\module\controller {
             $text = $replies[$logEntry->getReplyid()] ?? $this->language->translate($notFoundText, ['replyId' => $logEntry->getReplyid()]);
 
             $this->addLine($logEntry->getId(), [
-                '<div class="row my-1">',
+                '<div class="row p-2">',
                 '<div class="col-1 align-self-center">'.$logEntry->getId(),
                 '</div><div class="col-4 align-self-center">'.$text,
                 '</div><div class="col-3 align-self-center fpcm-ui-align-center">'.(string) new \fpcm\view\helper\dateText($logEntry->getReplytime()),
@@ -67,7 +67,7 @@ final class votelog extends \fpcm\controller\abstracts\module\controller {
             ]);            
 
         }
-
+        
         exit(implode(PHP_EOL, $this->returnData));
     }
     

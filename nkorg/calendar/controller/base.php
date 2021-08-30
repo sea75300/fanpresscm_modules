@@ -23,6 +23,13 @@ implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces
             \fpcm\module\module::getJsDirByKey($this->getModuleKey(), 'module.js')
         ]);
 
+        $this->view->addTabs('calendar', [
+            (new \fpcm\view\helper\tabItem('editor'))
+                ->setText($this->addLangVarPrefix('GUI_APPOINTMENT_TAB'))
+                ->setModulekey($this->getModuleKey())
+                ->setFile( \fpcm\view\view::PATH_MODULE . 'editor')
+        ]);
+        
         $this->view->assign('appointment', $this->appointment);        
         $this->view->render();
         return true;

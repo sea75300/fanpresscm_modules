@@ -9,17 +9,6 @@ fpcm.extStats = {
         fpcm.extStats.drawList();
         fpcm.extStats.drawChart();
 
-        fpcm.ui.datepicker('#dateFrom', {
-            changeMonth: true,
-            changeYear: true,
-            minDate: fpcm.vars.jsvars.extStats.minDate
-        });
-
-        fpcm.ui.datepicker('#dateTo', {
-            changeMonth: true,
-            changeYear: true
-        });
-
     },
 
     drawChart: function () {
@@ -63,6 +52,6 @@ fpcm.extStats = {
             return false;
         });
 
-    },
+    }
 
 };

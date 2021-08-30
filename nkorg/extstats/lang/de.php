@@ -43,5 +43,7 @@ $lang = [
     'CLEANUP_LIMIT' => 'Komprimierung auf X Element',
     'CLEANUP_SUCCESS' => 'Komprimierung auf Top {{limit}} erfolgreich.',
     'CLEANUP_FAILED' => 'Komprimierung auf Top {{limit}} fehlgeschlagen, weitere Information enthält das Datenbank-Protokoll.',
-    'CRONJOB_ANONYMIZELINKS' => 'Besuchte Links anonymisieren'
+    'CRONJOB_ANONYMIZELINKS' => 'Besuchte Links anonymisieren',
+    'LABEL_FIELD_CHARTTYPE' => 'Darstellen als',
+    'LABEL_FIELD_SORTTYPE' => 'Sortieren nach',
 ];

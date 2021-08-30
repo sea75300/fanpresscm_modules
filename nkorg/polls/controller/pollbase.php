@@ -12,7 +12,7 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
 
     protected function getViewPath() : string
     {
-        return 'pollform';
+        return 'dataview';
     }
     
     public function process()
@@ -29,6 +29,8 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         $this->view->addJsFiles([
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
         ]);
+        
+        $this->initTabs();
 
         $this->view->assign('poll', $this->poll);        
         $this->view->render();
@@ -94,6 +96,38 @@ class pollbase extends \fpcm\controller\abstracts\module\controller {
         }
 
         return true;
+    }
+    
+    private function initTabs()
+    {
+        $tabs = [];
+        
+        if ($this->poll->getId() && $this->poll->getVotessum()) {            
+            $tabs[] = (new \fpcm\view\helper\tabItem('result'))
+                    ->setText($this->addLangVarPrefix('GUI_RESULT'))
+                    ->setModulekey($this->getModuleKey())
+                    ->setFile( \fpcm\view\view::PATH_MODULE . 'pollsum' );
+        }
+        
+        $tabs[] = (new \fpcm\view\helper\tabItem('form1'))
+                ->setText($this->addLangVarPrefix('GUI_POLL'))
+                ->setModulekey($this->getModuleKey())
+                ->setFile( \fpcm\view\view::PATH_MODULE . 'pollform1' );
+        
+        $tabs[] = (new \fpcm\view\helper\tabItem('form2'))
+                ->setText($this->addLangVarPrefix('GUI_REPLIES'))
+                ->setModulekey($this->getModuleKey())
+                ->setFile( \fpcm\view\view::PATH_MODULE . 'pollform2' );
+        
+        if ($this->poll->getId() && $this->poll->getVotessum()) {                        
+            $tabs[] = (new \fpcm\view\helper\tabItem('votelog'))
+                    ->setText($this->addLangVarPrefix('GUI_VOTESLIST'))
+                    ->setUrl(\fpcm\classes\tools::getFullControllerLink('ajax/polls/votelog', [
+                        'pid' => $this->poll->getId()])
+                    );
+        }
+
+        $this->view->addTabs('polls', $tabs, '', 0);
     }
 
 }

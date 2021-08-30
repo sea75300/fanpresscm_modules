@@ -16,7 +16,7 @@ $lang = [
     'GUI_POLL' => 'Umfrage',
     'GUI_REPLIES' => 'Antworten',
     'GUI_RESULT' => 'Übersicht',
-    'GUI_VOTESLIST' => 'Stimmenübrsicht',
+    'GUI_VOTESLIST' => 'Stimmenübersicht',
 
     'GUI_POLL_TEXT' => 'Frage',
     'GUI_POLL_TIMESPAN' => 'Zeitraum',

@@ -9,8 +9,7 @@ fpcm.nkorg_inactivity_manager = {
         if (fpcm.dataview && fpcm.dataview.exists('messageslist')) {
             fpcm.dataview.render('messageslist');
         }
-        
-        fpcm.ui.datepicker('input.fpcm-ui-datepicker');
+
     }
 
 };

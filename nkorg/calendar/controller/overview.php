@@ -26,7 +26,12 @@ final class overview extends \fpcm\controller\abstracts\module\controller implem
         $this->items = (new \fpcm\modules\nkorg\calendar\models\appointments)->getAppointments();
         $this->initDataView();
 
-        $this->view->assign('headline', $this->addLangVarPrefix('HEADLINE'));
+        $this->view->addTabs('calendar', [
+            (new \fpcm\view\helper\tabItem('main'))
+                ->setText($this->addLangVarPrefix('HEADLINE'))
+                ->setFile( \fpcm\view\view::PATH_COMPONENTS . 'dataview__inline.php' )
+        ]);
+
         $this->view->setFormAction('calendar/overview');
         $this->view->render();
         return true;
@@ -96,7 +101,7 @@ final class overview extends \fpcm\controller\abstracts\module\controller implem
     
     protected function getViewPath() : string
     {
-        return \fpcm\view\view::PATH_COMPONENTS.'dataview';
+        return 'dataview';
     }
 
     public function isAccessible(): bool

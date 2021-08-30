@@ -1,4 +1,4 @@
-## counts_links table definition
+## counts_referrer table definition
 ---
 name: counts_referrer
 primarykey: id

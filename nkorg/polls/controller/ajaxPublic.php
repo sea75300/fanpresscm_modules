@@ -12,20 +12,25 @@ final class ajaxPublic extends \fpcm\controller\abstracts\module\ajaxController 
 
     public function request()
     {
+        $this->response = new \fpcm\model\http\response;
+        
+        $this->returnData = ['code' => 0, 'msg' => $this->language->translate($this->addLangVarPrefix('MSG_PUB_ERRCODE_GEN'))];
+        
         $this->pollId = $this->request->fromPOST('pid', [
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
         
         if (!$this->pollId) {
-            $this->response->setReturnData( new \fpcm\modules\nkorg\polls\models\pubMsg(0) )->fetch();
+            $this->response->setReturnData($this->returnData)->fetch();
         }
-
-        usleep(500);
 
         if ($this->processByParam() === \fpcm\controller\abstracts\controller::ERROR_PROCESS_BYPARAMS) {
             return false;
         }
 
+        usleep(500);
+
+        $this->response->setReturnData($this->returnData)->fetch();
         return true;
     }
 

@@ -1,0 +1,8 @@
+## Module configure config
+---
+sitemappath:
+    type: textInput
+    conf:
+        text: SITEMAPPATH
+        icon: link
+        size: lg

@@ -27,27 +27,15 @@ show_latest_poll:
     type: boolSelect
     conf:
         text: GUI_CONFIG_SHOWLATEST
-        data:
-            remove_corner_left: 1
         icon: sort-alpha-down-alt
         size: lg
-        class: >
-            col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0
-        labelClass: >
-            col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general
 chart_type:
     type: boolSelect
     conf:
         options: $charTypes
         text: GUI_CONFIG_CHARTTYPE
-        data:
-            remove_corner_left: 1
         icon: chart-pie
         size: lg
-        class: >
-            col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0
-        labelClass: >
-            col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general
 vote_expiration_default:
     type: textInput
     conf:
@@ -56,7 +44,3 @@ vote_expiration_default:
         type: number
         icon: stopwatch
         size: lg
-        class: >
-            col-12 col-sm-6 col-md-1 fpcm-ui-field-input-nowrapper-general pr-0
-        labelClass: >
-            col-12 col-sm-6 col-md-3 fpcm-ui-field-label-general

@@ -8,6 +8,7 @@ fpcm.polls = {
     replyOptionsIdSlug: 'fpcm-nkorgpolls-reply-',
 
     init: function () {
+        fpcm.ui_tabs.render('#polls');
         fpcm.polls._initPollsList();
         fpcm.polls._initPollForm();
     },
@@ -40,17 +41,14 @@ fpcm.polls = {
         if (fpcm.vars.jsvars.replyOptionsStart === undefined) {
             return false;
         }
-        
-        fpcm.ui.selectmenu('.fpcm-ui-input-select', {
-            removeCornerLeft: true
-        });
 
         fpcm.polls.replyOptionsStart = fpcm.vars.jsvars.replyOptionsStart;         
 
         jQuery('#btnAddReplyOption').unbind('click');
         jQuery('#btnAddReplyOption').click(function () {
+
             fpcm.polls.replyOptionsStart++;
-            jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone().attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#tabs-replies');
+            jQuery('div.fpcm-ui-nkorgpolls-replyline').last().clone().attr('id', fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart).appendTo('#fpcm-tab-form2-pane');
 
             var id = '#' + fpcm.polls.replyOptionsIdSlug + fpcm.polls.replyOptionsStart;
             jQuery(id).find('label span').text(fpcm.ui.translate('MODULE_NKORGPOLLS_GUI_POLL_REPLY_TXT').replace('{{id}}', fpcm.polls.replyOptionsStart));
