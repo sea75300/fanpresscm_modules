@@ -1,4 +1,4 @@
-# FanPress CM 4 modules
+# FanPress CM 5 modules
 
 This repo includes modules for the FanPress CM news system in version 5. The modules are available via module manager once the system ist installed.
 
