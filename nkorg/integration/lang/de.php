@@ -16,7 +16,7 @@ $lang = [
     'SHOW_PAGENUMBERS' => 'Anzeige von Seiten-Zahlen im Seitentitel',
     'SHOW_ARTICLETITLE' => 'Anzeige von Artikel-Überschriften im Seitentitel',
     'USE_RSS' => 'RSS-Feed verwenden',
-    'TEXT_NOTES' => 'Dieses Module hilft dir bei der Integration von FanPress CM 4.x in deine Seite. Sollten trotz der Beschreibungen noch Fragen bestehen, nutze bitte eine der ' .
+    'TEXT_NOTES' => 'Dieses Module hilft dir bei der Integration von FanPress CM 5.x in deine Seite. Sollten trotz der Beschreibungen noch Fragen bestehen, nutze bitte eine der ' .
     'in unter Kontakt und Support angegebenen Möglichkeiten!!',
     'TEXT_API' => 'Wenn du deine Seite mittels PHP include verwendest, binde wie im Beispiel beschrieben die API-Datei aus dem FanPress-Verzeichnis z. B. iun deiner index.php' .
     ' ein und erzeuge dann ein neues API-Objekt.',
