@@ -46,4 +46,5 @@ $lang = [
     'CRONJOB_ANONYMIZELINKS' => 'Besuchte Links anonymisieren',
     'LABEL_FIELD_CHARTTYPE' => 'Darstellen als',
     'LABEL_FIELD_SORTTYPE' => 'Sortieren nach',
+    'LABEL_FIELD_CHARTMODE' => 'Gruppierung nach',
 ];

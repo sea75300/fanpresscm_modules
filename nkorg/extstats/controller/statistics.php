@@ -78,7 +78,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 ->setClass('fpcm-ui-input-select-articleactions')
                 ->setOptions($dataSource)->setSelected($source)
                 ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED),
-
+            
             (new \fpcm\view\helper\submitButton('setdatespan'))
                 ->setText('GLOBAL_OK')
         ];
