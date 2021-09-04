@@ -50,8 +50,14 @@ final class msgList extends \fpcm\controller\abstracts\module\controller {
             \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
         ]);
 
-        $this->view->assign('headline', $this->addLangVarPrefix('HEADLINE'));
         $this->view->setFormAction('message/list');
+
+        $this->view->addTabs('messages', [
+            (new \fpcm\view\helper\tabItem('main'))
+                ->setText($this->addLangVarPrefix('HEADLINE'))
+                ->setFile( \fpcm\view\view::PATH_COMPONENTS . 'dataview__inline.php' )
+        ]);
+
         $this->view->render();
         return true;
     }
@@ -59,7 +65,7 @@ final class msgList extends \fpcm\controller\abstracts\module\controller {
     protected function getDataViewCols()
     {
         return [
-            (new \fpcm\components\dataView\column('select', ''))->setSize('05')->setAlign('center'),
+            (new \fpcm\components\dataView\column('select', ''))->setSize(1)->setAlign('center'),
             (new \fpcm\components\dataView\column('button', ''))->setSize(1)->setAlign('center'),
             (new \fpcm\components\dataView\column('text', $this->addLangVarPrefix('MSGTEXT_PREVIEW')))->setSize(5),
             (new \fpcm\components\dataView\column('start', $this->addLangVarPrefix('MSGSTART')))->setSize(2),

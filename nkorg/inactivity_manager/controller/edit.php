@@ -2,74 +2,42 @@
 
 namespace fpcm\modules\nkorg\inactivity_manager\controller;
 
-final class edit extends \fpcm\controller\abstracts\module\controller {
+final class edit extends base {
 
     /**
      *
-     * @var \fpcm\modules\nkorg\inactivity_manager\models\message
+     * @var string
      */
-    protected $obj;
-
-    protected function getViewPath() : string
-    {
-        return 'index';
-    }
+    protected $modeStr = 'EDITMSG';
 
     public function request()
     {
-        $id = $this->request->getID();
+        $this->oid = $this->request->getID();
         
-        if (!$id) {
-            $this->view = new \fpcm\view\error($this->addLangVarPrefix('MSGSAVE_NOTFOUND'));
-            $this->view->render();
-            exit;
-        }
-        
-        $this->obj = new \fpcm\modules\nkorg\inactivity_manager\models\message($id);
-        if (!$this->obj->exists()) {
+        if (!$this->oid) {
             $this->view = new \fpcm\view\error($this->addLangVarPrefix('MSGSAVE_NOTFOUND'));
             $this->view->render();
             exit;
         }
 
-        $msgData = $this->request->fetchAll('msg');
-        if (!$this->buttonClicked('save') || !count($msgData)) {
-            return true;
-        }
-
-        \fpcm\modules\nkorg\inactivity_manager\models\message::assignData($this->obj, $msgData);
-        if ($this->obj->getStarttime() >= $this->obj->getStoptime()) {
-            $this->obj->setStoptime(time() + FPCM_DATE_SECONDS);
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSGDATE_FROMTO'));
-            return true;
-        }
-
-        if (!$this->obj->update()) {
-            $this->obj->setStoptime(time() + FPCM_DATE_SECONDS);
-            $this->view->addErrorMessage($this->addLangVarPrefix('MSGSAVE_FAILED'));
-            return true;
-        }
+        parent::request();
         
-        $this->view->addNoticeMessage($this->addLangVarPrefix('MSGSAVE_SUCCESS'));
-        return true;
+        if ($this->obj->exists()) {
+            return true;
+        }
+
+        $this->view = new \fpcm\view\error($this->addLangVarPrefix('MSGSAVE_NOTFOUND'));
+        $this->view->render();
+        exit;
     }
     
     public function process()
     {
-        $this->view->addJsFiles([
-            \fpcm\classes\dirs::getDataUrl(\fpcm\classes\dirs::DATA_MODULES, $this->getModuleKey() . '/js/module.js')
-        ]);
-
-        $this->view->addButton(new \fpcm\view\helper\saveButton('save'));
-        $this->view->setViewVars([
-            'modeStr' => 'ADDMSG',
-            'obj' => $this->obj
-        ]);
         $this->view->setFormAction('message/edit', [
             'id' => $this->obj->getId()
         ]);
-        $this->view->render();
-        return true;
+        
+        parent::process();
     }
 
 }
