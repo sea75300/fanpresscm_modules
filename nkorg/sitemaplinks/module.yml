@@ -5,7 +5,7 @@ author: imagine
 name: Sitemap.xml link list
 description: "Creates editor link list from sitemap.xml files."
 link: https://nobody-knows.org/
-version: 5.0-dev
+version: 5.0.0-b1
 help: 
 requirements:
     system: 5.0.0-a1
