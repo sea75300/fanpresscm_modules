@@ -15,15 +15,13 @@
             <?php $theView->select('chartType')->setText('MODULE_NKORGEXTSTATS_LABEL_FIELD_CHARTTYPE')->setClass('fpcm-ui-input-select-articleactions')->setOptions($chartTypes)->setSelected($chartType)->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED); ?>
             </div>
 
-            <div class="row my-2">
+            <div class="row my-2 <?php if ($isLinks) : ?>d-none<?php endif; ?>">
             <?php $theView->select('chartMode')->setText('MODULE_NKORGEXTSTATS_LABEL_FIELD_CHARTMODE')->setClass('fpcm-ui-input-select-articleactions')->setOptions($chartModes)->setSelected($chartMode)->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED); ?>
             </div>
 
-            <?php if ($isLinks) : ?> 
-            <div class="row my-2">
+            <div class="row my-2 <?php if (!$isLinks) : ?>d-none<?php endif; ?>">
             <?php $theView->select('sortType')->setText('MODULE_NKORGEXTSTATS_LABEL_FIELD_SORTTYPE')->setOptions($sortTypes)->setSelected($sortType)->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED); ?>
             </div>
-            <?php endif; ?> 
         </fieldset>
     </div>
 </div>            
