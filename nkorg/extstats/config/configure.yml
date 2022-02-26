@@ -24,7 +24,7 @@ link_compress:
 show_visitors:
     type: boolSelect
     conf:
-        text: DEAULT_SHOW_VISITORS
+        text: DEFAULT_SHOW_VISITORS
         icon: language
         size: lg
 url_base:

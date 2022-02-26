@@ -344,7 +344,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         );
     }
 
-    final private function fetchData($start, $stop, $mode)
+    private function fetchData($start, $stop, $mode)
     {
         $this->mode = (int) $mode;
 
