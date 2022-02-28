@@ -227,6 +227,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $val = (string) ($value->counthits ?? 0);
 
             $parsed = parse_url($value->url);
+            if (!is_array($parsed)) {                
+                $parsed = [];
+            }
 
             $value->url = $parsed['scheme'] ?? $baseParsed['scheme'];
             $value->url .= '://';
