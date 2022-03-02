@@ -230,6 +230,10 @@ class counter extends \fpcm\model\abstracts\tablelist {
             if (!is_array($parsed)) {                
                 $parsed = [];
             }
+            
+            if (!isset($parsed['path'])) {
+                $parsed['path'] = '';
+            }
 
             $value->url = $parsed['scheme'] ?? $baseParsed['scheme'];
             $value->url .= '://';
@@ -238,7 +242,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $value->url .= isset($parsed['user']) || isset($parsed['pass']) ? '@' : '';
             $value->url .= $parsed['host'] ?? (strpos($parsed['path'], $baseParsed['host']) === false ? $baseParsed['host'] : '');
             $value->url .= isset($parsed['port']) ? ':' . $parsed['port'] : '';
-            $value->url .= $parsed['path'] ?? '';
+            $value->url .= $parsed['path'];
             $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
             $value->url .= $parsed['fragment'] ?? '';
             
