@@ -1,5 +1,5 @@
 <?php /* @var $theView fpcm\view\viewVars */ ?>
-<div class="p-2">
+<div class="p-2 border-5 border-primary border-top">
     <div class="row">
         <div class="col-12 col-sm-6">
             <div class="row g-0">

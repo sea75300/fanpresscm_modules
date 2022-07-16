@@ -5,7 +5,7 @@ author: imagine
 name: Integration Assistant
 description: "Assistant to easy integration of FanPress Cm into you website."
 link: https://nobody-knows.org/
-version: 5.0.0-b1
+version: 5.0.0
 help: 
 requirements:
     system: 5.0.0-a1

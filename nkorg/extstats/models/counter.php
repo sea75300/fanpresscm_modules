@@ -19,6 +19,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
     const SORT_COUNT = 0;
     const SORT_DATE = 1;
     const SORT_LINK = 2;
+    const SORT_REFERER = 3;
     
     const LINK_MAX_GRAPH = 15;
 
@@ -281,7 +282,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $params = [];
         
         $this->getTmeQuery($start, $stop, $where, $params);
-        $this->getOrder($sort, $where);
+        $this->getOrder($sort === self::SORT_LINK ? self::SORT_REFERER : $sort, $where);
 
         $values = $this->dbcon->selectFetch(
             (new \fpcm\model\dbal\selectParams($this->table))
@@ -467,6 +468,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
                 break;
             case self::SORT_LINK :
                 $order = 'url';
+                break;
+            case self::SORT_REFERER :
+                $order = 'refurl';
                 break;
             default:
                 $order = 'counthits DESC';

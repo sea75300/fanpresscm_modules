@@ -5,10 +5,10 @@ author: imagine
 name: Support Module
 description: "Module for support requests."
 link: https://nobody-knows.org/
-version: 4.1.0
+version: 5.0.0
 help: 
 requirements:
-    system: 4.1.0-b3
-    php: 7.0.0
+    system: 5.0.0-a3
+    php: 7.2.0
 tables:
 configOptions:

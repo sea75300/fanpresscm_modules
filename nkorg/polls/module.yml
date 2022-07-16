@@ -5,7 +5,7 @@ author: imagine
 name: Polls
 description: "Module to create polls with single/ multiple answers and so on."
 link: https://nobody-knows.org/
-version: 5.0.0-b1
+version: 5.0.0
 help: 
 useDataFolder: true
 requirements:

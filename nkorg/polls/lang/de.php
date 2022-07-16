@@ -67,5 +67,7 @@ $lang = [
     'MSG_ERR_CLOSEPOLL' => 'Die gewählte Umfrage konnte nicht geschlossen werden!',
     
     'CRONJOB_ANONYMIZEVOTELOG' => 'Stimmenübersicht anonymisieren',
+    'SYSCHECK_FOLDER_MODULE_NKORGPOLLS' => 'Umfrage-Templates',
+    'SYSCHECK_FOLDER_NKORG_POLLS' => 'Umfrage-Templates'
 
 ];
