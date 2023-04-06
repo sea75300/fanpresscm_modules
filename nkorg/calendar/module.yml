@@ -5,11 +5,11 @@ author: imagine
 name: Calendar
 description: "Calendar module"
 link: https://nobody-knows.org/
-version: 1.0.4
+version: 1.0.5
 help: 
 requirements:
-    system: 5.0.0-a1
-    php: 7.2.0
+    system: 5.1.0
+    php: 8.0.0
 tables:
     add:
         appointments

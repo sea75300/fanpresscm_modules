@@ -9,6 +9,7 @@ class poll_reply extends dbObj {
     protected $pollid = 0;
     protected $text = '';
     protected $votes = 0;
+    protected $color = '';
     protected $createtime = 0;
     protected $createuser = 0;
 
@@ -22,6 +23,10 @@ class poll_reply extends dbObj {
 
     public function getVotes() {
         return (int) $this->votes;
+    }
+
+    public function getColor() {
+        return (string) $this->color ?: \fpcm\components\charts\chartItem::getRandomColor();
     }
 
     public function getCreatetime() {
@@ -44,6 +49,16 @@ class poll_reply extends dbObj {
 
     public function setVotes(int $votes) {
         $this->votes = $votes;
+        return $this;
+    }
+
+    public function setColor(string $color = '') {
+        
+        if (!trim($color)) {
+            $color = \fpcm\components\charts\chartItem::getRandomColor();
+        }
+
+        $this->color = $color;
         return $this;
     }
 

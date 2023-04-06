@@ -1,7 +1,7 @@
 <?php /* @var $theView \fpcm\view\viewVars */ ?>
 <?php /* @var $poll fpcm\modules\nkorg\polls\models\poll */ ?>
 <?php /* @var $reply fpcm\modules\nkorg\polls\models\poll_reply */ ?>
-<div class="row py-2 border-5 border-primary border-top">
+<div class="row py-2">
     <?php $theView
             ->textInput("polldata[text]")
             ->setText('MODULE_NKORGPOLLS_GUI_POLL_TEXT')

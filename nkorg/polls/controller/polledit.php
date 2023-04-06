@@ -58,10 +58,4 @@ final class polledit extends pollbase {
         return $chart;
     }
 
-    private function getRandomColor()
-    {
-        $colStr = '#' . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255)) . dechex(mt_rand(0, 255));
-        return strlen($colStr) === 7 ? $colStr : str_pad($colStr, 7, dechex(mt_rand(0, 16)));
-    }
-
 }

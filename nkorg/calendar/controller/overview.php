@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\calendar\controller;
 
-final class overview extends \fpcm\controller\abstracts\module\controller implements \fpcm\controller\interfaces\isAccessible {
+final class overview extends \fpcm\controller\abstracts\module\controller {
 
     use \fpcm\controller\traits\common\dataView;
 

@@ -15,7 +15,7 @@ final class chartdraw {
             
             $labels[] = $reply->getText().' ('.$reply->getPercentage($poll->getVotessum()).'%)';
             $data[] = $reply->getVotes();
-            $colors[] = \fpcm\components\charts\chartItem::getRandomColor();
+            $colors[] = $reply->getColor();
         }
         
         $chart->setLabels($labels);

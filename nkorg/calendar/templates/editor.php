@@ -1,6 +1,6 @@
 <?php /* @var $theView \fpcm\view\viewVars */ ?>
 <?php /* @var $appointment fpcm\modules\nkorg\calendar\models\appointment */ ?>
-<div class="row row-cols-2 pt-3 border-5 border-primary border-top">
+<div class="row row-cols-2 pt-3">
     
     <div class="col">
         <?php $theView

@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\inactivity_manager\controller;
 
-class base extends \fpcm\controller\abstracts\module\controller implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces\requestFunctions {
+class base extends \fpcm\controller\abstracts\module\controller implements \fpcm\controller\interfaces\requestFunctions {
 
     /**
      *

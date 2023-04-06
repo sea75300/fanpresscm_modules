@@ -5,15 +5,15 @@ author: imagine
 name: Polls
 description: "Module to create polls with single/ multiple answers and so on."
 link: https://nobody-knows.org/
-version: 5.0.0
+version: 5.1.0
 help: 
 useDataFolder: true
 requirements:
-    system: 5.0.0-a1
-    php: 7.2.0
+    system: 5.1.0
+    php: 8.0.0
 tables:
     alter:
-        polls
+        polls_replies
 configOptions:
     add:
         show_latest_poll: 0

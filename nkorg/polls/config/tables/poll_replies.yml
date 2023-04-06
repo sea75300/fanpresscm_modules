@@ -24,6 +24,10 @@ cols:
         type: bigint
         length: 20
         params: NOT NULL
+    color:
+        type: varchar
+        length: 64
+        params: NOT NULL
     createtime:
         type: bigint
         length: 20

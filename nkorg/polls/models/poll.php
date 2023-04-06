@@ -152,6 +152,7 @@ class poll extends dbObj {
 
             $obj = new poll_reply();
             $obj->setPollid($this->getId())->setText($reply)->setCreatetime($this->getCreatetime())->setCreateuser($this->getCreateuser());
+            $obj->setColor();
             if (!$obj->save()) {
                 trigger_error('Unable to save reply "' . $reply . '" for poll "' . $this->getText() . '"!');
                 return false;
@@ -187,6 +188,10 @@ class poll extends dbObj {
             $obj = new poll_reply($id);
             $obj->setText(trim($reply));
             $obj->setVotes($sum);
+            if (!trim($obj->getColor())) {
+                $obj->setColor();
+            }
+            
             if (!$obj->update()) {
                 trigger_error('Unable to update reply "' . $reply . '" for poll "' . $this->getText() . '"!');
                 return false;

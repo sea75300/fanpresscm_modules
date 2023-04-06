@@ -3,7 +3,7 @@
 namespace fpcm\modules\nkorg\calendar\controller;
 
 class base extends \fpcm\controller\abstracts\module\controller
-implements \fpcm\controller\interfaces\isAccessible, \fpcm\controller\interfaces\requestFunctions {
+implements \fpcm\controller\interfaces\requestFunctions {
 
     /**
      *

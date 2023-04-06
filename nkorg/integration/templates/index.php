@@ -1,5 +1,5 @@
 <?php /* @var $theView fpcm\view\viewVars */ ?>
-<div class="accordion border-top border-5 border-primary" id="fpcm-accordion">    
+<div class="accordion" id="fpcm-accordion">    
     <?php foreach ($items as $descr => $value) : ?>
         <?php if ($value === null) continue; ?>
     <div class="accordion-item" data-bs-target="#ac-item-<?php print md5($descr); ?>">
