@@ -188,7 +188,7 @@ class poll extends dbObj {
             $obj = new poll_reply($id);
             $obj->setText(trim($reply));
             $obj->setVotes($sum);
-            if (!trim($obj->getColor())) {
+            if (!trim($obj->getColor(true))) {
                 $obj->setColor();
             }
             

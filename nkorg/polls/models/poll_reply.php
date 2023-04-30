@@ -25,8 +25,13 @@ class poll_reply extends dbObj {
         return (int) $this->votes;
     }
 
-    public function getColor() {
-        return (string) $this->color ?: \fpcm\components\charts\chartItem::getRandomColor();
+    public function getColor(bool $force = false) {
+        
+        if ($this->color || $force) {
+            return (string) $this->color;
+        }
+        
+        return \fpcm\components\charts\chartItem::getRandomColor();
     }
 
     public function getCreatetime() {
