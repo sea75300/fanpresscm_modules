@@ -6,6 +6,8 @@ class appointments extends \fpcm\model\abstracts\tablelist {
 
     use \fpcm\module\tools;
 
+    const CACHE_NAME = 'nkorg/calendar';
+    
     public function __construct()
     {
         $this->table = $this->getObject()->getFullPrefix('appointments');

@@ -93,6 +93,7 @@ class appointment extends \fpcm\model\abstracts\dataset {
             return false;
         }
 
+        (new \fpcm\classes\cache())->cleanup(appointments::CACHE_NAME);
         $this->id = $this->dbcon->getLastInsertId();
         return $this->id;
     }
@@ -101,11 +102,13 @@ class appointment extends \fpcm\model\abstracts\dataset {
     {
         $params = $this->getPreparedSaveParams();        
         $params[] = $this->getId();
-
+        
         if (!$this->dbcon->update($this->table, array_slice(array_keys($params), 0, -1), array_values($params), 'id = ?')) {
+            (new \fpcm\classes\cache())->cleanup(appointments::CACHE_NAME);
             return false;
         }
 
+        (new \fpcm\classes\cache())->cleanup(appointments::CACHE_NAME);
         return true;
     }
 

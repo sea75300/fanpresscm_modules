@@ -23,6 +23,14 @@ final class apiCallFunction extends \fpcm\module\event {
 
     final protected function display()
     {
+        $cache = new \fpcm\classes\cache();
+
+        if (!$cache->isExpired(\fpcm\modules\nkorg\calendar\models\appointments::CACHE_NAME)) {
+            print $cache->read(\fpcm\modules\nkorg\calendar\models\appointments::CACHE_NAME);
+            return true;
+        }
+        
+        
         $search = new \fpcm\modules\nkorg\calendar\models\search();
         $search->start = mktime(0,0,0);
         $search->stop = mktime(23,59,59) + $this->getObject()->getOption('frontend_days') * FPCM_DATE_SECONDS;
@@ -46,7 +54,11 @@ final class apiCallFunction extends \fpcm\module\event {
 
         $html[] = '</ul>';
         
-        print implode(PHP_EOL, $html);
+        $res = implode(PHP_EOL, $html);
+        
+        $cache->write(\fpcm\modules\nkorg\calendar\models\appointments::CACHE_NAME, $res);
+        
+        print $res;
         return true;
     }
 
