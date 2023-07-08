@@ -64,8 +64,8 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $isLinks = in_array($source, [\fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS, \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER]);
 
         $this->view->assign('isLinks', $isLinks);
-        $this->view->assign('start', trim($start) ? $start : '');
-        $this->view->assign('stop', trim($stop) ? $stop : '');
+        $this->view->assign('start', $start ?? '');
+        $this->view->assign('stop', $stop ?? '');
         $this->view->assign('chartTypes', $chartTypes);
         $this->view->assign('chartType', $chartType);
         $this->view->assign('sortTypes', $sortTypes);
@@ -168,14 +168,14 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
     private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop, &$sortType)
     {
         $source = $this->request->fromPOST('source');
-        if (!trim($source)) {
+        if ($source === null || !trim($source)) {
             $source = $this->config->module_nkorgextstats_show_visitors
                     ? \fpcm\modules\nkorg\extstats\models\counter::SRC_VISITORS
                     : \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
         }
         
         $chartType = $this->request->fromPOST('chartType');
-        if (!trim($chartType)) {
+        if ($chartType === null || !trim($chartType)) {
             $chartType = 'bar';
         }
 
@@ -187,7 +187,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
 
-        if (!trim($chartMode)) {
+        if ($chartMode !== null && !trim($chartMode)) {
             $chartMode = $this->config->module_nkorgextstats_show_visitors
                     ? \fpcm\modules\nkorg\extstats\models\counter::MODE_DAY
                     : \fpcm\modules\nkorg\extstats\models\counter::MODE_MONTH;
@@ -204,7 +204,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $start = date('Y-m-d', time() - $this->config->module_nkorgextstats_timespan_default * 86400);
         }
         
-        if (trim($stop) && !\fpcm\classes\tools::validateDateString($stop)) {
+        if ($stop === null || trim($stop) && !\fpcm\classes\tools::validateDateString($stop)) {
             $stop = '';
         }
 

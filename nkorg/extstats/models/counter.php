@@ -354,6 +354,15 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
     private function fetchData($start, $stop, $mode)
     {
+
+        if ($start === null) {
+            $start = '';
+        }
+
+        if ($stop === null) {
+            $stop = '';
+        }
+
         $this->mode = (int) $mode;
 
         $hash = \fpcm\classes\tools::getHash(__METHOD__ . json_encode(func_get_args()));
