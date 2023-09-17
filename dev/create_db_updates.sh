@@ -35,11 +35,18 @@ if (!is_array($ymlFiles) || !count($ymlFiles)) {
 }
 
 require_once 'Spyc.php';
+
+$path = __DIR__.'/modules.db';
+if (!file_exists($path) || !is_readable($path)) {
+    exit('Sqlite db file not available or readable!'.PHP_EOL.PHP_EOL);
+}
+
+$db = new SQLite3($path);
 array_map('showMetaData', $ymlFiles);
 
 function showMetaData(string $fileName) {
     
-    global $req_system, $pkg_build;
+    global $req_system, $pkg_build, $db;
 
     $obj = Spyc::YAMLLoad($fileName);
     
@@ -62,8 +69,8 @@ function showMetaData(string $fileName) {
         'version' => $obj['version'],
         'name' => $obj['name'],
         'author' => $obj['author'],
-        'link' => $obj['link'],
-        'description' => $obj['description'],
+        'link' => $db->escapeString($obj['link']),
+        'description' => $db->escapeString($obj['description']),
         'hash' => $hash,
         'signature' => $signature,
         'packageUrl' => $pkgUrl,
@@ -85,9 +92,14 @@ function showMetaData(string $fileName) {
     $modKey = $data['modkey'];
     unset($data['modkey']);
     
+    $sql = '';
+    
     foreach ($data as $key => $value) {
-        printf("UPDATE modules SET `%s` = '%s' where `modkey` = '%s' AND (req_system = '%s' or req_system = '%s');\n", $key, $value, $modKey, $obj['requirements']['system'], $req_system);
+        $sql .= sprintf("UPDATE modules SET `%s` = '%s' where `modkey` = '%s' AND (req_system = '%s' or req_system = '%s');\n", $key, $value, $modKey, $obj['requirements']['system'], $req_system);
     }
-   
-    print PHP_EOL.'= = = = ='.PHP_EOL;
+    
+    $sql .= PHP_EOL.PHP_EOL;
+    
+    file_put_contents('update.sql.txt', $sql, FILE_APPEND);
+
 }
