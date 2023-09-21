@@ -98,7 +98,10 @@ final class apiCallFunction extends \fpcm\module\event {
         $countObj->setCountHits($countObj->getCountHits() + 1);
         $countObj->setLastHit(time());
         $countObj->setLastip(\fpcm\classes\loader::getObject('\fpcm\model\http\request')->getIp());
-        $countObj->setLastagent(substr(filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING), 0, 128));
+        
+        $usrAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_URL) ?? '';
+        
+        $countObj->setLastagent($usrAgent ? substr($usrAgent, 0, 128) : '');
         call_user_func([$countObj, $fn]);
         return true;
     }
