@@ -23,7 +23,6 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
     public function process()
     {
-        $key = $this->getModuleKey();
 
         $chartTypes = [
             $this->addLangVarPrefix('TYPEBAR') => \fpcm\components\charts\chart::TYPE_BAR,
@@ -55,7 +54,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             $this->addLangVarPrefix('FROMREFERRER') => \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER
         ];
 
-        $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop, $sortType);
+        $this->getSettings($source, $chartType, $chartMode, $modeStr, $start, $stop, $sortType, $search);
         if (!trim($chartType)) {
             $chartType = \fpcm\components\charts\chart::TYPE_BAR;
         }
@@ -72,6 +71,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->assign('sortType', $sortType);
         $this->view->assign('chartModes', $chartModes);
         $this->view->assign('chartMode', $chartMode);
+        $this->view->assign('search', $search);        
 
         $buttons = [
             (new \fpcm\view\helper\select('source'))
@@ -121,7 +121,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             return true;
         }
 
-        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode, $sortType, $chart);
+        $values = call_user_func([$counter, $fn], $start, $stop, $chartMode, $sortType, $search);
         $this->view->assign('chart', $chart);
         $this->view->assign('notfound', empty($values) ? true : false);
         $this->view->assign('minDate', date('Y-m-d', $minMax['minDate']));
@@ -134,7 +134,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'chart' => $counter->getChart(),
                 'hasList' => $isLinks && isset($values['listValues']),
                 'showMode' => $hideMode ? false : true,
-                'showDate' => $isLinks
+                'showDate' => $isLinks,
             ]
         ]);
         
@@ -165,7 +165,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         return true;
     }
     
-    private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop, &$sortType)
+    private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop, &$sortType, &$search)
     {
         $source = $this->request->fromPOST('source');
         if ($source === null || !trim($source)) {
@@ -173,6 +173,8 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                     ? \fpcm\modules\nkorg\extstats\models\counter::SRC_VISITORS
                     : \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
         }
+        
+        $search = $this->request->fromPOST('search');
         
         $chartType = $this->request->fromPOST('chartType');
         if ($chartType === null || !trim($chartType)) {
@@ -187,7 +189,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
 
-        if ($chartMode !== null && !trim($chartMode)) {
+        if ($chartMode === null || !trim($chartMode)) {
             $chartMode = $this->config->module_nkorgextstats_show_visitors
                     ? \fpcm\modules\nkorg\extstats\models\counter::MODE_DAY
                     : \fpcm\modules\nkorg\extstats\models\counter::MODE_MONTH;
