@@ -70,7 +70,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         return $this->fetchData($start, $stop, $mode);
     }
 
-    public function fetchFIles($start, $stop, $mode = 1)
+    public function fetchFiles($start, $stop, $mode = 1)
     {
         $this->table = \fpcm\classes\database::tableFiles;
         $this->createTimeVar = 'filetime';
@@ -196,7 +196,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         return $data['labels'];
     }
 
-    public function fetchLinks($start, $stop, $mode = 1, $sort = 0)
+    public function fetchLinks($start, $stop, $mode = 1, $sort = 0, $search = '')
     {
         $this->table = countLink::TABLE;
 
@@ -206,6 +206,12 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $params = [];
         
         $this->getTmeQuery($start, $stop, $where, $params);
+
+        if ($search !== null && trim($search)) {
+            $where .= sprintf(' AND (url %s ? OR lastip %s ? OR lastagent %s ?) ', $this->dbcon->dbLike(), $this->dbcon->dbLike(), $this->dbcon->dbLike());
+            $params = array_pad($params, count($params)+3, '%'.$search.'%');
+        }
+
         $this->getOrder($sort, $where);
 
         $values = $this->dbcon->selectFetch(
@@ -272,7 +278,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         return $data;
     }
 
-    public function fetchReferrer($start, $stop, $mode = 1, $sort = 0)
+    public function fetchReferrer($start, $stop, $mode = 1, $sort = 0, $search = '')
     {
         $this->table = countReferrer::TABLE;
 
@@ -282,6 +288,12 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $params = [];
         
         $this->getTmeQuery($start, $stop, $where, $params);
+
+        if ($search !== null && trim($search)) {
+            $where .= sprintf(' AND (refurl %s ?) ', $this->dbcon->dbLike());
+            $params[] = '%'.$search.'%';
+        }
+
         $this->getOrder($sort === self::SORT_LINK ? self::SORT_REFERER : $sort, $where);
 
         $values = $this->dbcon->selectFetch(

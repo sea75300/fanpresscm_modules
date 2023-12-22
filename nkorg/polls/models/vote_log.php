@@ -47,7 +47,7 @@ class vote_log extends dbObj implements \JsonSerializable {
         return $this;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize(): array {
         return [
             'replyid' => $this->getId(),
             'replytime' => (string) new \fpcm\view\helper\dateText($this->getReplytime()),
