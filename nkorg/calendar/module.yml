@@ -8,11 +8,8 @@ link: https://nobody-knows.org/
 version: 1.0.6
 help: 
 requirements:
-    system: 5.1.0
+    system: 5.2.0-a1
     php: 8.0.0
 tables:
-    add:
-        appointments
 configOptions:
-    add:
-        frontend_days: 30
+    frontend_days: 30

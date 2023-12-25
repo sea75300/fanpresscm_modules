@@ -5,12 +5,11 @@ author: imagine
 name: Sitemap.xml link list
 description: "Creates editor link list from sitemap.xml files."
 link: https://nobody-knows.org/
-version: 5.0.0
+version: 5.2.0
 help: 
 requirements:
-    system: 5.0.0-a1
+    system: 5.2.0-a1
     php: 7.2.0
 tables:
 configOptions:
-    add:
-        sitemappath: /sitemap.xml
+    sitemappath: /sitemap.xml

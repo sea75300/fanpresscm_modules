@@ -8,20 +8,15 @@ link: https://nobody-knows.org/
 version: 5.0.2
 help: 
 requirements:
-    system: 5.0.0-a1
+    system: 5.2.0-a1
     php: 7.2.0
 tables:
-    add:
-        counts_referrer
-    alter:
-        counts_links
 configOptions:
-    add:
-        cookie_duration: 3600
-        timespan_default: 30
-        link_compress: 50
-        show_visitors: 0
-        url_base: "https://"
-        calc_unique: 1
+    cookie_duration: 3600
+    timespan_default: 30
+    link_compress: 50
+    show_visitors: 0
+    url_base: "https://"
+    calc_unique: 1
 crons:
     anonymizeLinks: 2419200

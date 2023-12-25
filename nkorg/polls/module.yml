@@ -9,15 +9,12 @@ version: 5.1.1
 help: 
 useDataFolder: true
 requirements:
-    system: 5.1.0
+    system: 5.2.0-a1
     php: 8.0.0
 tables:
-    alter:
-        polls_replies
 configOptions:
-    add:
-        show_latest_poll: 0
-        vote_expiration_default: 2678400
-        chart_type: pie
+    show_latest_poll: 0
+    vote_expiration_default: 2678400
+    chart_type: pie
 crons:
     anonymizeVotelog: 2419200
