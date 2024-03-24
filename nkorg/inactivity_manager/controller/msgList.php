@@ -11,6 +11,12 @@ final class msgList extends \fpcm\controller\abstracts\module\controller {
      * @var \fpcm\modules\nkorg\inactivity_manager\models\messages
      */
     protected $obj;
+    
+    /**
+     * 
+     * @var \fpcm\components\dataView\dataView
+     */
+    protected $dataView;
 
     public function request()
     {

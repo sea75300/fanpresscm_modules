@@ -5,6 +5,12 @@ namespace fpcm\modules\nkorg\calendar\controller;
 final class overview extends \fpcm\controller\abstracts\module\controller {
 
     use \fpcm\controller\traits\common\dataView;
+    
+    /**
+     * 
+     * @var \fpcm\components\dataView\dataView
+     */
+    protected $dataView;
 
     public function process()
     {

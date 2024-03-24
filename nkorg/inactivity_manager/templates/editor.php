@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-12 col-sm-6">
             <div class="row g-0">
-                <?php $theView->dateTimeInput('msg[dateTo]')->setText('MODULE_NKORGINACTIVITY_MANAGER_MSGEND')->setValue(date('Y-m-d', $obj->getStarttime())); ?>
+                <?php $theView->dateTimeInput('msg[dateTo]')->setText('MODULE_NKORGINACTIVITY_MANAGER_MSGEND')->setValue(date('Y-m-d', $obj->getStoptime())); ?>
             </div>
         </div>
         <div class="col align-self-center mb-3">
