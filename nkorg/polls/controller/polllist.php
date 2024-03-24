@@ -6,6 +6,12 @@ final class polllist extends \fpcm\controller\abstracts\module\controller {
 
     use \fpcm\controller\traits\common\dataView;
     
+    /**
+     * 
+     * @var \fpcm\components\dataView\dataView
+     */
+    protected $dataView;
+
     protected function getViewPath() : string
     {
         return 'dataview';
