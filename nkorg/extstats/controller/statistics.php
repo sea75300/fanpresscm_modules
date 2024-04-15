@@ -5,13 +5,13 @@ namespace fpcm\modules\nkorg\extstats\controller;
 final class statistics extends \fpcm\controller\abstracts\module\controller {
 
     /**
-     * 
+     *
      * @var \fpcm\components\dataView\dataView
      */
     private $dv;
 
     /**
-     * 
+     *
      * @var bool
      */
     private $hasIpAgent;
@@ -71,14 +71,14 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->assign('sortType', $sortType);
         $this->view->assign('chartModes', $chartModes);
         $this->view->assign('chartMode', $chartMode);
-        $this->view->assign('search', $search);        
+        $this->view->assign('search', $search);
 
         $buttons = [
             (new \fpcm\view\helper\select('source'))
                 ->setClass('fpcm-ui-input-select-articleactions')
                 ->setOptions($dataSource)->setSelected($source)
                 ->setFirstOption(\fpcm\view\helper\select::FIRST_OPTION_DISABLED),
-            
+
             (new \fpcm\view\helper\submitButton('setdatespan'))
                 ->setText('GLOBAL_OK')
         ];
@@ -127,7 +127,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->assign('minDate', date('Y-m-d', $minMax['minDate']));
 
         $this->getDataview($values, $isLinks, $source);
-        
+
         $this->view->addJsVars([
             'extStats' => [
                 'delList' => $source,
@@ -137,7 +137,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                 'showDate' => $isLinks,
             ]
         ]);
-        
+
         $this->view->addJslangVars([
             $this->addLangVarPrefix('HITS_LIST_LINK'),
             $this->addLangVarPrefix('HITS_LIST_COUNT'),
@@ -151,20 +151,20 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $this->view->addJsFiles($jsF);
         $this->view->addCssFiles($chart->getCssFiles());
-        
+
         $this->view->addTabs('extstats', [
             (new \fpcm\view\helper\tabItem('stats'))
                 ->setText( $this->language->translate(array_search($source, $dataSource)) . ' ' . (!$hideMode && $modeStr ? $this->language->translate($this->addLangVarPrefix('BY'.$modeStr)) : '') )
                 ->setModulekey($this->getModuleKey())
                 ->setFile(\fpcm\view\view::PATH_MODULE . 'index' )
         ]);
-        
+
         $this->view->addFromModule(['module.js']);
         $this->view->setFormAction('extstats/statistics');
         $this->view->render();
         return true;
     }
-    
+
     private function getSettings(&$source, &$chartType, &$chartMode, &$modeStr, &$start, &$stop, &$sortType, &$search)
     {
         $source = $this->request->fromPOST('source');
@@ -173,9 +173,9 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
                     ? \fpcm\modules\nkorg\extstats\models\counter::SRC_VISITORS
                     : \fpcm\modules\nkorg\extstats\models\counter::SRC_ARTICLES;
         }
-        
+
         $search = $this->request->fromPOST('search');
-        
+
         $chartType = $this->request->fromPOST('chartType');
         if ($chartType === null || !trim($chartType)) {
             $chartType = 'bar';
@@ -201,11 +201,11 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $start = $this->request->fromPOST('dateFrom');
         $stop = $this->request->fromPOST('dateTo');
-        
+
         if ($start === null || !\fpcm\classes\tools::validateDateString($start)) {
             $start = date('Y-m-d', time() - $this->config->module_nkorgextstats_timespan_default * 86400);
         }
-        
+
         if ($stop === null || trim($stop) && !\fpcm\classes\tools::validateDateString($stop)) {
             $stop = '';
         }
@@ -220,11 +220,11 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         }
 
         $this->hasIpAgent = $source !== \fpcm\modules\nkorg\extstats\models\counter::SRC_REFERRER;
-        
+
         $this->dv = new \fpcm\components\dataView\dataView('extendedstats-list');
         $this->view->addJsFiles($this->dv->getJsFiles());
         $this->view->addJsLangVars($this->dv->getJsLangVars());
-        
+
         $this->dv->addColumns([
             (new \fpcm\components\dataView\column('btn', ''))->setSize('1')->setAlign('center'),
             (new \fpcm\components\dataView\column('link', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('4'),
@@ -233,11 +233,11 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         ]);
 
         if ($this->hasIpAgent) {
-        
+
             $this->dv->addColumns([
                 (new \fpcm\components\dataView\column('ip', $this->addLangVarPrefix('HITS_LIST_IP')))->setSize('2')->setAlign('center'),
                 (new \fpcm\components\dataView\column('useragent', $this->addLangVarPrefix('HITS_LIST_USERAGENT')))->setSize('2')->setAlign('center')
-            ]); 
+            ]);
 
         }
 
@@ -245,13 +245,13 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
         $this->view->addJsVars($this->dv->getJsVars());
         return true;
     }
-    
+
     private function addDvRow(array $value)
     {
         if (!count($value)) {
             return false;
         }
-        
+
         $btn = [
             (string) (new \fpcm\view\helper\button('entry_' . $value['intid']))->setText('GLOBAL_DELETE')->setIcon('trash')->setIconOnly(true)->setData(['entry' =>  $value['intid']])->setClass('fpcm-extstats-links-delete'),
             (string) (new \fpcm\view\helper\openButton('open_' . $value['intid']))->setText('GLOBAL_OPENNEWWIN')->setUrl($value['fullUrl'])->setTarget('_blank')->setRel('external')
@@ -263,7 +263,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
             new \fpcm\components\dataView\rowCol('count', $value['value'] ),
             new \fpcm\components\dataView\rowCol('latest', $value['latest'] ),
         ];
-        
+
         if ($this->hasIpAgent) {
             $row[] = new \fpcm\components\dataView\rowCol('ip', $value['lastip'] ?? $this->language->translate('GLOBAL_NOTFOUND') );
             $row[] = new \fpcm\components\dataView\rowCol('useragent', $value['lastagent'] ?? $this->language->translate('GLOBAL_NOTFOUND') );
