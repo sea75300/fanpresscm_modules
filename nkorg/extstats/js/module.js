@@ -5,7 +5,7 @@ if (fpcm === undefined) {
 fpcm.extStats = {
 
     init: function () {
-        
+
         fpcm.extStats.drawList();
         fpcm.extStats.drawChart();
 
@@ -16,7 +16,7 @@ fpcm.extStats = {
         if (!fpcm.vars.jsvars.extStats.chart) {
             return true;
         }
-        
+
         window.chart = fpcm.ui_chart.draw(fpcm.vars.jsvars.extStats.chart);
     },
 
@@ -30,22 +30,28 @@ fpcm.extStats = {
             fpcm.dataview.render('extendedstats-list');
         }
 
-        jQuery('.fpcm-extstats-links-delete').unbind('click');
-        jQuery('.fpcm-extstats-links-delete').click(function () {
-            
-            var btnParent = jQuery(this).parent().parent();
+        fpcm.dom.bindClick('.fpcm-extstats-links-delete', function (_ev, _ui) {
+
+            var _entryId = parseInt(_ui.dataset.entry);
+            _ui.firstElementChild.classList.replace('fa-trash', 'fa-spinner');
+            _ui.firstElementChild.classList.add('fa-spin');
+
             fpcm.ajax.post('extstats/delete', {
+                quiet: true,
                 data: {
-                    id: jQuery(this).data('entry'),
+                    id: _entryId,
                     obj: fpcm.vars.jsvars.extStats.delList
                 },
                 execDone: function (result) {
 
+                    _ui.firstElementChild.classList.remove('fa-spin');
                     if (!result.code) {
+                        _ui.firstElementChild.classList.replace('fa-spinner', 'fa-ban');
+                        _ui.firstElementChild.classList.add('text-danger');
                         return false;
                     }
 
-                    jQuery(btnParent).remove();
+                    _ui.parentElement.parentElement.remove();
                 }
             });
 

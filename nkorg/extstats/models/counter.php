@@ -5,7 +5,7 @@ namespace fpcm\modules\nkorg\extstats\models;
 class counter extends \fpcm\model\abstracts\tablelist {
 
     use \fpcm\module\tools;
-    
+
     const MODE_MONTH = 1;
     const MODE_YEAR = 2;
     const MODE_DAY = 3;
@@ -20,14 +20,14 @@ class counter extends \fpcm\model\abstracts\tablelist {
     const SORT_DATE = 1;
     const SORT_LINK = 2;
     const SORT_REFERER = 3;
-    
+
     const LINK_MAX_GRAPH = 15;
 
     protected $mode;
     protected $months;
     protected $table;
     protected $createTimeVar = 'createtime';
-    
+
     protected $chart;
 
     public function setChart(\fpcm\components\charts\chart $chart): void
@@ -39,7 +39,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
     {
         return $this->chart;
     }
-        
+
     public function deleteLinkEntry($id)
     {
         $result = $this->dbcon->delete(countLink::TABLE, 'id = ?', [
@@ -95,7 +95,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         if (!$values) {
             return [];
         }
-        
+
         $articles = [];
         foreach ($values as $value) {
             $articles[$value->id] = $value->title;
@@ -112,7 +112,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         if (!$values) {
             return [];
         }
-        
+
 
         $data = [];
         foreach ($values as $value) {
@@ -122,12 +122,12 @@ class counter extends \fpcm\model\abstracts\tablelist {
             }
 
             $len = strlen($articles[$value->article_id]);
-            
+
             $data['labels'][] = ( $len >= 20 ? substr($articles[$value->article_id], 0, 20).'...' : $articles[$value->article_id] ). ' ('.$value->article_id.')';
             $data['values'][] = (string) $value->counted;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
-        
+
         $this->chart->setLabels($data['labels']);
         $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));
 
@@ -140,14 +140,14 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $this->createTimeVar = 'countdt';
         $this->mode = (int) $mode;
         $this->months = $this->language->translate('SYSTEM_MONTHS');
-        
+
         $where = '1=1';
         $params = [];
 
         $where .= (trim($start) ? ' AND ' . $this->createTimeVar . ' >= ?'  : '');
         $where .= (trim($stop) ? ' AND ' . $this->createTimeVar . ' < ?' : '');
         $where .= ' GROUP BY dtstr '.$this->dbcon->orderBy(['dtstr ASC']);
-        
+
         if (trim($start)) {
             $params[] = strtotime($start);
         }
@@ -155,7 +155,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         if (trim($stop)) {
             $params[] = strtotime($stop);
         }
-        
+
         $items = 'SUM(countunique) AS sumunique, SUM(counthits) as sumhits, count(id) AS countedds, '. call_user_func([$this, 'getSelectItem' . ucfirst($this->dbcon->getDbtype())]);
 
         $values = $this->dbcon->selectFetch(
@@ -178,14 +178,14 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['hits']['values'][] = (string) ($value->sumhits ?? $value->counthits);
             $data['hits']['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
-        
+
         $unique = $this->getObject()->getOption('calc_unique');
         if (!$unique) {
             $data['unique'] = [];
         }
-        
+
         $this->chart->setLabels($data['labels']);
-        
+
         $index  = 0;
         if ($unique) {
             $this->chart->setValues((new \fpcm\components\charts\chartItem($data['unique']['values'], $data['unique']['colors']))->setFill(true), 0);
@@ -202,9 +202,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         $where = '1=1 ';
         $this->createTimeVar = 'lasthit';
-        
+
         $params = [];
-        
+
         $this->getTmeQuery($start, $stop, $where, $params);
 
         if ($search !== null && trim($search)) {
@@ -232,14 +232,32 @@ class counter extends \fpcm\model\abstracts\tablelist {
         foreach ($values as $value) {
 
             $val = (string) ($value->counthits ?? 0);
-
             $parsed = parse_url($value->url);
-            if (!is_array($parsed)) {                
+
+            if (!is_array($parsed)) {
                 $parsed = [];
             }
-            
+
             if (!isset($parsed['path'])) {
                 $parsed['path'] = '';
+            }
+
+            if (isset($parsed['path']) && count($parsed) === 1) {
+
+                $tmpEx = explode('.', $parsed['path'], 3);
+                $tmpExC = count($tmpEx);
+
+                if (str_contains($parsed['path'], $baseParsed['host'])) {
+                    $parsed['host'] = $baseParsed['host'];
+                    $parsed['path'] = '';
+                }
+                elseif (
+                    ( $tmpExC === 3 && str_contains($baseParsed['host'], $tmpEx[1]) ) ||
+                    ( $tmpExC === 2 && str_contains($baseParsed['host'], $tmpEx[0]) ) 
+                ) {
+                    $parsed['host'] = $parsed['path'];
+                    $parsed['path'] = '';
+                }
             }
 
             $value->url = $parsed['scheme'] ?? $baseParsed['scheme'];
@@ -252,7 +270,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $value->url .= $parsed['path'];
             $value->url .= isset($parsed['query']) ? '?'.$parsed['query'] : '';
             $value->url .= $parsed['fragment'] ?? '';
-            
+
             $data['labels'][] = strlen($value->url) >= 40 ? substr($value->url, 0, 40) . '...' : $value->url;
             $data['values'][] = $val;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
@@ -271,9 +289,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $data['labels'] = array_slice($data['labels'], 0, self::LINK_MAX_GRAPH);
         $data['values'] = array_slice($data['values'], 0, self::LINK_MAX_GRAPH);
         $data['colors'] = array_slice($data['colors'], 0, self::LINK_MAX_GRAPH);
-        
+
         $this->chart->setLabels($data['labels']);
-        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));        
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));
 
         return $data;
     }
@@ -284,9 +302,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         $where = '1=1 ';
         $this->createTimeVar = 'lasthit';
-        
+
         $params = [];
-        
+
         $this->getTmeQuery($start, $stop, $where, $params);
 
         if ($search !== null && trim($search)) {
@@ -312,7 +330,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
         foreach ($values as $value) {
 
             $val = (string) ($value->counthits ?? 0);
-            
+
             $data['labels'][] = strlen($value->refurl) >= 40 ? substr($value->refurl, 0, 40) . '...' : $value->refurl;
             $data['values'][] = $val;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
@@ -329,9 +347,9 @@ class counter extends \fpcm\model\abstracts\tablelist {
         $data['labels'] = array_slice($data['labels'], 0, self::LINK_MAX_GRAPH);
         $data['values'] = array_slice($data['values'], 0, self::LINK_MAX_GRAPH);
         $data['colors'] = array_slice($data['colors'], 0, self::LINK_MAX_GRAPH);
-        
+
         $this->chart->setLabels($data['labels']);
-        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));        
+        $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));
 
         return $data;
     }
@@ -404,7 +422,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['values'][] = (string) $value->counted;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
         }
-        
+
         $this->chart->setLabels($data['labels']);
         $this->chart->setValues((new \fpcm\components\charts\chartItem($data['values'], $data['colors']))->setFill(true));
 
@@ -415,7 +433,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
     {
         $data = explode('-', $data);
         $month = intval($data[1] ?? 0);
-        
+
         switch ($this->mode) {
             case self::MODE_DAY :
                 return $data[2] . '. ' . $this->months[$month] . ' ' . $data[0];
@@ -457,7 +475,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
     }
 
     /**
-     * 
+     *
      * @param string $start
      * @param string $stop
      * @param string $where
@@ -480,7 +498,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
 
         return true;
     }
-    
+
     private function getOrder($type, &$where)
     {
         switch ($type) {
@@ -497,8 +515,8 @@ class counter extends \fpcm\model\abstracts\tablelist {
                 $order = 'counthits DESC';
                 break;
         }
-        
-        
+
+
         $where .= $this->dbcon->orderBy([$order]);
         return true;
     }

@@ -7,7 +7,6 @@ fpcm.nkorg_integration = {
     init: function() {
 
         fpcm.dom.bindClick('#btnProcess', function () {
-            debugger;
             fpcm.nkorg_integration.processArticles();
             fpcm.nkorg_integration.processTitle();            
             return false;
