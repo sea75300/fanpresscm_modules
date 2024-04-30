@@ -60,15 +60,18 @@ function prepareData($obj) {
 
     $mkey = str_replace('/', '_', $obj['key']);
 
-    $pkgUrl = "https://updates.nobody-knows.org/fanpress/modules/packages/v5/{$mkey}_version{$obj['version']}.zip";
+    $pkgUrl = sprintf("https://updates.nobody-knows.org/fanpress/modules/packages/v5/%s_version%s.zip", $mkey, $obj['version']) ;
     
     list($vendor, $key) = explode('/', $obj['key']);
    
     exec(sprintf("%s/fanpress4_pkg -m %s %s %s \n\n", $pkg_build, $vendor, $key, $obj['version']), $cliout);
     
-    $hash = preg_replace('/(\ {4}hash:\ )/i', '', array_slice($cliout, -4, 1)[0])  ;
-    $signature = preg_replace('/(\ {4}signature:\ )/i', '', array_slice($cliout, -3, 1)[0])  ;
-
+    $hash_item = array_filter($cliout, fn($str) => str_contains($str, '   hash: '));
+    $hash = preg_replace('/(\ {4}hash:\ )/i', '', array_slice($hash_item, -5, 1)[0])  ;
+    
+    $sig_item = array_filter($cliout, fn($str) => str_contains($str, '   signature: '));
+    $signature = preg_replace('/(\ {4}signature:\ )/i', '', array_shift($sig_item))  ;
+    
     return [
         'packageUrl' => $pkgUrl,
         'signature' => $signature,
