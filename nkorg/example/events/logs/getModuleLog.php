@@ -6,8 +6,10 @@ final class getModuleLog extends \fpcm\modules\nkorg\example\events\eventBase {
 
     public function run()
     {
+        $this->logEvent($this->params);
+
         return new \fpcm\model\logs\logfileResult(
-            $this->getData(),
+            $this->getData($this->params),
             null,
             $this->getSize(), 
             function () {

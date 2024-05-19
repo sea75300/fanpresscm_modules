@@ -33,7 +33,7 @@ abstract class eventBase extends \fpcm\module\event {
         return file_put_contents($this->path, '') !== false ? true : false;
     }
 
-    final protected function getData()
+    final protected function getData($search = null)
     {
         $data = file_get_contents($this->path);
         $data = explode('<===================>', $data);
@@ -51,9 +51,15 @@ abstract class eventBase extends \fpcm\module\event {
                 continue;
             }
             
+            $text = isset($line[1]) ? $line[1] : '-';
+
+            if ( $search !== null && !str_contains($text, $search) ) {
+                continue;
+            }
+            
             $items[] = [
                 'time' => $line[0],
-                'text' => isset($line[1]) ? $line[1] : '-'
+                'text' => $text
             ];
         }
 
