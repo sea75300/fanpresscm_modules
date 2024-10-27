@@ -2,7 +2,7 @@
 
 namespace fpcm\modules\nkorg\example\models;
 
-final class container extends \fpcm\model\abstracts\dashcontainer{
+final class container extends \fpcm\model\abstracts\dashcontainer {
 
     public function getContent()
     {

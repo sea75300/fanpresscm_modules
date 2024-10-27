@@ -16,7 +16,11 @@ final class test extends \fpcm\controller\abstracts\module\controller {
 
     public function process()
     {
+        $obj = new \fpcm\modules\nkorg\example\models\demodataObj();
+        
         $this->view->addNoticeMessage('MODULE_NKORGEXAMPLE_DESCRIPTION');
+        $this->view->addButton(  (new \fpcm\view\helper\copyButton('exampleCopy'))->setCopyParams($obj, 'demodataObj', $this->getModuleKey()) );
+        
         return true;
     }
 
