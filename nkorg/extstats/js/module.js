@@ -36,7 +36,12 @@ fpcm.extStats = {
         }
 
         if (fpcm.dataview !== undefined) {
-            fpcm.dataview.render('extendedstats-list');
+            fpcm.dataview.render('extendedstats-list', {
+                onRenderAfter: () => {
+                    fpcm.dom.fromId('fpcm-id-extstats-list-spinner').remove();
+                    fpcm.dom.fromId('fpcm-id-extstats-list-leadline').removeClass('d-none');
+                }
+            });
         }
 
         fpcm.dom.bindClick('.fpcm-extstats-links-delete', function (_ev, _ui) {
