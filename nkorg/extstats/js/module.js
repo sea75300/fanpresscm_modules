@@ -6,8 +6,17 @@ fpcm.extStats = {
 
     init: function () {
 
-        fpcm.extStats.drawList();
-        fpcm.extStats.drawChart();
+        fpcm.worker.postMessage({
+            namespace: 'extStats',
+            function: 'drawChart',
+            id: 'extStats.drawChart'
+        });
+
+        fpcm.worker.postMessage({
+            namespace: 'extStats',
+            function: 'drawList',
+            id: 'extStats.drawList'
+        });
 
     },
 

@@ -78,7 +78,5 @@
 
 <?php if (!$notfound) : ?>
 <h3 class="<?php if (!$isLinks) : ?>d-none<?php else : ?>p-3<?php endif; ?>"><?php $theView->write('MODULE_NKORGEXTSTATS_HITS_LIST'); ?></h3>
-
-<div id="fpcm-dataview-extendedstats-list">
+<div id="fpcm-dataview-extendedstats-list"></div>
 <?php endif; ?>
-</div>

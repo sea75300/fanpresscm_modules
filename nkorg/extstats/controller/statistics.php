@@ -227,7 +227,7 @@ final class statistics extends \fpcm\controller\abstracts\module\controller {
 
         $this->dv->addColumns([
             (new \fpcm\components\dataView\column('btn', ''))->setSize('1')->setAlign('center'),
-            (new \fpcm\components\dataView\column('link', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('4'),
+            (new \fpcm\components\dataView\column('link', $this->addLangVarPrefix('HITS_LIST_LINK'), 'flex-grow'))->setSize('4'),
             (new \fpcm\components\dataView\column('count', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('1')->setAlign('center'),
             (new \fpcm\components\dataView\column('latest', $this->addLangVarPrefix('HITS_LIST_LINK')))->setSize('2')->setAlign('center'),
         ]);

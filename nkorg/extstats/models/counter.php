@@ -234,6 +234,8 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $val = (string) ($value->counthits ?? 0);
             $parsed = parse_url($value->url);
 
+            $orgUrl = $value->url;
+
             if (!is_array($parsed)) {
                 $parsed = [];
             }
@@ -253,7 +255,7 @@ class counter extends \fpcm\model\abstracts\tablelist {
                 }
                 elseif (
                     ( $tmpExC === 3 && str_contains($baseParsed['host'], $tmpEx[1]) ) ||
-                    ( $tmpExC === 2 && str_contains($baseParsed['host'], $tmpEx[0]) ) 
+                    ( $tmpExC === 2 && str_contains($baseParsed['host'], $tmpEx[0]) )
                 ) {
                     $parsed['host'] = $parsed['path'];
                     $parsed['path'] = '';
@@ -274,9 +276,16 @@ class counter extends \fpcm\model\abstracts\tablelist {
             $data['labels'][] = strlen($value->url) >= 40 ? substr($value->url, 0, 40) . '...' : $value->url;
             $data['values'][] = $val;
             $data['colors'][] = \fpcm\components\charts\chartItem::getRandomColor();
+
+            $label = sprintf(
+                '%s<br><span class="fs-6 font-monospac text-secondary">%s</span>',
+                (string) new \fpcm\view\helper\escape($value->url),
+                (string) new \fpcm\view\helper\escape($orgUrl)
+            );
+
             $data['listValues'][] = [
                 'src' => \fpcm\modules\nkorg\extstats\models\counter::SRC_LINKS,
-                'label' => (string) new \fpcm\view\helper\escape($value->url),
+                'label' => $label,
                 'latest' => date($this->config->system_dtmask, $value->lasthit),
                 'lastip' => $value->lastip,
                 'lastagent' => $value->lastagent,
