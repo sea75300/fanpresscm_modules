@@ -5,22 +5,32 @@ namespace fpcm\modules\nkorg\calendar\controller;
 final class overview extends \fpcm\controller\abstracts\module\controller {
 
     use \fpcm\controller\traits\common\dataView;
-    
+
+    const ROW_STYLE_CURRENT = 'bg-warning-subtle';
+
+    private int $start;
+
+    private int $stop;
+
+
     /**
-     * 
+     *
      * @var \fpcm\components\dataView\dataView
      */
     protected $dataView;
 
     public function process()
     {
+        $this->start = mktime(0, 0, 0);
+        $this->stop = mktime(23, 59, 59);
+
         $this->delete();
 
         $this->view->addButtons([
             (new \fpcm\view\helper\linkButton('appointmentAdd'))->setText($this->addLangVarPrefix('GUI_APPOINTMENT_ADD'))->setIcon('calendar-plus')->setUrl(\fpcm\classes\tools::getControllerLink('calendar/add')),
             (new \fpcm\view\helper\deleteButton('appointmentDelete'))->setIcon('calendar-minus'),
         ]);
-        
+
         $this->view->addJsVars([
             'polls' => [],
         ]);
@@ -42,9 +52,9 @@ final class overview extends \fpcm\controller\abstracts\module\controller {
         $this->view->render();
         return true;
     }
-    
+
     private function delete() : bool {
-        
+
         if (!$this->buttonClicked('appointmentDelete')) {
             return true;
         }
@@ -52,7 +62,7 @@ final class overview extends \fpcm\controller\abstracts\module\controller {
         $id = $this->request->fromPOST('id', [
             \fpcm\model\http\request::FILTER_CASTINT
         ]);
-        
+
         if (!$id) {
             return false;
         }
@@ -83,28 +93,30 @@ final class overview extends \fpcm\controller\abstracts\module\controller {
         ];
 
     }
-    
+
     /**
-     * 
+     *
      * @param \fpcm\modules\nkorg\calendar\models\appointment $appointment
      * @return \fpcm\components\dataView\row
      */
     protected function initDataViewRow($appointment)
     {
+        $dt = $appointment->getDatetime();
+
         return new \fpcm\components\dataView\row([
             new \fpcm\components\dataView\rowCol('select', (new \fpcm\view\helper\radiobutton('id', 'chbx' . $appointment->getId()))->setValue($appointment->getId()), '', \fpcm\components\dataView\rowCol::COLTYPE_ELEMENT),
             new \fpcm\components\dataView\rowCol('button', (new \fpcm\view\helper\editButton('edit'.$appointment->getId()))->setUrlbyObject($appointment) ),
             new \fpcm\components\dataView\rowCol('name', $appointment->getDescription() ),
-            new \fpcm\components\dataView\rowCol('time', new \fpcm\view\helper\dateText($appointment->getDatetime(), 'd.m.Y H:i') ),
+            new \fpcm\components\dataView\rowCol('time', new \fpcm\view\helper\dateText($dt, 'd.m.Y H:i') ),
             new \fpcm\components\dataView\rowCol('status', (new \fpcm\view\helper\boolToText('status'.$appointment->getId()))->setValue($appointment->getPending()) ),
             new \fpcm\components\dataView\rowCol('visible', (new \fpcm\view\helper\boolToText('visible'.$appointment->getId()))->setValue($appointment->getVisible()) )
-        ]);
+        ], $this->isCurrent($dt));
     }
 
     protected function getDataViewName() {
         return 'nkorgcalendar';
     }
-    
+
     protected function getViewPath() : string
     {
         return 'dataview';
@@ -113,6 +125,11 @@ final class overview extends \fpcm\controller\abstracts\module\controller {
     public function isAccessible(): bool
     {
         return true;
+    }
+
+    private function isCurrent(int $dt) : string
+    {
+        return $dt >= $this->start && $dt <= $this->stop ? self::ROW_STYLE_CURRENT : '';
     }
 
 }

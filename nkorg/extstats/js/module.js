@@ -32,6 +32,7 @@ fpcm.extStats = {
     drawList: function () {
 
         if (!fpcm.vars.jsvars.extStats.hasList) {
+            fpcm.dom.fromId('fpcm-id-extstats-list-spinner').remove();
             return true;
         }
 
