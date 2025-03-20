@@ -18,8 +18,15 @@ class dashContainer extends \fpcm\model\abstracts\dashcontainer {
      */
     private $poll = false;
 
+    private int $start;
+
+    private int $stop;
+
     public function getContent() : string
     {
+        $this->start = mktime(0, 0, 0);
+        $this->stop = mktime(23, 59, 59);
+
         $search = new \fpcm\modules\nkorg\calendar\models\search();
         $search->start = mktime(0,0,0);
         $search->visible = 1;
@@ -30,24 +37,36 @@ class dashContainer extends \fpcm\model\abstracts\dashcontainer {
             return $this->language->translate('GLOBAL_NOTFOUND2');
         }
         
-        $html = ['<ul>'];
+        $html = ['<div class="list-group me-2">'];
         /* @var $appointment \fpcm\modules\nkorg\calendar\models\appointment */
         foreach ($appointments as $appointment) {
             
-            $html[] = '<li>';
-            $html[] = '<strong>'.(new \fpcm\view\helper\dateText($appointment->getDatetime(), $appointment->getPending() ? 'M / Y' : 'd.m.Y')).'</strong>: ';
-            $html[] = (new \fpcm\view\helper\escape($appointment->getDescription()));
-            $html[] = '</li>';
+            $dt = $appointment->getDatetime();
+
+            $html[] = sprintf(
+                '<a class="list-group-item list-group-item-action %s" href="%s">%s <strong>%s</strong> %s</a>',
+                $this->isCurrent($dt),
+                $appointment->getEditLink(),
+                (string) (new \fpcm\view\helper\icon('edit')),
+                (new \fpcm\view\helper\dateText($appointment->getDatetime(), $appointment->getPending() ? 'M / Y' : 'd.m.Y')),
+                (new \fpcm\view\helper\escape($appointment->getDescription()))
+            );            
         }
 
-        $html[] = '</ul>';;
+        $html[] = '</div>';
         
         return implode(PHP_EOL, $html);
     }
 
     public function getHeadline() : string
     {
-        return $this->language->translate($this->addLangVarPrefix('HEADLINE'));
+        return $this->language->translate(
+            $this->addLangVarPrefix('HEADLINE_DASHBOARD'),
+            [
+                (string) (new \fpcm\view\helper\icon('calendar-day'))
+            ],
+            true
+        );
     }
 
     public function getName() : string
@@ -58,6 +77,11 @@ class dashContainer extends \fpcm\model\abstracts\dashcontainer {
     public function getPosition()
     {
         return self::DASHBOARD_POS_MAX;
+    }
+
+    private function isCurrent(int $dt) : string
+    {
+        return $dt >= $this->start && $dt <= $this->stop ? 'list-group-item-warning' : '';
     }
 
 }

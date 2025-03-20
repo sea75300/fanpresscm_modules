@@ -8,6 +8,7 @@
  */
 $lang = [
     'HEADLINE' => 'Kalender',
+    'HEADLINE_DASHBOARD' => '%s Kalender',
     'GUI_GOTO_OVERVIEW' => 'zur Übersicht',
 
     'GUI_APPOINTMENT_ADD' => 'Termin hinzufügen',
