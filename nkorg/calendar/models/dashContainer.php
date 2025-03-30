@@ -29,7 +29,9 @@ class dashContainer extends \fpcm\model\abstracts\dashcontainer {
 
         $search = new \fpcm\modules\nkorg\calendar\models\search();
         $search->start = mktime(0,0,0);
-        $search->visible = 1;
+        $search->limit = $this->getObject()->getOption('dashboard_items');
+        $search->offset = 0;
+        $search->order = 'datetime ASC';
 
         $appointments = (new \fpcm\modules\nkorg\calendar\models\appointments)->getAppointments($search);
 
@@ -44,12 +46,14 @@ class dashContainer extends \fpcm\model\abstracts\dashcontainer {
             $dt = $appointment->getDatetime();
 
             $html[] = sprintf(
-                '<a class="list-group-item list-group-item-action %s" href="%s">%s <strong>%s</strong> %s</a>',
-                $this->isCurrent($dt),
+                '<a class="list-group-item list-group-item-action %s" href="%s"><span class="d-flex"><span class="me-1">%s</span><span class="text-light-emphasis">%s</span><span class="ms-auto">%s %s</span></span><span class="me-3">%s</span></a>',
+                $this->isCurrent($dt) . (!$appointment->getVisible() ? ' list-group-item-danger' : ''),
                 $appointment->getEditLink(),
                 (string) (new \fpcm\view\helper\icon('edit')),
                 (new \fpcm\view\helper\dateText($appointment->getDatetime(), $appointment->getPending() ? 'M / Y' : 'd.m.Y')),
-                (new \fpcm\view\helper\escape($appointment->getDescription()))
+                (new \fpcm\view\helper\boolToText('status'.$appointment->getId()))->setValue($appointment->getPending())->setText($this->addLangVarPrefix('GUI_APPOINTMENT_PENDING')),
+                (new \fpcm\view\helper\boolToText('visible'.$appointment->getId()))->setValue($appointment->getVisible())->setText($this->addLangVarPrefix('GUI_APPOINTMENT_VISIBLE')),
+                (new \fpcm\view\helper\escape($appointment->getDescription())),
             );            
         }
 

@@ -5,7 +5,7 @@ author: imagine
 name: Calendar
 description: "Calendar module"
 link: https://nobody-knows.org/
-version: 1.0.10
+version: 1.0.11
 help: 
 requirements:
     system: 5.2.0-a1
@@ -13,3 +13,4 @@ requirements:
 tables:
 configOptions:
     frontend_days: 30
+    dashboard_items: 10

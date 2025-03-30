@@ -18,6 +18,7 @@ $lang = [
     'GUI_APPOINTMENT_PENDING' => 'Vorläufiger Eintrag',
     'GUI_APPOINTMENT_VISIBLE' => 'Sichtbar',
     'GUI_APPOINTMENT_FRONTEND_DAYS' => 'Termine für XX Tage anzeigen',
+    'GUI_APPOINTMENT_DASHBOARD_ITEMS' => 'Termine auf Startbildschirm anzeigen',
     
     'MSG_SUCCESS_SAVE' => 'Die Änderungen wurden gespeichert.',
     
