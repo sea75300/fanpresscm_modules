@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\example\events\editor;
 
 final class addLinks extends \fpcm\modules\nkorg\example\events\eventBase {
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         return [
             [

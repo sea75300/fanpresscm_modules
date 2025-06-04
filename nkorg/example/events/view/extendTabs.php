@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\example\events\view;
 
 final class extendTabs extends \fpcm\modules\nkorg\example\events\eventBase  {
 
-    final public function run()
+    final public function run() : \fpcm\module\eventResult 
     {        
         $this->data->tabs[] = (new \fpcm\view\helper\tabItem(md5(self::class)))
             ->setText('Extend tabs item')

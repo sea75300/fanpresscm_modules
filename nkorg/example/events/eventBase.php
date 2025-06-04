@@ -6,7 +6,7 @@ abstract class eventBase extends \fpcm\module\event {
 
     protected $path;
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);

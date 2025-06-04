@@ -12,7 +12,7 @@ final class copyItem extends \fpcm\module\event
     protected $data;
 
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         fpcmLogSystem(sprintf("%s\n\n%s", __METHOD__, var_export($this->data, true)));
 

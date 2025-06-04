@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\example\events\modules;
 
 class configure extends \fpcm\modules\nkorg\example\events\eventBase {
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         return [
             'var1' => mt_rand(0, 10),

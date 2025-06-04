@@ -10,7 +10,7 @@ final class create extends \fpcm\modules\nkorg\example\events\eventBase {
      */
     protected $data;
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         $this->data['content'] .= '<br><br>revisioned on '.microtime(true);
         

@@ -4,7 +4,7 @@ namespace fpcm\modules\nkorg\example\events\comments;
 
 final class save extends \fpcm\modules\nkorg\example\events\eventBase {
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         $this->data['name'] = $this->data['name'].' '. microtime(true).' '.$this->getModuleKey().' '. get_class($this);
         return $this->data;

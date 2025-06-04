@@ -12,7 +12,7 @@ final class ajaxRefresh extends \fpcm\module\event
     protected $data;
 
 
-    public function run()
+    public function run() : \fpcm\module\eventResult 
     {
         $notification = new \fpcm\model\theme\notificationItem( ( new \fpcm\view\helper\icon('bell') )->setText(__METHOD__) );
         $this->data->addNotification($notification);        
