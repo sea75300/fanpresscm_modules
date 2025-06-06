@@ -10,7 +10,7 @@ abstract class eventBase extends \fpcm\module\event {
     {
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
     final public function init()

@@ -11,7 +11,7 @@ final class dashboardContainersLoad extends \fpcm\modules\nkorg\example\events\e
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
         
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
 }

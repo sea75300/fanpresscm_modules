@@ -8,7 +8,7 @@ final class getModuleLog extends \fpcm\modules\nkorg\example\events\eventBase {
     {
         $this->logEvent($this->params);
 
-        return new \fpcm\model\logs\logfileResult(
+        $return = new \fpcm\model\logs\logfileResult(
             $this->getData($this->params[0]),
             null,
             $this->getSize(), 
@@ -24,6 +24,9 @@ final class getModuleLog extends \fpcm\modules\nkorg\example\events\eventBase {
                     new \fpcm\components\dataView\rowCol('text', new \fpcm\view\helper\escape($item['text']), 'pre-box'),
                 ]);
             });
+            
+            
+        return (new \fpcm\module\eventResult())->setData($return);
     }
 
 }

@@ -10,8 +10,7 @@ final class runSystemCheck extends \fpcm\modules\nkorg\example\events\eventBase 
         
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
-        
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
 }

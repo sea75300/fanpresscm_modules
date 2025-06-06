@@ -8,6 +8,6 @@ final class clearCache extends \fpcm\modules\nkorg\example\events\eventBase {
     {
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
-        return null;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 }

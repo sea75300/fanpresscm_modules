@@ -8,7 +8,7 @@ final class loginBefore extends \fpcm\modules\nkorg\example\events\eventBase {
     {
         $this->logEvent(__METHOD__.' login data is');
         $this->logEvent($this->data);
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
 }

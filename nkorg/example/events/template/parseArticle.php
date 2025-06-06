@@ -9,7 +9,7 @@ final class parseArticle extends \fpcm\modules\nkorg\example\events\eventBase {
         $this->data['{{example}}'] = 'This is an example template placeholder!';
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
     
 }

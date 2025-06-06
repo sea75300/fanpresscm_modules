@@ -6,7 +6,7 @@ final class addLinks extends \fpcm\modules\nkorg\example\events\eventBase {
 
     public function run() : \fpcm\module\eventResult 
     {
-        return [
+        return (new \fpcm\module\eventResult())->setData([
             [
                 'label' => '',
                 'value' => ''
@@ -23,7 +23,7 @@ final class addLinks extends \fpcm\modules\nkorg\example\events\eventBase {
                 'label' => 'Bing',
                 'value' => 'https://bing.de'
             ]
-        ];
+        ]);
     }
 
 }

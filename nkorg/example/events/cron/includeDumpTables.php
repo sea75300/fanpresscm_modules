@@ -12,7 +12,7 @@ final class includeDumpTables extends \fpcm\modules\nkorg\example\events\eventBa
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
 
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
 }

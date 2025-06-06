@@ -12,7 +12,7 @@ final class extendToolbar extends \fpcm\modules\nkorg\example\events\eventBase  
                             ->setTarget('_blank')
                             ->setIcon('external-link-alt');
 
-        return $this->data;
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
     final public function extendToolbarSystemprofile()
@@ -23,7 +23,8 @@ final class extendToolbar extends \fpcm\modules\nkorg\example\events\eventBase  
                             ->setTarget('_blank')
                             ->setIcon('book-reader')
                             ->setIconOnly(true);
-        return $this->data;
+
+        return (new \fpcm\module\eventResult())->setData($this->data);
     }
 
 }
