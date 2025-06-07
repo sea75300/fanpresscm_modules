@@ -6,7 +6,7 @@ abstract class eventBase extends \fpcm\module\event {
 
     protected $path;
 
-    public function run() : \fpcm\module\eventResult 
+    public function run() : \fpcm\module\eventResult
     {
         $this->logEvent(__METHOD__);
         $this->logEvent($this->data);
@@ -44,19 +44,19 @@ abstract class eventBase extends \fpcm\module\event {
             if (!trim($line)) {
                 continue;
             }
-            
+
             $line = explode('<====>', $line);
-            
+
             if (!trim($line[0])) {
                 continue;
             }
-            
+
             $text = isset($line[1]) ? $line[1] : '-';
 
             if ( $search !== null && !str_contains($text, $search) ) {
                 continue;
             }
-            
+
             $items[] = [
                 'time' => $line[0],
                 'text' => $text
@@ -70,4 +70,5 @@ abstract class eventBase extends \fpcm\module\event {
     {
         return filesize($this->path);
     }
+
 }
