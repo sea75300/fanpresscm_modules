@@ -11,22 +11,17 @@ final class main extends \fpcm\controller\abstracts\module\controller {
 
     public function process()
     {
-      
-        $mode = $this->config->system_mode == 0 ? 'Frame' : 'Include';
-        
-        call_user_func([$this, 'addNotification'.$mode]);
-
         $this->view->assign('items', [
             $this->addLangVarPrefix('GERNERALNOTES') => 'notes',
-            $this->addLangVarPrefix('INCLUDE_API') => $this->config->system_mode == 1 ? 'api' : null,
+            $this->addLangVarPrefix('INCLUDE_API') => 'api',
             $this->addLangVarPrefix('CSS_STYLES') => 'styles',
-            $this->addLangVarPrefix('SHOW_ARTICLES') => 'articles'.$mode,
-            $this->addLangVarPrefix('SHOW_LATESTNEWS') => 'latestnews'.$mode,
-            $this->addLangVarPrefix('SHOW_PAGENUMBERS') => $this->config->system_mode == 1 ? 'titlePages' :  null,
-            $this->addLangVarPrefix('SHOW_ARTICLETITLE') => $this->config->system_mode == 1 ? 'titleHeadline'  :null,
+            $this->addLangVarPrefix('SHOW_ARTICLES') => 'articlesInclude',
+            $this->addLangVarPrefix('SHOW_LATESTNEWS') => 'latestnewsInclude',
+            $this->addLangVarPrefix('SHOW_PAGENUMBERS') => 'titlePages',
+            $this->addLangVarPrefix('SHOW_ARTICLETITLE') => 'titleHeadline',
             $this->addLangVarPrefix('USE_RSS') => 'feed',
         ]);
-        
+
         $this->view->assign('articleCount', $this->config->articles_limit);
         $this->view->assign('cssPath', $this->config->system_css_path);
 
@@ -53,21 +48,11 @@ final class main extends \fpcm\controller\abstracts\module\controller {
                 ->setModulekey($this->getModuleKey())
                 ->setFile( \fpcm\view\view::PATH_MODULE . $this->getViewPath() )
         ]);
-        
+
         $this->view->addFromModule(['module.js']);
         $this->view->setFormAction('integration/main');
         $this->view->render();
         return true;
-    }
-    
-    private function addNotificationFrame()
-    {
-        $this->notifications->addNotification(new \fpcm\model\theme\notificationItem((new \fpcm\view\helper\icon('code'))->setText($this->addLangVarPrefix('NOTIFICATION_IFRAMEMODE'))));
-    }
-    
-    private function addNotificationInclude()
-    {
-        $this->notifications->addNotification(new \fpcm\model\theme\notificationItem((new \fpcm\view\helper\icon('php', 'fab'))->setText($this->addLangVarPrefix('NOTIFICATION_PHPMODE'))));
     }
 
 }

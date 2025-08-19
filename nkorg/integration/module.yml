@@ -5,10 +5,10 @@ author: imagine
 name: Integration Assistant
 description: "Assistant to easy integration of FanPress Cm into you website."
 link: https://nobody-knows.org/
-version: 5.1.0
+version: 5.3.0
 help: 
 requirements:
-    system: 5.0.0-a1
-    php: 7.2.0
+    system: 5.3.0-dev
+    php: 8.2.0
 tables:
 configOptions:
